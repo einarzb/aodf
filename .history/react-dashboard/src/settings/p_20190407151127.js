@@ -1,0 +1,1 @@
+export default const p = "000000" // 

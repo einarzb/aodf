@@ -1,0 +1,5 @@
+AuthName "AODF Manager"
+AuthType Basic
+AuthUserFile /etc/aodf-web/aodfpass
+Require user Admin
+DirectoryIndex info.php

@@ -1,0 +1,28 @@
+{
+    "remotePath": "/usr/share/aodf-web/root/",
+    "host": "82.166.236.100",
+    "username": "root",
+    "password": "ziv",
+    "port": 10457,
+    "secure": false,
+    "protocol": "ssh",
+    "uploadOnSave": false,
+    "passive": false,
+    "debug": false,
+    "privateKeyPath": null,
+    "passphrase": null,
+    "agent": null,
+    "allow": [],
+    "ignore": [
+        "\\.vscode",
+        "\\.git",
+        "\\.DS_Store",
+        "react-dashboard/node_modules"
+    ],
+    "generatedFiles": {
+        "extensionsToInclude": [
+            ""
+        ],
+        "path": ""
+    }
+}

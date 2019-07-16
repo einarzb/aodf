@@ -1,0 +1,5 @@
+# List of NTP servers to use  (Separate multiple servers with spaces.)
+NTPSERVERS="0.asia.pool.ntp.org"
+
+# Additional options to pass to busybox ntpd client
+NTPOPTIONS=""

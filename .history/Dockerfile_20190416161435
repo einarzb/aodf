@@ -1,0 +1,12 @@
+FROM debian:squeeze
+
+RUN echo "deb http://archive.debian.org/debian squeeze main" > /etc/apt/sources.list
+RUN echo "deb http://archive.debian.org/debian squeeze-lts main" >> /etc/apt/sources.list
+RUN echo "Acquire::Check-Valid-Until false;" > /etc/apt/apt.conf
+
+RUN apt-get update
+RUN apt-get install --force-yes -y procps vim nano tmux curl gcc 
+RUN apt-get update
+RUN apt-get install --force-yes -y make ia32-libs
+CMD ["/bin/bash"]
+   

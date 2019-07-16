@@ -1,0 +1,11 @@
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet static
+	address 192.168.2.80
+	netmask 255.255.255.0
+	gateway 192.168.2.1
+	udhcpc_opts -T10 -t10 -b -S
+	hostname teliswitch-aodf
+	up sleep 5 ;  /sbin/ethtool -s eth0 speed 10 duplex half autoneg on

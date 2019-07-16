@@ -1,0 +1,118 @@
+body {
+  font-family: sans-serif;
+  color: black;
+}
+
+h1 {
+  text-align: center;
+  color: #fd7c20;
+}
+
+img {
+  border: none;
+}
+
+div#terminal {
+  border: solid 2px #fd7c20;
+  padding: 2px;
+  margin-top: 0.5em;
+  background: black;
+}
+
+div#terminal textarea { 
+  outline: none;
+  font-size: 100%;
+  width: 100%;
+  border: none;
+  color:#fd7c20;
+  background: black;
+}
+
+#ps1 {
+  color:white;
+  background: black;  
+}
+
+p {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+p#prompt {
+  font-family: monospace;
+  margin: 0px;
+}
+
+p#prompt input {
+  border: none;
+  outline: none;
+  font-family: monospace;
+  color:white;
+  background: black;  
+}
+
+
+.login-box {
+  width: 500px;
+  margin: 0 auto;
+  border: 3px solid #fd7c20;
+  padding: 30px;
+
+}
+
+.login-title {
+  text-align: center;
+  font-size: 20px;
+  margin: 4px 0 33px 0;
+}
+
+.submit-button {
+  background: #fd7c20;
+  padding: 6px 25px;
+  color: white;
+  border: grey;
+  font-size: 16px;  
+}
+
+legend {
+  padding-right: 0.5em;
+}
+
+fieldset {
+  padding: 0.5em;
+}
+
+label {
+  float: left;
+  width: 20%;
+  margin-right: 1em;
+  text-align: right;
+  font-weight: bold;
+}
+
+.error {
+    color: red;
+    padding: 4px;
+    margin: 25px 0;
+}
+
+div.warning {
+  background-color: rgb(255, 150, 150);
+  border: medium solid rgb(255, 60, 60);
+  padding: 0.5em;
+  margin: 0.25em;
+}
+
+a {
+  color:#fd7c20;
+  
+}
+
+.pwd {
+  font-family: monospace;
+  padding: 0.5em;
+  margin: 0.25em;
+}
+a.pwd {
+  font-weight: bold;
+}

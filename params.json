@@ -1,0 +1,384 @@
+{
+  "ELEV_MOTOR" : 1,
+  "STAGE_MOTOR" : 2,
+  "PLATE_ROTATED" : 3,
+  "PLATE_IO" : 4,
+  "GRIPPER_OC" : 5,
+  "GRIPPER_IO" : 6,
+  "ALL_MOTORS" : [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "MOTORS_NAMES" : [
+    "ELEV_MOTOR",
+    "STAGE_MOTOR",
+    "PLATE_ROTATED",
+    "PLATE_IO",
+    "GRIPPER_OC",
+    "GRIPPER_IO"
+  ],
+  "MOTOR_TO_CAN" : [
+    [
+      3,
+      0,
+      89,
+      1
+    ],
+    [
+      3,
+      1,
+      89,
+      1
+    ],
+    [
+      3,
+      3,
+      89,
+      1
+    ],
+    [
+      5,
+      0,
+      87,
+      2
+    ],
+    [
+      5,
+      1,
+      87,
+      2
+    ],
+    [
+      7,
+      0,
+      87,
+      3
+    ]
+  ],
+  "PULS_DIV" : 3,
+  "RAMP_DIV" : 7,
+  "USRS" : 6,
+  "RESET_SET" : 1,
+  "NORMAL_SET" : 2,
+  "DIRECT_SET" : 3,
+  "EDGE_SET" : 4,
+  "SEARCH_SET" : 5,
+  "TEST_SET" : 6,
+  "MODULE_SCALE" : {
+  },
+  "GPIO_TABLE" : [
+    [
+      91,
+      "OUT",
+      "P9_11"
+    ],
+    [
+      60,
+      "in",
+      "P9_12"
+    ],
+    [
+      50,
+      "out",
+      "P9_14"
+    ],
+    [
+      90,
+      "OUT",
+      "P9_16"
+    ],
+    [
+      87,
+      "OUT",
+      "P9_23"
+    ],
+    [
+      88,
+      "OUT",
+      "P9_27"
+    ],
+    [
+      89,
+      "OUT",
+      "P8_8"
+    ],
+    [
+      69,
+      "out",
+      "P8_9"
+    ],
+    [
+      68,
+      "out",
+      "P8_10"
+    ],
+    [
+      45,
+      "out",
+      "P8_11"
+    ],
+    [
+      44,
+      "out",
+      "P8_12"
+    ],
+    [
+      23,
+      "out",
+      "P8_13"
+    ],
+    [
+      22,
+      "out",
+      "P8_19"
+    ],
+    [
+      31,
+      "in",
+      "P9_13"
+    ],
+    [
+      48,
+      "in",
+      "P9_15"
+    ]
+  ],
+  "CAN_GPIO_ON" : 1,
+  "CAN_GPIO_OFF" : 0,
+  "CAMERA_LEDS_GPIO" : 88,
+  "CAMERA_LEDS_GPIO_ON" : 0,
+  "CAMERA_LEDS_GPIO_OFF" : 1,
+  "DOOR_GPIO" : 90,
+  "DOOR_GPIO_OPEN" : 1,
+  "DOOR_GPIO_CLOSE" : 0,
+  "DOOR_GPIO_DIRECTION" : "in",
+  "DOOR_GPIO_SAMPLING" : 1,
+  "ETH_LINK_STATUS_SAMPLING" : 5,
+  "AODF_DB" : "/etc/aodf-db/AODF.db",
+  "ATOMIC_DB" : "/etc/aodf-db/atomic.db",
+  "CONNECTION_QUEUE_DB" : "/etc/aodf-db/connections_queue.db",
+  "ATOMIC_FILE_NAME" : "/etc/aodf-scripts/atomic.json",
+  "AODF_LOG_FILE" : "/var/log/aodf.log",
+  "AODF_LOG_FILE_2" : "/var/log/aodf2.log",
+  "ALARMS_LOG_FILE" : "/var/log/alarms.log",
+  "AODF_LOG_HISTORY_FILE" : "/var/log/aodf_his.log",
+  "AODF_LOG_TMP_FILE" : "/var/log/aodf_tmp.log",
+  "CONNECTIONS_LOG_FILE" : "/var/log/connections_log.csv",
+  "AODF_NAME" : "/etc/hostname",
+  "DISABLE_TEMP_SENSOR" : true,
+  "TOTAL_PLATE_NUMBER" : 147,
+  "P_PLATE_A" : 147,
+  "P_PLATE_B" : 98,
+  "P_PLATE_C" : 49,
+  "TIME_240S" : 240,
+  "TIME_180S" : 180,
+  "TIME_120S" : 120,
+  "TIME_60S" : 60,
+  "TIME_30S" : 30,
+  "TIME_20S" : 20,
+  "TIME_10S" : 10,
+  "TIME_5S" : 5,
+  "RESET_ALL_TIMEOUT" : 604800,
+  "WHEELS_REMAP" : {
+  },
+  "PLATE_PORT_REMAP" : {
+  },
+  "PIX_2_STEP_RATIO" : 1.1,
+  "PLATE_X_OFFSET" : 8350,
+  "ELEV_MOV_UP_PIX_2_STP" : -470,
+  "ELEV_MOV_DOWN_PIX_2_STP" : -470,
+  "STG_PIX_2_STP" : 27,
+  "PLT_PIX_2_STP" : 57,
+  "PLT_CONNECTOR_DISTANCE" : 9700,
+  "PLT_FIBER_DISTANCE" : 3017,
+  "STG_FIBER_DISTANCE" : 1443,
+  "TARGET_OFFSET" : 9426,
+  "PARKING_TARGET_X_POS" : 290,
+  "PARKING_TARGET_Y_POS" : 257,
+  "REGULAR_PLATE_TARGET_X_POS" : 290,
+  "REGULAR_PLATE_TARGET_Y_POS" : 257,
+  "P_PLATE_Y_DIS_FROM_TARGET" : 54,
+  "P_PLATE_X_DIS_FROM_TARGET" : 54,
+  "R_PLATE_Y_DIS_FROM_TARGET" : 30,
+  "R_PLATE_X_DIS_FROM_TARGET" : 75,
+  "MIN_HIDDEN_CAMERA_HOME_PORT" : 1,
+  "MAX_HIDDEN_CAMERA_HOME_PORT" : 9,
+  "MIN_REGULAR_HOME_PORT" : 10,
+  "MAX_REGULAR_HOME_PORT" : 144,
+  "FAR_TARGET_HOME_PORT_BARRIER" : 136,
+  "ADAPT_HOME_PORT" : {
+    "137" : 134,
+    "138" : 135,
+    "139" : 133,
+    "140" : 134,
+    "141" : 135,
+    "142" : 133,
+    "143" : 134,
+    "144" : 135
+  },
+  "PARKING_FRAME" : {
+    "blue_count" : 20,
+    "conf_level_min" : 80,
+    "dark_count" : 75,
+    "dark_threshold" : 70,
+    "dark_x_size" : 12,
+    "dark_y_size" : 2,
+    "div_blue_factor" : 120,
+    "div_green_factor" : 250,
+    "div_red_factor" : 115,
+    "do_center_find" : -1,
+    "draw_flag" : 3,
+    "eraser_count" : 500,
+    "eraser_threshold" : 1500,
+    "eraser_use_grey" : true,
+    "eraser_x_size" : 4,
+    "eraser_y_size" : 70,
+    "find_algorithm" : 4,
+    "rad_in" : 10,
+    "rad_out" : 16,
+    "rad_out2" : 100,
+    "save_pic" : true,
+    "smooth_size" : 1,
+    "threshold_red_max" : 300,
+    "threshold_red_min" : 40,
+    "threshold_red_to_blue_max" : 300,
+    "threshold_red_to_blue_min" : 20,
+    "threshold_red_to_green_max" : 300,
+    "threshold_red_to_green_min" : 50,
+    "x1_area" : 200,
+    "x2_area" : 380,
+    "y1_area" : 177,
+    "y2_area" : 337
+  },
+  "PLATE_FRAME" : {
+    "blue_count" : 20,
+    "conf_level_min" : 80,
+    "dark_count" : 75,
+    "dark_threshold" : 70,
+    "dark_x_size" : 12,
+    "dark_y_size" : 2,
+    "div_blue_factor" : 120,
+    "div_green_factor" : 250,
+    "div_red_factor" : 115,
+    "do_center_find" : -1,
+    "draw_flag" : 3,
+    "eraser_count" : 500,
+    "eraser_threshold" : 1500,
+    "eraser_use_grey" : true,
+    "eraser_x_size" : 4,
+    "eraser_y_size" : 70,
+    "find_algorithm" : 2,
+    "rad_in" : 10,
+    "rad_out" : 16,
+    "rad_out2" : 100,
+    "save_pic" : true,
+    "smooth_size" : 1,
+    "threshold_red_max" : 300,
+    "threshold_red_min" : 40,
+    "threshold_red_to_blue_max" : 300,
+    "threshold_red_to_blue_min" : 20,
+    "threshold_red_to_green_max" : 300,
+    "threshold_red_to_green_min" : 50,
+    "x1_area" : 200,
+    "x2_area" : 380,
+    "y1_area" : 177,
+    "y2_area" : 337
+  },
+  "PLT_FIND_GAP" : 3000,
+  "PORTS" : [
+    17350,
+    8530,
+    -320,
+    -9701
+  ],
+  "PLT_RIGHT_PORT" : [
+    52775,
+    43926,
+    35151,
+    24659
+  ],
+  "PORT_ON_HOME_PORT_SHORT" : [
+    34,
+    37,
+    39,
+    41
+  ],
+  "PORT_ON_HOME_PORT_LONG" : [
+    31,
+    34,
+    37,
+    40
+  ],
+  "LONG_PORT_OFFSET" : 122,
+  "SHORT_PORT_OFFSET" : 10,
+  "SHORT_OFFSET_DISTANCE" : 120512,
+  "FULL_CIRCLE_LENGTH" : 450920,
+  "STG_TO_PLT_STEPS_RATION" : 2.0883,
+  "PLT_MAX_STEP" : 447800,
+  "PLT_LEFT_2_RIGHT_TARGET" : 8450,
+  "PLT_FAR_LEFT_2_LEFT_TARGET" : 12050,
+  "ROT_PLT_HP_1_TO_3_COMPENSATION" : 37030,
+  "ROT_PLT_HP_4_TO_9_COMPENSATION" : 31362,
+  "LOK_PLT_HP_1_TO_3_COMPENSATION" : -26220,
+  "LOK_PLT_HP_4_TO_9_COMPENSATION" : -17486,
+  "PARKING_PLATE_SHIFT" : [
+    0,
+    0,
+    0
+  ],
+  "UPPER_MICROSWITCH_HEIGHT" : false,
+  "P_PLATE_PULL_EXTENDER_CORRECTION" : 7500,
+  "P_PLATE_INSERT_EXTENDER_CORRECTION" : 7500,
+  "R_PLATE_PULL_EXTENDER_CORRECTION" : 500,
+  "R_PLATE_INSERT_EXTENDER_CORRECTION" : 500,
+  "P_PLATE_HEIGHT_CORRECTION" : 4000,
+  "R_PLATE_HEIGHT_CORRECTION" : 2000,
+  "REGULAR_PLATE_HEIGHT" : 40000,
+  "R_PLATE_2_P_PLATE_CORRECTION" : 40000,
+  "ELEV_FIND_GAP" : 15000,
+  "TARGET_2_EXTENDER_CORRECTION" : 0,
+  "PLATE_RESTART_OFFSET" : 0,
+  "PLATE_ROTATED_CORECTION" : 0,
+  "STG_RESET_CAPTUR" : 206767,
+  "STG_PORT_GAP" : 4129,
+  "STG_FIND_GAP" : 1000,
+  "STG_2_LEFT" : [
+    -8418,
+    -4150,
+    124,
+    4500
+  ],
+  "STG_2_RIGHT" : [
+    -25368,
+    -21248,
+    -16856,
+    -12560
+  ],
+  "STG_HEIGHT_POS_SAMPLE" : [
+    133,
+    103,
+    67,
+    40
+  ],
+  "STAGE_SET_ABSOLUT_POSITION" : 204046,
+  "ABS_POSITION_TO_PLT_SET_ZERO" : 54700,
+  "STG_MAX_STEP" : 207500,
+  "STG_OFFSET_4_RESET" : 13896,
+  "STG_LEFT_2_RIGHT_TARGET" : 16888,
+  "STG_LEFT_2_FAR_LEFT_TARGET" : 6773,
+  "PLT_IO_TRAVEL" : 97000,
+  "GRP_IO_CORRECTION_POSITION" : -1000000,
+  "MAXIMUM_LOAD" : 60,
+  "LOAD_TIMES" : 3,
+  "GRP_FULL_MOVE" : -97200,
+  "GRP_CLOSE_TRAVEL" : 20000,
+  "TECHNICIAN_PERMISSION" : false,
+  "CONNECT_TO_EXT_DISTANCE" : -75000,
+  "DISCONNECT_FROM_EXT_DISTANCE" : -60000,
+  "LEFT_2_FAR_LEFT_TARGET" : 14145,
+  "LOG_FILE" : "/var/log/aodf.log"
+}

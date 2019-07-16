@@ -1,0 +1,127 @@
+#main
+{
+    position: relative;
+    margin: 0 3%;
+    width: 94%;
+    top: 100px;
+}
+#mainmenu
+{
+    position: absolute;
+    top: 0px;
+    left:0px;
+}
+#mainmenu input
+{
+    width: 160px;
+    height: 30px;
+}
+#content
+{
+    position: relative;
+    top: 0px;
+    left: 200px;
+    height: 50%;
+    width: 80%;
+}
+.selectedtab
+{
+    background-color: red;
+}
+#header
+{
+    position: relative;
+    width: 73%;
+    margin: 0 auto;
+}
+#logo
+{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+#sysinfo
+{
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+#submenu
+{
+    position: absolute;
+    top: 0px;
+    left:0px;
+}
+#submenu input,#submenu select
+{
+    width: 160px;
+    height: 30px;
+}
+#cameramainimage
+{
+    position: absolute;
+    top: 0px;
+    left: 215px;
+    width: 400px;
+    height: 300px;
+}
+#tableplate
+{
+    position: absolute;
+    top: 0px;
+    left: 660px;
+    width: 330px;
+    border: 1px solid;
+}
+#tablestage
+{
+    position: absolute;
+    top: 230px;
+    left: 660px;
+    width: 330px;
+    border: 1px solid;
+}
+#tablegripperoc
+{
+    position: absolute;
+    top: 460px;
+    left: 660px;
+    width: 330px;
+    height: 100px;
+    border: 1px solid;
+}
+#tablegripperio
+{
+    position: absolute;
+    top: 460px;
+    left: 330px;
+    width: 330px;
+    height: 100px;
+    border: 1px solid;
+}
+#tablerotate
+{
+    position: absolute;
+    top: 460px;
+    left: 0px;
+    width: 330px;
+    height: 100px;
+    border: 1px solid;
+}
+#tablevalues
+{
+    position: absolute;
+    top: 310px;
+    left: 260px;
+    width: 400px;
+    height: 300px;
+}
+#tableelevator
+{
+    position: absolute;
+    top: 260px;
+    left: 0px;
+    width: 130px;
+    height: 100px;
+    border: 1px solid;
+}

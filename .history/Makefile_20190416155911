@@ -1,0 +1,13 @@
+CC=arm-linux-gnueabi-gcc
+ALL=test_ziv
+TGT=/data/
+# -s :Remove all symbol table and relocation information from the executable.
+
+all: $(ALL)
+
+clean:
+	rm -f $(ALL)
+
+install: $(ALL)
+	mv $^ $(TGT)
+	chmod +s $(TGT)$^
