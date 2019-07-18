@@ -9,8 +9,8 @@ const MAIN_FILE_REGEX = /main\.(.*?)\.chunk\.js/;
 const CSS_FILE_REGEX = /main\.(.*?)\.chunk\.css/;
 const SECONDARY_FILE_REGEX = /2\.(.*?)\.chunk/;
 
-const myPath = process.argv.slice(2);
-const INDEX_PATH = myPath[0] + '/build/index.html';
+const myPath = process.argv.slice(2)[0];
+const INDEX_PATH = myPath + '/build/index.html';
 
 replace({
     from: /"\/static/g,

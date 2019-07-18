@@ -15,8 +15,8 @@ function build_and_copy {
 }
 
 function make_upload {
-    # make c program
-    docker run --rm -v /Users/zivtaller/Documents/current-projects/aodf_app:/data -w /data ev3cc make  && 
+    # make c program 
+    docker run --rm -v `pwd`:/data -w /data ev3cc make  && 
     #chmod to spec
     chmod +X ./run_root_settings && 
     chmod 4755 ./run_root_settings && 
