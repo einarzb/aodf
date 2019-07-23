@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import SettingsRow, {SettingsIDRow, SettingsNTPSyncRow, SettingsDownloadRow, HalfRow} from './SettingsRow';
 import SettingsDateRow from './SettingsDateRow';
-import {OButton, FormRow} from './styled';
+import {OButton, FormRow, COLOR_PRIMARY} from './styled';
 
-const COLOR_PRIMARY = '#fd7c20';
+//const COLOR_PRIMARY = '#fd7c20';
 
 
 export default class SettingsView extends React.Component{
@@ -99,6 +99,6 @@ const FormContainer = styled.div`
   display: flex;
   flex-direction:column;
   border-top: 1px gray solid;
-  margin:20px;
+  margin: 5rem auto;
   width:75vw;
 `;

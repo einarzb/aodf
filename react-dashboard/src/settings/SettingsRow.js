@@ -11,7 +11,7 @@ import { Heading } from 'grommet/components/Heading'
 import { Save } from 'grommet-icons/icons/Save'
 import { Undo } from 'grommet-icons/icons/Undo'
 // import { Calendar } from 'grommet-icons/icons/Calendar'
-import {FormRow, RowTitle, RowData, DataText, OButton,RowChild, InputContainer} from './styled'
+import {FormRow, RowTitle, RowData, DataText, OButton, RowChild, InputContainer} from './styled'
 
 const IP_INPUT_PROPS = [
     {
@@ -38,14 +38,13 @@ const IP_INPUT_PROPS = [
       placeholder:'#',
     },
   ];
-  const ID_INPUT_PROPS = [
- 
-  
+
+const ID_INPUT_PROPS = [
     {
       length: [1, 30]
   
     }
-  ];
+];
 
 
 export default class SettingsRow extends React.Component{
