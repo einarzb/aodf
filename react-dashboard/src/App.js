@@ -5,7 +5,9 @@ import styled from 'styled-components';
 import {Grommet} from 'grommet/components/Grommet';
 import {Heading} from 'grommet/components/Heading';
 import PasscodeModal from './settings/PasscodeModal';
-import SettingsView from './settings/SettingsView'
+import SettingsView from './settings/SettingsView';
+//import ConfigurationsView from './settings/configuration/ConfigurationsView';
+import TabsView from './settings/tabs/TabsView';
 // import SettingsRow, {SettingsIDRow} from './settings/SettingsRow';
 // import SettingsDateRow from './settings/SettingsDateRow';
 import RebootView from './RebootView';
@@ -201,6 +203,7 @@ class App extends Component {
     // let {part, serial} = aodf; 
     return (
       <Grommet theme={myTheme} className="App">
+        <TabsView/>
       {
           showPasscodeModal ? 
             <PasscodeModal unSavedChanges={unSavedChanges} onPasscodeEntered={this.onPasscodeEntered} close={()=>{this.setState({showPasscodeModal:false})}}/>
@@ -218,8 +221,10 @@ class App extends Component {
           showPasscodeModal={showPasscodeModal} settings={settings} 
           unSavedChanges={unSavedChanges} needReebot={needReebot} 
           rebootSafe={rebootSafe} checkingSwitches={checkingSwitches}/>
+
         }
         <a href="/logread.txt" hidden={true} ref={this.logRef} download></a>
+
       </Grommet>
     );
   }
