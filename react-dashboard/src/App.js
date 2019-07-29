@@ -6,7 +6,7 @@ import {Grommet} from 'grommet/components/Grommet';
 import {Heading} from 'grommet/components/Heading';
 import PasscodeModal from './settings/PasscodeModal';
 import SettingsView from './settings/SettingsView';
-//import ConfigurationsView from './settings/configuration/ConfigurationsView';
+import ConfigurationsView from './settings/configuration/ConfigurationsView';
 import TabsView from './settings/tabs/TabsView';
 // import SettingsRow, {SettingsIDRow} from './settings/SettingsRow';
 // import SettingsDateRow from './settings/SettingsDateRow';
@@ -224,7 +224,7 @@ class App extends Component {
 
         }
         <a href="/logread.txt" hidden={true} ref={this.logRef} download></a>
-
+        <ConfigurationsView onSettingChanged={this.onSettingChanged} tryToSave={this.tryToSave} onTimeChanged={this.onTimeChanged} settings={settings}/>
       </Grommet>
     );
   }
