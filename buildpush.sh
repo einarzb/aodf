@@ -1,6 +1,6 @@
 #!/bin/bash
 function copy_php {
-    scp -r -P 10457 ./*.php root@82.166.236.100:/usr/share/aodf-web/root/
+    scp -r -P 10560 ./*.php root@82.81.211.231:/usr/share/aodf-web/root/
 }
 
 function build_and_copy {
@@ -11,7 +11,7 @@ function build_and_copy {
     cd ..
     # pass args to index_updater.js
     node index_updater.js $myPath &&
-    scp -r -P 10457 ./react-dashboard/build/* root@82.166.236.100:/usr/share/aodf-web/root/machine_settings    
+    scp -r -P 10560 ./react-dashboard/build/* root@82.81.211.231:/usr/share/aodf-web/root/machine_settings    
 }
 
 function make_upload {
@@ -21,7 +21,7 @@ function make_upload {
     chmod +X ./run_root_settings && 
     chmod 4755 ./run_root_settings && 
     # send to server
-    scp  -r -P 10457 ./run_root_settings root@82.166.236.100:~
+    scp  -r -P 10560 ./run_root_settings root@82.81.211.231:~
 }
 
 function do_all {
