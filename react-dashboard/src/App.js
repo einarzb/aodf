@@ -1,17 +1,21 @@
 import React, { Component } from 'react';
+
+// import components
+import PasscodeModal from './settings/PasscodeModal';
+import SettingsView from './settings/SettingsView';
+import ConfigurationsView from './settings/configuration/ConfigurationsView';
+import TabsView from './settings/tabs/TabsView';
+import RebootView from './RebootView';
+import {p} from './settings/p'
+
+// styling dependencies
 import logo from './logo.svg';
 import './App.css';
 import styled from 'styled-components';
 import {Grommet} from 'grommet/components/Grommet';
 import {Heading} from 'grommet/components/Heading';
-import PasscodeModal from './settings/PasscodeModal';
-import SettingsView from './settings/SettingsView';
-import ConfigurationsView from './settings/configuration/ConfigurationsView';
-import TabsView from './settings/tabs/TabsView';
-// import SettingsRow, {SettingsIDRow} from './settings/SettingsRow';
-// import SettingsDateRow from './settings/SettingsDateRow';
-import RebootView from './RebootView';
-import {p} from './settings/p'
+
+// data 
 import { MicroApi } from './micro-api';
 // import PasscodeModal from './settings/PasscodeModal';
 const MOCK_DATA = {
@@ -41,8 +45,6 @@ const myTheme = {
 let switchesPinger;
 
 class App extends Component {
-
-  
   constructor(){
     super();
     this.logRef = React.createRef();
