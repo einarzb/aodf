@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import {OButton, FormRow} from './settings/styled';
+import {OButton, FormRow} from './views/styled';
 import {Heading} from 'grommet/components/Heading'
 
 class RebootView extends Component{

@@ -319,7 +319,7 @@ if(isset($_GET["functionname"])&&!empty ($_GET["functionname"]))
                }
                echo json_encode($records);
                break;
-           case 'operatorinsert':
+            case 'operatorinsert':
                $sql="INSERT INTO OPERATORS VALUES('{$_GET["NAME"]}','{$_GET['DESCRIPTION']}','{$_GET['COMMENT']}',0,0,0);";
                $result = $db->query($sql);
                if($result!=false)
