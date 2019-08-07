@@ -53,7 +53,7 @@ const _query=(params)=>{
 
 export const MicroApi = {
     
-    getSettings:()=>{
+    getSettings:()=>{        
         return _query({method:'GET',func:'get_settings',body:false})
     },
     changeSettings: (settings)=> {

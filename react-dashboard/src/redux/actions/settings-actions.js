@@ -9,3 +9,10 @@ export const settingsChangedAction = (fieldKey, value, fieldName) => ({
      }
   })
 
+export const FETCH_SETTINGS = 'FETCH_SETTINGS';
+
+export const fetchSettingsAction = (res) => ({
+  type:FETCH_SETTINGS,
+  data: res
+})
+

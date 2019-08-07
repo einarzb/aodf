@@ -19,6 +19,8 @@ import { ModalBG, myTheme } from '../src/views/styled';
 
 // data 
 import { MicroApi } from './micro-api';
+// ACTIONS
+import { fetchSettingsAction } from './redux/actions/settings-actions';
 
 let switchesPinger;
 
@@ -50,21 +52,22 @@ class App extends Component {
   }
 
 
-  refreshData = ( ) => {
-    
+  refreshData = ( ) => {    
     MicroApi.getSettings().then((res)=>{
-      // let set
+      //dispatch here? 
+      // let set      
       console.log(res);
       if (res.need_reboot){
         this.startPinger();
       }
       this.setState({settings:{...this.props.settings}, needReebot:res.need_reboot});
-
+      return res;
     });
+
     MicroApi.getPin().then((data)=>{
       this.setState({verifyPIN:data.code})
     })
-    
+
   }
 
   tryToSave = ()=>{    
@@ -182,8 +185,23 @@ const mapStateToProps = (state) => ({
   unSavedChanges:state.saveChangesReducer
 });
 
+
+const mapDispatchToProps = (dispatch) => {
+    return {  
+      refreshData:() => {    
+        MicroApi.getSettings().then((res)=>{    
+          console.log(res);
+          dispatch(fetchSettingsAction(res));
+        });
+      }
+    }
+  };
+
+
+
+
 export default connect(
-  mapStateToProps)
+  mapStateToProps, mapDispatchToProps)
   (App)
 
 
