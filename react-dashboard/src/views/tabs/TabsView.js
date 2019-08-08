@@ -1,23 +1,44 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+
+//views
+import SettingsView from '../SettingsView';
+import ConfigurationsView from '../configuration/ConfigurationsView';
 
 
 export default class TabsView extends React.Component{
     
     render(){    
         return (
-            <TabMenu>
-              <Tab>Settings</Tab>
-              <Tab>Configuration</Tab>  
-              <Tab>Optical Port</Tab>
-              <Tab>Calibration</Tab>
-              <Tab>Quick Commands</Tab>
-              <Tab></Tab>
-            </TabMenu>
+            <Router>
+                <div>
+                  <TabMenu>
+                        <Tab>
+                          <Link to="/">Settings</Link>
+                        </Tab>
+                        <Tab>
+                          <Link to="/configuration">Configuration</Link>
+                        </Tab>
+                        <Tab>
+                          <Link to="/opticalport">Optical Port</Link>
+                        </Tab>
+                        <Tab>
+                          <Link to="/calibration">Calibration</Link>
+                        </Tab>
+                        <Tab>
+                          <Link to="/quickcommands">Quick Commands</Link>
+                        </Tab>
+                        <Tab></Tab>
+                  </TabMenu>
+                  <Route exact path="/" component={SettingsView} />
+                  <Route path="/configuration" component={ConfigurationsView} />
+
+                </div>
+            </Router>
           )
     }
 }
-
 
 export const TabMenu = styled.ul`
   display: inline-flex;
@@ -39,6 +60,16 @@ export const Tab = styled.li`
   text-align:center;
   padding: 10px 4px;
   text-align:center;
+  & a {
+    text-decoration:none;
+    color: #000000;
+    border:2px solid red;
+    max-width:20%;
+    &:hover {
+      text-decoration:none;
+      color: #000000;
+    }
+  }
   &:last-child {
       width:10%;
     }

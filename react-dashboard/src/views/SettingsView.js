@@ -34,7 +34,7 @@ class SettingsView extends React.Component{
                 <BigButt disabled={true} label={'REBOOT NEEDED BUT SWITCHES ARE IN PROGRESS'}></BigButt>}
               
             </ButtonsRow>
-     
+            <div> im just sent from tabs</div>
             <SettingsRow label={'MAC Address'} model={mac_address} />
             <SettingsRow isIp={true} label={'IP Address'} model={ip}  
               onChange={ip =>{onSettingChanged('ip',ip,'IP Address')}} />
@@ -64,7 +64,8 @@ class SettingsView extends React.Component{
               model={CUSTOMER_MINOR_ID} onChange={id =>{onSettingChanged('CUSTOMER_MINOR_ID',id,'Customer Minor ID')}} /> 
             <SettingsNTPSyncRow label={'NTP Usage'} model={ntp_sync} onChange={ntp_sync =>{onSettingChanged('ntp_sync',ntp_sync,'NTP SYNC ENABLED')}} />
             <SettingsDownloadRow label={'AODF Log'} model={'/aodf.log'} refresher={false}  />
-            <SettingsDownloadRow label={'System Log'} model={false} refresher={dumpLogAndGetFile} />          
+            <SettingsDownloadRow label={'System Log'} model={false} refresher={dumpLogAndGetFile} />   
+
             <HalfRow labelLeft={'AODF Part number'} modelLeft={part_and_serial_numbers.aodf.part}
               labelRight={'AODF Serial number'} modelRight={part_and_serial_numbers.aodf.serial}></HalfRow>
               <HalfRow labelLeft={'Robot Part number'} modelLeft={part_and_serial_numbers.robot.part}

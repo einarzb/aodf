@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
+import {connect } from 'react-redux';
+
 import styled from 'styled-components';
 import SettingsRow, {ConfigurationRow} from '../SettingsRow';
-import {connect } from 'react-redux';
+
+// ACTIONS
+import { settingsChangedAction } from '../../redux/actions/settings-actions';
 
 class ConfigurationsView extends React.Component{
     
@@ -10,7 +14,9 @@ class ConfigurationsView extends React.Component{
         let currentSettings = settings;
         let {mac_address, part_and_serial_numbers} = currentSettings;
 
-        return (<ConfigurationContainer>
+        return (
+            <ConfigurationContainer tryToSave={this.tryToSave} 
+            onTimeChanged={this.onTimeChanged}>
                 <ConfigurationRow label={'MAC Address'} model={mac_address} />
                 <ConfigurationRow label={'Robotic Part Number'} model={part_and_serial_numbers.robot.part} />
                 <ConfigurationRow label={'Robotic Serial Number'} model={part_and_serial_numbers.robot.serial} onChange={part_and_serial_numbers =>{onSettingChanged('part_and_serial_numbers.robot.serial',part_and_serial_numbers.robot.serial,'Robotic Serial Number')}}/>
@@ -20,20 +26,30 @@ class ConfigurationsView extends React.Component{
     }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    settings:{...state.machine}
+//
+const mapStateToProps = (state) => ({  
+  settings:state.settingsReducer,
+  unSavedChanges:state.saveChangesReducer
+});
+
+
+const mapDispatchToProps = (dispatch) => {
+  return {  
+    onSettingChanged:(fieldKey, value, fieldName) => {
+      dispatch(
+        settingsChangedAction(fieldKey, value, fieldName)
+      )
+    }
   }
-}
+};
 
-const mapDispatchToProps = (dispatch) =>{
-  return {
-    changeDataToEinar:()=>dispatch({type:'name', 'data':'Einar'})
-  }
-}
-export default connect(mapStateToProps,mapDispatchToProps)(ConfigurationsView)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps)
+  (ConfigurationsView)
 
 
+//inline style
 const ConfigurationContainer = styled.div`
   display: flex;
   flex-direction:column;

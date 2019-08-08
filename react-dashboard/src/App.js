@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 // import views
 import PasscodeModal from './views/PasscodeModal';
 import SettingsView from './views/SettingsView';
-import ConfigurationsView from './views/configuration/ConfigurationsView';
 import TabsView from './views/tabs/TabsView';
 import RebootView from './RebootView';
 import {p} from './views/p'
@@ -54,8 +53,6 @@ class App extends Component {
 
   refreshData = ( ) => {    
     MicroApi.getSettings().then((res)=>{
-      //dispatch here? 
-      // let set      
       console.log(res);
       if (res.need_reboot){
         this.startPinger();
@@ -153,7 +150,9 @@ class App extends Component {
     let {rebootOngoing, showPasscodeModal, needReebot, rebootSafe, checkingSwitches} = this.state
 
     return (
+
       <Grommet theme={myTheme} className="App">
+        
         <TabsView/>
       {
           showPasscodeModal ? 
@@ -162,6 +161,10 @@ class App extends Component {
             <span></span> 
           }
         <ModalBG visible={showPasscodeModal}/>
+        
+        <div>
+          <p>im appjs settings down here </p>
+    
         {
           rebootOngoing ?  
           <RebootView reboot={this.reboot} toggle={this.toggleReboot} />         
@@ -173,6 +176,7 @@ class App extends Component {
           rebootSafe={rebootSafe} checkingSwitches={checkingSwitches} />
 
         }
+            </div>
         <a href="/logread.txt" hidden={true} ref={this.logRef} download></a>
        
       </Grommet>
@@ -201,7 +205,8 @@ const mapDispatchToProps = (dispatch) => {
 
 
 export default connect(
-  mapStateToProps, mapDispatchToProps)
+  mapStateToProps, 
+  mapDispatchToProps)
   (App)
 
 
