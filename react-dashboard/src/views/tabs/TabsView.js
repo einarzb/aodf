@@ -31,7 +31,8 @@ export default class TabsView extends React.Component{
                         </Tab>
                         <Tab></Tab>
                   </TabMenu>
-                  <Route exact path="/" component={SettingsView} />
+        {/**                  <Route exact path="/" component={SettingsView} /> 
+                  <Route exact path="/" component={SettingsOrRebootView} />*/}
                   <Route path="/configuration" component={ConfigurationsView} />
 
                 </div>
@@ -63,8 +64,9 @@ export const Tab = styled.li`
   & a {
     text-decoration:none;
     color: #000000;
-    border:2px solid red;
-    max-width:20%;
+    display:block;
+    width:100%;
+    height:100%;
     &:hover {
       text-decoration:none;
       color: #000000;

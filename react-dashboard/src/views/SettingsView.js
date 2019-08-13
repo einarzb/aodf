@@ -12,7 +12,7 @@ import { settingsChangedAction } from '../redux/actions/settings-actions';
 class SettingsView extends React.Component{
     
     render(){
-        let {dumpLogAndGetFile, onTimeChanged, onSettingChanged, unSavedChanges, settings, tryToSave, needReebot, rebootSafe, reboot} = this.props
+        let {dumpLogAndGetFile, onTimeChanged, onSettingChanged, unSavedChanges, settings, tryToSave, needReboot, rebootSafe, reboot} = this.props
         let currentSettings = settings;
         let {ntp_sync, ip, netmask , mac_address, gateway, time, 
             hostname, repo_ip, ntp_server, part_and_serial_numbers, 
@@ -27,14 +27,13 @@ class SettingsView extends React.Component{
               }
               <Spacer></Spacer>
               {
-                (needReebot && rebootSafe ) && 
+                (needReboot && rebootSafe ) && 
                 <AlertButton onClick={reboot} label={'REBOOT'}></AlertButton>}
                  {
-                (needReebot &&  !rebootSafe) && 
+                (needReboot &&  !rebootSafe) && 
                 <BigButt disabled={true} label={'REBOOT NEEDED BUT SWITCHES ARE IN PROGRESS'}></BigButt>}
               
             </ButtonsRow>
-            <div> im just sent from tabs</div>
             <SettingsRow label={'MAC Address'} model={mac_address} />
             <SettingsRow isIp={true} label={'IP Address'} model={ip}  
               onChange={ip =>{onSettingChanged('ip',ip,'IP Address')}} />
@@ -77,8 +76,10 @@ class SettingsView extends React.Component{
 }
 
 const mapStateToProps = (state) => ({  
-  settings:state.settingsReducer,
-  unSavedChanges:state.saveChangesReducer
+    settings:state.settingsReducer,
+    unSavedChanges:state.saveChangesReducer,
+    needReboot:state.rebootReducer.needReboot,
+    rebootSafe:state.rebootReducer.rebootSafe
 });
 
 

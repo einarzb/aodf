@@ -19,63 +19,73 @@ import { ModalBG, myTheme } from '../src/views/styled';
 // data 
 import { MicroApi } from './micro-api';
 // ACTIONS
-import { fetchSettingsAction } from './redux/actions/settings-actions';
+import { fetchSettingsAction, checkSwitchesAction } from './redux/actions/settings-actions';
 
 let switchesPinger;
 
 class App extends Component {
   constructor(props){
     super(props);
-
     this.logRef = React.createRef();
+    //local state holds local ui functions 
     this.state = {
       settings:{...this.props.settings},
       showPasscodeModal:false,
-      needReebot:false,
-      rebootSafe:false,
-      checkingSwitches:false,
-      rebootOngoing:false,
       verifyPIN:"111111"
-    };    
+    };        
   }
-
+  
   componentDidMount(){
-    this.refreshData();
+    this.refreshData();    
 
     setInterval(() => {
-      MicroApi.getDate().then(res=>{
-        let settings  = {...this.props.settings, time:res.date};        
-        this.setState({settings});
+      MicroApi.getDate().then(res => {     
+        console.log('im interval');
+           
+        let settings  = {...this.props.settings, time:res.date};  
+        this.state.settings = settings;
+       // this.setState({settings});
       })
     }, 10*1000);
   }
 
 
-  refreshData = ( ) => {    
-    MicroApi.getSettings().then((res)=>{
-      console.log(res);
+  refreshData = () => {            
+      let { sendResToRedux } = this.props;
+      MicroApi.getSettings().then((res) => {
+      sendResToRedux(res);
+      
       if (res.need_reboot){
         this.startPinger();
       }
-      this.setState({settings:{...this.props.settings}, needReebot:res.need_reboot});
-      return res;
+
+      /* this.setState({settings:{...this.props.settings}, needReboot:res.need_reboot});*/
+      this.state.settings = this.props.settings;
+      this.state.needReboot = this.props.needReboot;    
     });
 
-    MicroApi.getPin().then((data)=>{
-      this.setState({verifyPIN:data.code})
-    })
-
+      MicroApi.getPin().then((data)=>{
+        this.setState({verifyPIN:data.code})
+      })
+  }  
+  
+  sendResToRedux = (res) => {        
+    return res;  
   }
 
+  sendSwitchesToRedux = (res) => {
+    return res;
+  }
+  //move this to an action
   tryToSave = ()=>{    
     this.setState({showPasscodeModal:true})
   }
   closeModal = ( )=> {
     this.setState({showPasscodeModal:false});
   }
+  //move this to an action
   onTimeChanged = (time)=>{
-    console.log(time)
-  
+    console.log(time)    
     MicroApi.setDate(time).then(()=>{
       this.refreshData();
     }).catch(()=>{
@@ -108,32 +118,42 @@ class App extends Component {
     }
   }
 
-  startPinger = ( )=>{
-    if (!switchesPinger && !this.state.checkingSwitches){
-      switchesPinger = setInterval(()=>{
-        this.setState({checkingSwitches:true})
-        MicroApi.checkSwitches().then((res)=>{
-          if (res.indexOf('switch') !== -1){
 
-            this.setState({rebootSafe:false})
-          }else{
-            this.setState({rebootSafe:true, checkingSwitches:false});
-            
-              // this.stopPinger();
-          }
+
+  startPinger = () => {
+    let {sendSwitchesToRedux} = this.props;
+    if (!switchesPinger && !this.props.checkingSwitches){
+      
+      switchesPinger = setInterval(() => {
+        this.checkingSwitchesUpdate(); //this.setState({checkingSwitches:true})  
+
+        MicroApi.checkSwitches().then((res)=>{
+          sendSwitchesToRedux(res);
         });        
       },5*1000);
     }
   }
+  checkingSwitchesUpdate = () => {
+    this.props.checkingSwitches = true;
+
+    return this.props.checkingSwitches;
+  }
   stopPinger = ()=>{
     clearInterval(switchesPinger);
-    switchesPinger =false;
+    switchesPinger = false;
   }
+  
+// invoked when reboot btn pressed 
   toggleReboot = () => {
-    let rebootOngoing = !this.state.rebootOngoing;
-    this.setState({rebootOngoing});
+    let rebootOngoing = !this.props.rebootOngoing; 
+    this.state.rebootOngoing = rebootOngoing;
+    console.log(rebootOngoing);
+    console.log( this.state.rebootOngoing);
+    
+   // this.setState({rebootOngoing});    
   }
 
+  //move this to an action
   reboot=()=> {
     // TODO check that we don't have any scheduled switching
     MicroApi.reboot().then(r=>{alert("SYSTEM REBOOTED, TRY REFRESHING THIS PAGE IN A MINUTE")})
@@ -147,13 +167,13 @@ class App extends Component {
   }
 
   render() {
-    let {rebootOngoing, showPasscodeModal, needReebot, rebootSafe, checkingSwitches} = this.state
+    let { showPasscodeModal } = this.state
 
     return (
 
       <Grommet theme={myTheme} className="App">
-        
-        <TabsView/>
+       {/** <TabsView/> */} 
+       
       {
           showPasscodeModal ? 
             <PasscodeModal onPasscodeEntered={this.onPasscodeEntered} close={()=>{this.setState({showPasscodeModal:false})}}/>
@@ -161,48 +181,47 @@ class App extends Component {
             <span></span> 
           }
         <ModalBG visible={showPasscodeModal}/>
-        
-        <div>
-          <p>im appjs settings down here </p>
-    
-        {
-          rebootOngoing ?  
-          <RebootView reboot={this.reboot} toggle={this.toggleReboot} />         
-          :
-          <SettingsView tryToSave={this.tryToSave} dumpLogAndGetFile={this.dumpLogAndGetFile}
-          onTimeChanged={this.onTimeChanged} reboot={this.toggleReboot}
-          showPasscodeModal={showPasscodeModal} 
-          needReebot={needReebot} 
-          rebootSafe={rebootSafe} checkingSwitches={checkingSwitches} />
+        {/*
+        TODO:// move to another view that TABS view would direct him as SETTINGS VIEW  */}
+            
+        <div>    
+              {
+                this.props.rebootOngoing ?  
+                <RebootView reboot={this.reboot} toggle={this.toggleReboot} />         
+                :
+                <SettingsView tryToSave={this.tryToSave} dumpLogAndGetFile={this.dumpLogAndGetFile}
+                onTimeChanged={this.onTimeChanged} reboot={this.toggleReboot}
+                showPasscodeModal={showPasscodeModal} />
 
-        }
-            </div>
+              }
+        </div>
+   
         <a href="/logread.txt" hidden={true} ref={this.logRef} download></a>
        
       </Grommet>
     );
   }
 }
+ 
 
-const mapStateToProps = (state) => ({  
-  settings:state.settingsReducer,
-  unSavedChanges:state.saveChangesReducer
-});
-
-
-const mapDispatchToProps = (dispatch) => {
-    return {  
-      refreshData:() => {    
-        MicroApi.getSettings().then((res)=>{    
-          console.log(res);
-          dispatch(fetchSettingsAction(res));
-        });
-      }
-    }
-  };
+const mapStateToProps = (state) => {
+  const props = {
+    settings:state.settingsReducer,
+    unSavedChanges:state.saveChangesReducer,
+    needReboot:state.rebootReducer.needReboot,
+    rebootSafe:state.rebootReducer.rebootSafe,
+    checkingSwitches:state.rebootReducer.checkingSwitches,
+    rebootOngoing:state.rebootReducer.rebootOngoing
+  }
+  console.log(props);
+  return props;
+};
 
 
-
+const mapDispatchToProps = (dispatch) => ({  
+    sendResToRedux:(res) => dispatch(fetchSettingsAction(res)),
+    sendSwitchesToRedux:(res) => dispatch(checkSwitchesAction(res))
+    });
 
 export default connect(
   mapStateToProps, 

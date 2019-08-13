@@ -1,7 +1,4 @@
-import { UPDATE_SETTINGS, FETCH_SETTINGS } from '../actions/settings-actions';
-
-//dummy data --- > remove this and call get_settings api 
-//https://82.81.211.231:10561/api.php?functionname=get_settings 
+import { UPDATE_SETTINGS, FETCH_SETTINGS, UPDATE_TIME } from '../actions/settings-actions';
 
 const defaultState = {
     "Ntp_sync":"0","mac_address":"00:00:00:00:00:00","ip":"000.000.000.000","netmask":"000.000.000.000","gateway":"000.000.000.000","hostname":"...","time":new Date(Date.now()).toUTCString(),"repo_ip":"000.000.000.000","ntp_server":"...",
@@ -10,30 +7,39 @@ const defaultState = {
 
 };
 
-const resState = {}
-
-export default function settingsReducer(state, action){  
+let resState = {}
+let time; 
+export default function settingsReducer(state=defaultState, action){  
     switch (action.type) {
         case FETCH_SETTINGS:
-          return fetchSettings(state);
+          return fetchSettings(action.data);
         case UPDATE_SETTINGS:
           return checkSettings(state, action.data);
+        case UPDATE_TIME:
+          return updateTime(state, action);  
         case (! action.data || action.data == ''):
-          return defaultState;  
+          return resState;  
         default:
-          return defaultState;  
+          return state;  
       }
 }
 
-//push the new data for the view
-function checkSettings (state, data){
-    state[data.fieldKey]=data.value;    
-    return {...state};
+//fetch initial data from the API
+function fetchSettings(data) {
+  resState=data.res.settings;  
+  return {...resState};
 }
 
-//fetch initial data from the API
-function fetchSettings(state) {
-  console.log('fetching');
-  resState = state;
-  return {resState}  
+//push the new data for the view
+function checkSettings (state, data){  
+  state[data.fieldKey]=data.value;    
+  return {...state};
+}
+
+function updateTime (state,data){
+  console.log(state);
+  console.log(data.time);
+  console.log('yo');
+  time = data.time;
+  return {...time};
 }

@@ -4,6 +4,8 @@ function copy_php {
     scp -r -P 10560 ./*.php root@82.81.211.231:/usr/share/aodf-web/root/
     say finished mista
 }
+# local machien credentials - -P 443 ./*.php root@192.168.1.61:/usr/share/aodf-web/root/
+#remote machine credentials -  scp -r -P 10560 ./*.php root@82.81.211.231:/usr/share/aodf-web/root/
 
 function build_and_copy {
     cd react-dashboard/ 
@@ -15,8 +17,8 @@ function build_and_copy {
     node index_updater.js $myPath &&
     say please insert password 
     scp -r -P 10560 ./react-dashboard/build/* root@82.81.211.231:/usr/share/aodf-web/root/machine_settings  
-    open "https://82.81.211.231:10561/machine_settings/index.html"  
 }
+
 
 function make_upload {
     # make c program 
@@ -34,14 +36,12 @@ function do_all {
     build_and_copy &&
     copy_php &&
     make_upload 
-    say finished building
 }
 
 function do_js_php {
 
     build_and_copy &&
     copy_php 
-    say finished mistaaaaa
 }
 
 if [ "$1" == "all" ]; then
