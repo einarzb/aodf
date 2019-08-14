@@ -19,7 +19,7 @@ import { ModalBG, myTheme } from '../src/views/styled';
 // data 
 import { MicroApi } from './micro-api';
 // ACTIONS
-import { fetchSettingsAction, checkSwitchesAction, updateStateAction } from './redux/actions/settings-actions';
+import { fetchSettingsAction, checkSwitchesAction, updateTimeInStateAction, clearUnSavedChangesAction } from './redux/actions/settings-actions';
 
 let switchesPinger;
 
@@ -40,14 +40,13 @@ class App extends Component {
     this.refreshData();    
 
     setInterval(() => {
-      let { updateState } = this.props;
+      let { updateTimeInState } = this.props;
       MicroApi.getDate().then(res => {     
-        updateState(res);             
+        let updatedState = {...this.state.settings, time:res.date};
+        updateTimeInState(updatedState);             
       })
     }, 10*1000);
   }
-
-
   refreshData = () => {            
       let { sendResToRedux } = this.props;
       MicroApi.getSettings().then((res) => {
@@ -56,17 +55,13 @@ class App extends Component {
         if (res.need_reboot){
           this.startPinger();
         }
+      });
 
-        /* this.setState({settings:{...this.props.settings}, needReboot:res.need_reboot});*/
-        this.state.settings = this.props.settings;
-        this.state.needReboot = this.props.needReboot;    
-        });
-
-      MicroApi.getPin().then((data)=>{
+      MicroApi.getPin().then((data)=>{        
         this.setState({verifyPIN:data.code})
       })
   }  
-  updateState = (res) => {
+  updateTimeInState = (res) => {
     return res;
   }  
   sendResToRedux = (res) => {        
@@ -84,23 +79,28 @@ class App extends Component {
     this.setState({showPasscodeModal:false});
   }
   onPasscodeEntered = (ep) => {    
+    //init 
     const requiringReboot = ['ip', 'hostname', 'ntp_server', 'netmask', 'gateway'];
     let rebootNeeded = false;
+    let { clearUnSavedChanges } = this.props;
 
-    if ( ep == this.state.verifyPIN){
-
+    
+    if ( ep == this.state.verifyPIN) {
       let settingsMap = {};
 
       this.props.unSavedChanges.forEach(change => {
         settingsMap[change.fieldKey] = change.value;
-        if (requiringReboot.indexOf(change.fieldKey)!= -1){
+        
+        if (requiringReboot.indexOf(change.fieldKey)!= -1){          
           rebootNeeded = true;
         }
       }); 
+      
       console.log(settingsMap)
+      clearUnSavedChanges();
       this.setState({showPasscodeModal:false, unSavedChanges:[]})
-      MicroApi.changeSettings(settingsMap).then((r)=>{
-        // alert(r)
+
+      MicroApi.changeSettings(settingsMap).then((res)=>{        
         if (rebootNeeded){
           this.startPinger();
         }
@@ -109,6 +109,9 @@ class App extends Component {
     }
   }
 
+  clearUnSavedChanges = () => {
+    return;
+  }
   //move this to an action
   onTimeChanged = (time)=>{
     console.log(time)    
@@ -213,7 +216,6 @@ const mapStateToProps = (state) => {
     checkingSwitches:state.rebootReducer.checkingSwitches,
     rebootOngoing:state.rebootReducer.rebootOngoing
   }
-  console.log(props);
   return props;
 };
 
@@ -221,7 +223,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({  
     sendResToRedux:(res) => dispatch(fetchSettingsAction(res)),
     sendSwitchesToRedux:(res) => dispatch(checkSwitchesAction(res)),
-    updateState: (res) => dispatch(updateStateAction(res))
+    updateTimeInState: (res) => dispatch(updateTimeInStateAction(res)),
+    clearUnSavedChanges: () => dispatch(clearUnSavedChangesAction())
     });
 
 export default connect(

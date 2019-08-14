@@ -25,11 +25,10 @@ export const timeChangedAction = (time) => ({
 });
 
 export const UPDATE_STATE = 'UPDATE_STATE';
-export const updateStateAction = (res) => ({
+export const updateTimeInStateAction = (res) => ({
   type: UPDATE_STATE,
-  data: {
-    res
-  }
+  settings: {...res},
+  time: res.time
 });
 
 
@@ -42,3 +41,13 @@ export const checkSwitchesAction = (res) => ({
 });
 
 export const SWITCH_PINGER = 'SWITCH_PINGER';
+
+export const CLEAR_CACHE = 'CLEAR_CACHE';
+export const clearUnSavedChangesAction = (fieldKey, value, fieldName) => ({
+  type: CLEAR_CACHE,
+  data: {
+    fieldKey,
+    value,
+    fieldName
+   }
+});

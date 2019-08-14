@@ -9,6 +9,7 @@ const defaultState = {
 
 let resState = {}
 let time; 
+
 export default function settingsReducer(state=defaultState, action){  
     switch (action.type) {
         case FETCH_SETTINGS:
@@ -16,7 +17,7 @@ export default function settingsReducer(state=defaultState, action){
         case UPDATE_SETTINGS:
           return checkSettings(state, action.data);
         case UPDATE_STATE:
-          return updateSettings(state, action.data);
+          return updateTimeForSettings(state, action);
         case UPDATE_TIME:
           return updateTime(state, action);  
         case (! action.data || action.data == ''):
@@ -27,14 +28,15 @@ export default function settingsReducer(state=defaultState, action){
 }
 
 //fetch initial data from the API
-function fetchSettings(data) {
+function fetchSettings(data) {  
   resState=data.res.settings;  
   return {...resState};
 }
 
-//update state in an intervals 
-function updateSettings(state, data) {
-  resState=state;    
+//update state by TIME from API in an intervals of 10 sec
+function updateTimeForSettings(state, action) {
+  time = action.time;
+  resState.time=time;      
   return {...resState};
 }
 
