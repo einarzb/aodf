@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-// import views
+// views
 import PasscodeModal from './views/PasscodeModal';
 import SettingsView from './views/SettingsView';
 import TabsView from './views/tabs/TabsView';
@@ -19,7 +19,7 @@ import { ModalBG, myTheme } from '../src/views/styled';
 // data 
 import { MicroApi } from './micro-api';
 // ACTIONS
-import { fetchSettingsAction, checkSwitchesAction } from './redux/actions/settings-actions';
+import { fetchSettingsAction, checkSwitchesAction, updateStateAction } from './redux/actions/settings-actions';
 
 let switchesPinger;
 
@@ -27,6 +27,7 @@ class App extends Component {
   constructor(props){
     super(props);
     this.logRef = React.createRef();
+
     //local state holds local ui functions 
     this.state = {
       settings:{...this.props.settings},
@@ -39,12 +40,9 @@ class App extends Component {
     this.refreshData();    
 
     setInterval(() => {
+      let { updateState } = this.props;
       MicroApi.getDate().then(res => {     
-        console.log('im interval');
-           
-        let settings  = {...this.props.settings, time:res.date};  
-        this.state.settings = settings;
-       // this.setState({settings});
+        updateState(res);             
       })
     }, 10*1000);
   }
@@ -53,44 +51,37 @@ class App extends Component {
   refreshData = () => {            
       let { sendResToRedux } = this.props;
       MicroApi.getSettings().then((res) => {
-      sendResToRedux(res);
-      
-      if (res.need_reboot){
-        this.startPinger();
-      }
+        sendResToRedux(res);
+        
+        if (res.need_reboot){
+          this.startPinger();
+        }
 
-      /* this.setState({settings:{...this.props.settings}, needReboot:res.need_reboot});*/
-      this.state.settings = this.props.settings;
-      this.state.needReboot = this.props.needReboot;    
-    });
+        /* this.setState({settings:{...this.props.settings}, needReboot:res.need_reboot});*/
+        this.state.settings = this.props.settings;
+        this.state.needReboot = this.props.needReboot;    
+        });
 
       MicroApi.getPin().then((data)=>{
         this.setState({verifyPIN:data.code})
       })
   }  
-  
+  updateState = (res) => {
+    return res;
+  }  
   sendResToRedux = (res) => {        
     return res;  
   }
-
   sendSwitchesToRedux = (res) => {
     return res;
   }
-  //move this to an action
+
+//local
   tryToSave = ()=>{    
     this.setState({showPasscodeModal:true})
   }
   closeModal = ( )=> {
     this.setState({showPasscodeModal:false});
-  }
-  //move this to an action
-  onTimeChanged = (time)=>{
-    console.log(time)    
-    MicroApi.setDate(time).then(()=>{
-      this.refreshData();
-    }).catch(()=>{
-      this.refreshData();
-    });
   }
   onPasscodeEntered = (ep) => {    
     const requiringReboot = ['ip', 'hostname', 'ntp_server', 'netmask', 'gateway'];
@@ -116,6 +107,16 @@ class App extends Component {
         this.refreshData()
       })
     }
+  }
+
+  //move this to an action
+  onTimeChanged = (time)=>{
+    console.log(time)    
+    MicroApi.setDate(time).then(()=>{
+      this.refreshData();
+    }).catch(()=>{
+      this.refreshData();
+    });
   }
 
 
@@ -168,7 +169,6 @@ class App extends Component {
 
   render() {
     let { showPasscodeModal } = this.state
-
     return (
 
       <Grommet theme={myTheme} className="App">
@@ -220,7 +220,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({  
     sendResToRedux:(res) => dispatch(fetchSettingsAction(res)),
-    sendSwitchesToRedux:(res) => dispatch(checkSwitchesAction(res))
+    sendSwitchesToRedux:(res) => dispatch(checkSwitchesAction(res)),
+    updateState: (res) => dispatch(updateStateAction(res))
     });
 
 export default connect(

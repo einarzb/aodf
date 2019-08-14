@@ -24,6 +24,15 @@ export const timeChangedAction = (time) => ({
   }
 });
 
+export const UPDATE_STATE = 'UPDATE_STATE';
+export const updateStateAction = (res) => ({
+  type: UPDATE_STATE,
+  data: {
+    res
+  }
+});
+
+
 export const CHECK_SWITCHES = 'CHECK_SWITCHES';
 export const checkSwitchesAction = (res) => ({
   type: CHECK_SWITCHES,
