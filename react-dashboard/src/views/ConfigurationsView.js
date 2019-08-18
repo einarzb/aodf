@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import {connect } from 'react-redux';
 
 import styled from 'styled-components';
-import SettingsRow, {ConfigurationRow} from '../SettingsRow';
+import SettingsRow, {ConfigurationRow} from './SettingsRow';
 
 // ACTIONS
-import { settingsChangedAction } from '../../redux/actions/settings-actions';
+import { settingsChangedAction } from '../redux/actions/settings-actions';
 
 class ConfigurationsView extends React.Component{
     

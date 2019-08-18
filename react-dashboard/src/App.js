@@ -4,12 +4,11 @@ import { connect } from 'react-redux';
 // views
 import PasscodeModal from './views/PasscodeModal';
 import SettingsView from './views/SettingsView';
-import TabsView from './views/tabs/TabsView';
-import RebootView from './RebootView';
+import TabsView from './views/TabsView';
+import RebootView from './views/RebootView';
 import {p} from './views/p'
  
 // styling dependencies
-import logo from './logo.svg';
 import './App.css';
 import styled from 'styled-components';
 import {Grommet} from 'grommet/components/Grommet';
@@ -19,7 +18,7 @@ import { ModalBG, myTheme } from '../src/views/styled';
 // data 
 import { MicroApi } from './micro-api';
 // ACTIONS
-import { fetchSettingsAction, checkSwitchesAction, updateTimeInStateAction, clearUnSavedChangesAction } from './redux/actions/settings-actions';
+import { fetchSettingsAction, checkSwitchesAction, updateTimeInStateAction, clearUnSavedChangesAction, timeChangedAction } from './redux/actions/settings-actions';
 
 let switchesPinger;
 
@@ -97,11 +96,11 @@ class App extends Component {
       }); 
       
       console.log(settingsMap)
-      clearUnSavedChanges();
-      this.setState({showPasscodeModal:false, unSavedChanges:[]})
+      clearUnSavedChanges(); //redux
+      this.setState({showPasscodeModal:false}); //local 
 
-      MicroApi.changeSettings(settingsMap).then((res)=>{        
-        if (rebootNeeded){
+      MicroApi.changeSettings(settingsMap).then((res)=>{                
+        if (rebootNeeded){          
           this.startPinger();
         }
         this.refreshData()
@@ -109,20 +108,9 @@ class App extends Component {
     }
   }
 
-  clearUnSavedChanges = () => {
+  clearUnSavedChanges = () => {    
     return;
   }
-  //move this to an action
-  onTimeChanged = (time)=>{
-    console.log(time)    
-    MicroApi.setDate(time).then(()=>{
-      this.refreshData();
-    }).catch(()=>{
-      this.refreshData();
-    });
-  }
-
-
 
   startPinger = () => {
     let {sendSwitchesToRedux} = this.props;
@@ -137,23 +125,33 @@ class App extends Component {
       },5*1000);
     }
   }
+
   checkingSwitchesUpdate = () => {
     this.props.checkingSwitches = true;
-
     return this.props.checkingSwitches;
   }
+
   stopPinger = ()=>{
     clearInterval(switchesPinger);
     switchesPinger = false;
   }
+
+  //move this to an action
+  onTimeChanged = (time)=>{
+   // let {sendTimeToRedux} = this.props;     
+    MicroApi.setDate(time).then(()=>{
+      //sendTimeToRedux(time);
+      this.refreshData();
+    }).catch(()=>{
+      this.refreshData();
+    });
+  }
+
   
 // invoked when reboot btn pressed 
   toggleReboot = () => {
-    let rebootOngoing = !this.props.rebootOngoing; 
+    let rebootOngoing = !this.props.rebootOngoing;     
     this.state.rebootOngoing = rebootOngoing;
-    console.log(rebootOngoing);
-    console.log( this.state.rebootOngoing);
-    
    // this.setState({rebootOngoing});    
   }
 
@@ -171,11 +169,11 @@ class App extends Component {
   }
 
   render() {
-    let { showPasscodeModal } = this.state
+    let { showPasscodeModal, rebootOngoing } = this.state
     return (
 
       <Grommet theme={myTheme} className="App">
-       {/** <TabsView/> */} 
+      <TabsView/> 
        
       {
           showPasscodeModal ? 
@@ -185,20 +183,26 @@ class App extends Component {
           }
         <ModalBG visible={showPasscodeModal}/>
         {/*
-        TODO:// move to another view that TABS view would direct him as SETTINGS VIEW  */}
-            
+        TODO:// move to another view that TABS view would direct him as SETTINGS VIEW 
         <div>    
               {
-                this.props.rebootOngoing ?  
-                <RebootView reboot={this.reboot} toggle={this.toggleReboot} />         
+                rebootOngoing 
+                ?  
+                <RebootView 
+                  reboot={this.reboot} 
+                  toggle={this.toggleReboot} 
+                />         
                 :
-                <SettingsView tryToSave={this.tryToSave} dumpLogAndGetFile={this.dumpLogAndGetFile}
-                onTimeChanged={this.onTimeChanged} reboot={this.toggleReboot}
-                showPasscodeModal={showPasscodeModal} />
-
+                <SettingsView 
+                  tryToSave={this.tryToSave} 
+                  dumpLogAndGetFile={this.dumpLogAndGetFile}
+                  reboot={this.toggleReboot} onTimeChanged={this.onTimeChanged}
+                  showPasscodeModal={showPasscodeModal} 
+                />
               }
         </div>
-   
+       
+     */}
         <a href="/logread.txt" hidden={true} ref={this.logRef} download></a>
        
       </Grommet>
@@ -214,8 +218,8 @@ const mapStateToProps = (state) => {
     needReboot:state.rebootReducer.needReboot,
     rebootSafe:state.rebootReducer.rebootSafe,
     checkingSwitches:state.rebootReducer.checkingSwitches,
-    rebootOngoing:state.rebootReducer.rebootOngoing
-  }
+    rebootOngoing:state.rebootReducer.rebootOngoing,
+  }  
   return props;
 };
 
@@ -224,8 +228,9 @@ const mapDispatchToProps = (dispatch) => ({
     sendResToRedux:(res) => dispatch(fetchSettingsAction(res)),
     sendSwitchesToRedux:(res) => dispatch(checkSwitchesAction(res)),
     updateTimeInState: (res) => dispatch(updateTimeInStateAction(res)),
-    clearUnSavedChanges: () => dispatch(clearUnSavedChangesAction())
-    });
+    clearUnSavedChanges: () => dispatch(clearUnSavedChangesAction()),
+    //sendTimeToRedux:(time) => dispatch(timeChangedAction(time))    
+  });
 
 export default connect(
   mapStateToProps, 

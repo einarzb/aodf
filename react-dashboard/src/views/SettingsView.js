@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+// STYLING
 import styled from 'styled-components';
 import SettingsRow, {SettingsIDRow, SettingsNTPSyncRow, SettingsDownloadRow, HalfRow} from './SettingsRow';
 import SettingsDateRow from './SettingsDateRow';
@@ -20,20 +21,19 @@ class SettingsView extends React.Component{
     
         return (
         <FormContainer>  
+
             <ButtonsRow>
               {
-                (unSavedChanges.length > 0) &&
-                <BigButt onClick={tryToSave} label={'SAVE'}></BigButt>
+                (unSavedChanges.length > 0) && <BigButt onClick={tryToSave} label={'SAVE'}></BigButt>
               }
               <Spacer></Spacer>
               {
-                (needReboot && rebootSafe ) && 
-                <AlertButton onClick={reboot} label={'REBOOT'}></AlertButton>}
-                 {
-                (needReboot &&  !rebootSafe) && 
-                <BigButt disabled={true} label={'REBOOT NEEDED BUT SWITCHES ARE IN PROGRESS'}></BigButt>}
-              
+                 (needReboot && rebootSafe ) &&  <AlertButton onClick={reboot} label={'REBOOT'}></AlertButton>}
+              {
+                 (needReboot &&  !rebootSafe) &&  <BigButt disabled={true} label={'REBOOT NEEDED BUT SWITCHES ARE IN PROGRESS'}></BigButt>
+              }
             </ButtonsRow>
+
             <SettingsRow label={'MAC Address'} model={mac_address} />
             <SettingsRow isIp={true} label={'IP Address'} model={ip}  
               onChange={ip =>{onSettingChanged('ip',ip,'IP Address')}} />
@@ -80,18 +80,13 @@ const mapStateToProps = (state) => ({
     unSavedChanges:state.saveChangesReducer,
     needReboot:state.rebootReducer.needReboot,
     rebootSafe:state.rebootReducer.rebootSafe
+  });
+
+
+const mapDispatchToProps = (dispatch) => ({
+    onSettingChanged:(fieldKey, value, fieldName) => dispatch(settingsChangedAction(fieldKey, value, fieldName)),
 });
 
-
-const mapDispatchToProps = (dispatch) => {
-  return {  
-    onSettingChanged:(fieldKey, value, fieldName) => {
-      dispatch(
-        settingsChangedAction(fieldKey, value, fieldName)
-      )
-    }
-  }
-};
 
 export default connect(
   mapStateToProps,

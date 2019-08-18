@@ -46,10 +46,16 @@ function checkSettings (state, data){
   return {...state};
 }
 
+// onTimeChanged update 
 function updateTime (state,data){
-  console.log(state);
+  console.log(state.time);
   console.log(data.time);
   console.log('yo');
   time = data.time;
-  return {...time};
-}
+
+  state.time = data.time;
+  console.log(time);
+  console.log(state.time);
+  
+  return {...state};
+};
