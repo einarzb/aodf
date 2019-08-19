@@ -44,11 +44,11 @@ function checkSwitchesStatus(data){
   return {...initState}
   }
 
-// turn checkingSwitches from false to true
-function switchPinger(){
-  console.log('im invoked');
-  console.log(initState.checkingSwitches);
-  initState.checkingSwitches = true;
-  console.log(initState.checkingSwitches);
-  return {...initState}
-}
+  // turn checkingSwitches from false to true
+  function switchPinger(){
+    console.log('im invoked');
+    console.log(initState.checkingSwitches);
+    initState.checkingSwitches = true;
+    console.log(initState.checkingSwitches);
+    return {...initState}
+  }

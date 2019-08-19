@@ -13,7 +13,7 @@ import './App.css';
 import styled from 'styled-components';
 import {Grommet} from 'grommet/components/Grommet';
 import {Heading} from 'grommet/components/Heading';
-import { ModalBG, myTheme } from '../src/views/styled';
+import { ModalBG, myTheme } from './views/styled';
 
 // data 
 import { MicroApi } from './micro-api';
@@ -41,7 +41,7 @@ class App extends Component {
     setInterval(() => {
       let { updateTimeInState } = this.props;
       MicroApi.getDate().then(res => {     
-        let updatedState = {...this.state.settings, time:res.date};
+        let updatedState = {...this.state.settings, time:res.date};        
         updateTimeInState(updatedState);             
       })
     }, 10*1000);
@@ -64,9 +64,12 @@ class App extends Component {
     return res;
   }  
   sendResToRedux = (res) => {        
+    console.log('yo');
+    console.log(res);
+    
     return res;  
   }
-  sendSwitchesToRedux = (res) => {
+  sendSwitchesToRedux = (res) => {    
     return res;
   }
 
@@ -99,7 +102,9 @@ class App extends Component {
       clearUnSavedChanges(); //redux
       this.setState({showPasscodeModal:false}); //local 
 
-      MicroApi.changeSettings(settingsMap).then((res)=>{                
+      MicroApi.changeSettings(settingsMap).then((res)=>{     
+        console.log(res);
+                   
         if (rebootNeeded){          
           this.startPinger();
         }
@@ -111,8 +116,16 @@ class App extends Component {
   clearUnSavedChanges = () => {    
     return;
   }
-
-  startPinger = () => {
+  //move this to an action
+  onTimeChanged = (time)=>{
+    console.log(time)    
+    MicroApi.setDate(time).then(()=>{
+      this.refreshData();
+    }).catch(()=>{
+      this.refreshData();
+    });
+  }
+  startPinger = () => {    
     let {sendSwitchesToRedux} = this.props;
     if (!switchesPinger && !this.props.checkingSwitches){
       
@@ -136,16 +149,7 @@ class App extends Component {
     switchesPinger = false;
   }
 
-  //move this to an action
-  onTimeChanged = (time)=>{
-   // let {sendTimeToRedux} = this.props;     
-    MicroApi.setDate(time).then(()=>{
-      //sendTimeToRedux(time);
-      this.refreshData();
-    }).catch(()=>{
-      this.refreshData();
-    });
-  }
+
 
   
 // invoked when reboot btn pressed 
@@ -173,7 +177,7 @@ class App extends Component {
     return (
 
       <Grommet theme={myTheme} className="App">
-      <TabsView/> 
+       {/** <TabsView/> */} 
        
       {
           showPasscodeModal ? 
@@ -183,7 +187,8 @@ class App extends Component {
           }
         <ModalBG visible={showPasscodeModal}/>
         {/*
-        TODO:// move to another view that TABS view would direct him as SETTINGS VIEW 
+        TODO:// move to another view that TABS view would direct him as SETTINGS VIEW      */}
+
         <div>    
               {
                 rebootOngoing 
@@ -202,7 +207,6 @@ class App extends Component {
               }
         </div>
        
-     */}
         <a href="/logread.txt" hidden={true} ref={this.logRef} download></a>
        
       </Grommet>
@@ -220,6 +224,8 @@ const mapStateToProps = (state) => {
     checkingSwitches:state.rebootReducer.checkingSwitches,
     rebootOngoing:state.rebootReducer.rebootOngoing,
   }  
+  console.log(props);
+  
   return props;
 };
 
@@ -228,7 +234,7 @@ const mapDispatchToProps = (dispatch) => ({
     sendResToRedux:(res) => dispatch(fetchSettingsAction(res)),
     sendSwitchesToRedux:(res) => dispatch(checkSwitchesAction(res)),
     updateTimeInState: (res) => dispatch(updateTimeInStateAction(res)),
-    clearUnSavedChanges: () => dispatch(clearUnSavedChangesAction()),
+    clearUnSavedChanges: () => dispatch(clearUnSavedChangesAction())
     //sendTimeToRedux:(time) => dispatch(timeChangedAction(time))    
   });
 

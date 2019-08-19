@@ -21,7 +21,7 @@ export default function settingsReducer(state=defaultState, action){
         case UPDATE_TIME:
           return updateTime(state, action);  
         case (! action.data || action.data == ''):
-          return resState;  
+          return state;  
         default:
           return state;  
       }
@@ -46,16 +46,10 @@ function checkSettings (state, data){
   return {...state};
 }
 
-// onTimeChanged update 
 function updateTime (state,data){
-  console.log(state.time);
+  console.log(state);
   console.log(data.time);
   console.log('yo');
   time = data.time;
-
-  state.time = data.time;
-  console.log(time);
-  console.log(state.time);
-  
-  return {...state};
-};
+  return {...time};
+}

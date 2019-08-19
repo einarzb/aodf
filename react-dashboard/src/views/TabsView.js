@@ -32,14 +32,11 @@ export default class TabsView extends React.Component{
                         <Tab>
                         </Tab>
                   </TabMenu>
-                   
-                  <Route exact path="/" component={SettingsOrRebootView} />
-            
+        {/**                  <Route exact path="/" component={SettingsView} /> 
+                  <Route exact path="/" component={SettingsOrRebootView} />*/}
                   <Route path="/configuration" component={ConfigurationsView} />
 
-                  <Route path="/quickcommands" component={QuickCommandsView} />
-
-                </div>
+                  </div>
             </Router>
           )
     }

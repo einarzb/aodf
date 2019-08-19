@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-
 import styled from 'styled-components';
 import {OButton, FormRow} from './styled';
 import {Heading} from 'grommet/components/Heading'
@@ -12,14 +11,12 @@ class RebootView extends Component{
             rebootStartTime:false
         }        
     }
-    
     confirm= ()=>{
         this.props.reboot();        
         let d = new Date();
         this.setState({rebootInProgress:true, rebootStartTime:d.toDateString()})
         this.props.reboot()
     }
-    
     render(){
         let {rebootInProgress, rebootStartTime} = this.state
         return (

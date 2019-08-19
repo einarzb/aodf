@@ -16,8 +16,8 @@ export default function saveChangesReducer(state=unSavedChanges, action){
       }
 }
 
-// update unSavedChanges once needed
 function checkForChangesToSave (data) {
+    
   let alreadyChangedIndex = unSavedChanges.findIndex((e) => {
     return e.fieldKey === data.fieldKey
   });
@@ -28,12 +28,11 @@ function checkForChangesToSave (data) {
       unSavedChanges[alreadyChangedIndex] = {
         ...data
       }
-  
-    }  
+  }  
   return {unSavedChanges}
 }
 
-//clear unSavedChanges after changes saved in passcodemodal  
+//clear unSavedChanges after passcode modal is finished 
 function clearCacheAfterSaving (state){ 
   unSavedChanges = [];
   state = unSavedChanges;  
