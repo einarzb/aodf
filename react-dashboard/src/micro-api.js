@@ -84,4 +84,7 @@ export const MicroApi = {
     dumpLog:()=>{
         return  _query({method:'POST', func:'dump_log',body:{method:'dump_log'}});
     }
+
+    /// quick commands /// 
+    
 };

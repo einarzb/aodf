@@ -1,69 +1,41 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import styled from 'styled-components';
-import {OButton, FormRow} from './styled';
-import {Heading} from 'grommet/components/Heading'
 
 class quickCommandsView extends Component{
     constructor(){
         super()
         this.state = {
-            rebootInProgress:false,
-            rebootStartTime:false
+          quickFlag:false
         }
+        let data = 'yo yo oy';
     }
-    
-    confirm= ()=>{
-        this.props.reboot();
-        let d = new Date();
-        this.setState({rebootInProgress:true, rebootStartTime:d.toDateString()})
-        this.props.reboot()
-    }
-    
+
     render(){
-        let {rebootInProgress, rebootStartTime} = this.state
+        let { quickFlag } = this.state;
         return (
-        <QuickCommandsContainer>
-               
-            { 
-            !rebootInProgress&&<Heading textAlign={'center'}>
-                Are you sure? 
-                <br/>
-                <br/>
-                
-            </Heading>
-            }
-            {
-                !rebootInProgress&& <ButtonsFlexer>
-                <OButton label={'CONFIRM REBOOT'} onClick={this.confirm} ></OButton>
-                <OButton label={'CANCEL'} onClick={this.toggle} ></OButton>
-                </ButtonsFlexer>
-            }
-            {
-            rebootInProgress&&<Heading textAlign={'center'}>
-                Reboot command sent to machine at {rebootStartTime} 
-                <br/>
-                <br/>
-                You can refresh this page after ~ 1 minute
-                </Heading>
+          <QuickCommandsContainer>
+                <div>
+                  <p>Quick commands are set of commonly used commands that the technician used, it should replace the usage of “Set Function” screen. https://82.81.211.231:10561/index.php?param=Functions 
+                  this is what exsisting - /Users/EinarBarzilay/teliswitch_aodf/functions_display.php
+                  /Users/EinarBarzilay/teliswitch_aodf/aodf.js
+                  </p>
+                </div>
 
-            }
 
-        </QuickCommandsContainer>);
+          </QuickCommandsContainer>
+        );
     }
 }
-export default quickCommandsView;
+export default connect(
+  null,
+  null)
+  (quickCommandsView)
 
 const QuickCommandsContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
     padding-top:250px;
-`;
-
-const ButtonsFlexer = styled.div`
-    display: flex;
-    flex-direction: row;
-    width: 500px;
-    justify-content:space-evenly;
 `;

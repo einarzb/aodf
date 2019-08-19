@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 //views
 import ConfigurationsView from './ConfigurationsView';
 import SettingsOrRebootView from './SettingsOrRebootView';
-import quickCommandsView from './quickCommandsView';
+import QuickCommandsView from './QuickCommandsView';
 
 export default class TabsView extends React.Component{
     
@@ -29,14 +29,16 @@ export default class TabsView extends React.Component{
                         <Tab>
                           <Link to="/quickcommands">Quick Commands</Link>
                         </Tab>
-                        <Tab></Tab>
+                        <Tab>
+                        </Tab>
                   </TabMenu>
                    
                   <Route exact path="/" component={SettingsOrRebootView} />
             
                   <Route path="/configuration" component={ConfigurationsView} />
 
-                  <Route path="/quickcommands" component={quickCommandsView} />
+                  <Route path="/quickcommands" component={QuickCommandsView} />
+
                 </div>
             </Router>
           )

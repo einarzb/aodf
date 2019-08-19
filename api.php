@@ -125,7 +125,7 @@ if(isset($_GET["functionname"])&&!empty ($_GET["functionname"]))
            else
                $records["status"]="Update Failed";
            echo json_encode($records);
-           break;
+       break;
        case "plateload":
            $sql="SELECT * FROM 'PLATE_INFO' WHERE PLATE_NUMBER={$_GET["plateinfo_platenum"]} ";
            $result = $db->query($sql);
@@ -139,77 +139,77 @@ if(isset($_GET["functionname"])&&!empty ($_GET["functionname"]))
            echo json_encode($records);
            break;
        case "plategetportsform":
-           if(isset($_GET["plateinfo_platenum"]))
-           {
-               $recordid=$_GET["plateinfo_platenum"];
-               // select default ports of current record id
-               $sql="SELECT * FROM 'PLATE_INFO' WHERE PLATE_NUMBER=$recordid";
-               $result = $db->query($sql);
-               if($result!=FALSE)
-               {
-                   $records=$result->fetch(PDO::FETCH_ASSOC);
-                   $plateinfo_portsnum = $records["PORTS_NUMBER"];
-                   $plate_type =  $records['PLATE_TYPE'];
-               }
-               else
-                   return;
-               // get operators list
-               $result = $db->query("SELECT NAME FROM OPERATORS;");
-               $operatorslist=null;
-               $operatorslist[]="Not Assigned";
-               while($operator=$result->fetch(PDO::FETCH_ASSOC))
-               {
-                $operatorslist[]=$operator['NAME'];
-               }
-               //$statuslist=null;
-               $statuslist[]="Available";
-               $statuslist[]="Not Available";
-               echo '<table style="margin:0;border: 1px solid gray;" border="1">';
-               echo '<tr>';
-               echo td("Port");
-               echo td("Reel");
-               if($plate_type == 'Regular')
-               {
-                 echo td("Operator");
-                 echo td("Operator Comment");
-               }
-               echo td("Admin Comment");
-               echo td("Physical Status");
-               echo td("Counter");
-               echo '</tr>';
-               for ($index = 0; $index < $plateinfo_portsnum; $index++)
-               {
-                   $port_index = $index+1;
-                   $sql = "select * from 'platesports_info' where plateid= $recordid and portnum = $port_index";
-                   $result = $db->query($sql);
-                   $port_info=$result->fetch(PDO::FETCH_ASSOC);
-                   echo '<tr>';
-                   echo td($port_index);
-                   $sql="SELECT wheelid FROM 'wheel_info' WHERE plate_number=$recordid and plate_port_number=$port_index";
-                   $result = $db->query($sql);
-                   $records=$result->fetch(PDO::FETCH_ASSOC);
-                   $wheelid = $records['wheelid'];
-                   if($wheelid  > 0)
-                      echo td("$wheelid");
-                   else
-                      echo td("None");
-                   if($plate_type == 'Regular')
-                   { // Parking plate does not have operator
-                     echo td(dropdown('plateinfo_operator'.$index, $operatorslist,$port_info['operator']));
-                     echo td(input('plateinfo_opcmt'.$index, $port_info['opcomment']));
-                   }
-                   echo td(input('plateinfo_adcmt'.$index, $port_info['adcomment']));
-                   echo td(dropdown('plateinfo_status'.$index, $statuslist,$port_info['status']));
-                   echo td($port_info['connections_counter']); // Counter
-                   echo '</tr>';
-               }
-               echo '</table>';
-           }
-           break;
+            if(isset($_GET["plateinfo_platenum"]))
+            {
+                $recordid=$_GET["plateinfo_platenum"];
+                // select default ports of current record id
+                $sql="SELECT * FROM 'PLATE_INFO' WHERE PLATE_NUMBER=$recordid";
+                $result = $db->query($sql);
+                if($result!=FALSE)
+                {
+                    $records=$result->fetch(PDO::FETCH_ASSOC);
+                    $plateinfo_portsnum = $records["PORTS_NUMBER"];
+                    $plate_type =  $records['PLATE_TYPE'];
+                }
+                else
+                    return;
+                // get operators list
+                $result = $db->query("SELECT NAME FROM OPERATORS;");
+                $operatorslist=null;
+                $operatorslist[]="Not Assigned";
+                while($operator=$result->fetch(PDO::FETCH_ASSOC))
+                {
+                    $operatorslist[]=$operator['NAME'];
+                }
+                //$statuslist=null;
+                $statuslist[]="Available";
+                $statuslist[]="Not Available";
+                echo '<table style="margin:0;border: 1px solid gray;" border="1">';
+                echo '<tr>';
+                echo td("Port");
+                echo td("Reel");
+                if($plate_type == 'Regular')
+                {
+                    echo td("Operator");
+                    echo td("Operator Comment");
+                }
+                echo td("Admin Comment");
+                echo td("Physical Status");
+                echo td("Counter");
+                echo '</tr>';
+                for ($index = 0; $index < $plateinfo_portsnum; $index++)
+                {
+                    $port_index = $index+1;
+                    $sql = "select * from 'platesports_info' where plateid= $recordid and portnum = $port_index";
+                    $result = $db->query($sql);
+                    $port_info=$result->fetch(PDO::FETCH_ASSOC);
+                    echo '<tr>';
+                    echo td($port_index);
+                    $sql="SELECT wheelid FROM 'wheel_info' WHERE plate_number=$recordid and plate_port_number=$port_index";
+                    $result = $db->query($sql);
+                    $records=$result->fetch(PDO::FETCH_ASSOC);
+                    $wheelid = $records['wheelid'];
+                    if($wheelid  > 0)
+                        echo td("$wheelid");
+                    else
+                        echo td("None");
+                    if($plate_type == 'Regular')
+                    { // Parking plate does not have operator
+                        echo td(dropdown('plateinfo_operator'.$index, $operatorslist,$port_info['operator']));
+                        echo td(input('plateinfo_opcmt'.$index, $port_info['opcomment']));
+                    }
+                    echo td(input('plateinfo_adcmt'.$index, $port_info['adcomment']));
+                    echo td(dropdown('plateinfo_status'.$index, $statuslist,$port_info['status']));
+                    echo td($port_info['connections_counter']); // Counter
+                    echo '</tr>';
+                }
+                echo '</table>';
+                }
+            break;
         // ~~~~~~~~~~~~~~~
         // Coninfo screen
         // ~~~~~~~~~~~~~~~
-           case 'conoperhomeportstatus':
+        case 'conoperhomeportstatus':
                $homeport = $_GET['conoper_reelnum'];
                $sql="SELECT * FROM wheel_info WHERE wheelid=$homeport";
                $result = $db->query($sql);
@@ -244,11 +244,11 @@ if(isset($_GET["functionname"])&&!empty ($_GET["functionname"]))
                else
                  $ret['stat']="Fail to find home port";
                echo json_encode($ret);
-               break;
+        break;
         // ~~~~~~~~~~~~~~~
         // Reelinfo screen
         // ~~~~~~~~~~~~~~~
-           case 'wheelload':
+        case 'wheelload':
                $sql="SELECT * FROM wheel_info WHERE wheelid={$_GET["reelinfo_reelnum"]}";
                $result = $db->query($sql);
 
@@ -262,24 +262,24 @@ if(isset($_GET["functionname"])&&!empty ($_GET["functionname"]))
                    $records["status"]="Update Failed";
                }
                echo json_encode($records);
-               break;
-           case 'wheelsave':
-               $sql="UPDATE wheel_info SET administrator_comment='{$_GET['reelinfo_adcmt']}',operator_comment='{$_GET['reelinfo_opcmt']}',wheelstatus='{$_GET['reelinfo_status']}' WHERE wheelid={$_GET["reelinfo_reelnum"]}";
-               $result = $db->query($sql);
-               if($result!=false)
-               {
-                   $records["status"]="ok";
-               }
-               else
-               {
-                   $records["status"]="Update Failed";
-               }
-               echo json_encode($records);
-               break;
+        break;
+        case 'wheelsave':
+            $sql="UPDATE wheel_info SET administrator_comment='{$_GET['reelinfo_adcmt']}',operator_comment='{$_GET['reelinfo_opcmt']}',wheelstatus='{$_GET['reelinfo_status']}' WHERE wheelid={$_GET["reelinfo_reelnum"]}";
+            $result = $db->query($sql);
+            if($result!=false)
+            {
+                $records["status"]="ok";
+            }
+            else
+            {
+                $records["status"]="Update Failed";
+            }
+            echo json_encode($records);
+        break;
         // ~~~~~~~~~~~~~~~
         // Operatorsinfo screen
         // ~~~~~~~~~~~~~~~
-           case "operatordelete":
+        case "operatordelete":
                $sql="DELETE FROM 'OPERATORS' WHERE NAME='{$_GET["selected_operator"]}'";
                $result = $db->query($sql);
                if($result!=false)
@@ -290,8 +290,8 @@ if(isset($_GET["functionname"])&&!empty ($_GET["functionname"]))
                else
                    $records["status"]="Delete Failed";
                echo json_encode($records);
-               break;
-           case 'operatorload':
+        break;
+        case 'operatorload':
                $sql="SELECT * FROM OPERATORS WHERE NAME='{$_GET["selected_operator"]}'";
                $result = $db->query($sql);
 
@@ -305,50 +305,49 @@ if(isset($_GET["functionname"])&&!empty ($_GET["functionname"]))
                    $records["status"]="Select Failed";
                }
                echo json_encode($records);
-               break;
-           case 'operatorsave':
-               $sql="UPDATE OPERATORS SET DESCRIPTION='{$_GET['DESCRIPTION']}', COMMENT='{$_GET['COMMENT']}' WHERE NAME='{$_GET["selected_operator"]}'";
-               $result = $db->query($sql);
-               if($result!=false)
-               {
-                   $records["status"]="ok";
-               }
-               else
-               {
-                   $records["status"]="Update Failed";
-               }
-               echo json_encode($records);
-               break;
-            case 'operatorinsert':
-               $sql="INSERT INTO OPERATORS VALUES('{$_GET["NAME"]}','{$_GET['DESCRIPTION']}','{$_GET['COMMENT']}',0,0,0);";
-               $result = $db->query($sql);
-               if($result!=false)
-               {
-                   $records["name"] = $_GET["NAME"];
-                   $records["status"]="ok";
-               }
-               else
-               {
-                   $records["status"]="Insert Failed";
-               }
-               echo json_encode($records);
-               break;
-            case 'get_settings':
-                echo json_encode( array(
-                    "settings"=>get_settings(),
-                    "need_reboot"=>is_reboot_needed()
-                ));
-                break;
-            case 'reboot':
-            
-                die(do_reboot());    
-                break;
+        break;
+        case 'operatorsave':
+            $sql="UPDATE OPERATORS SET DESCRIPTION='{$_GET['DESCRIPTION']}', COMMENT='{$_GET['COMMENT']}' WHERE NAME='{$_GET["selected_operator"]}'";
+            $result = $db->query($sql);
+            if($result!=false)
+            {
+                $records["status"]="ok";
+            }
+            else
+            {
+                $records["status"]="Update Failed";
+            }
+            echo json_encode($records);
+            break;
+        case 'operatorinsert':
+            $sql="INSERT INTO OPERATORS VALUES('{$_GET["NAME"]}','{$_GET['DESCRIPTION']}','{$_GET['COMMENT']}',0,0,0);";
+            $result = $db->query($sql);
+            if($result!=false)
+            {
+                $records["name"] = $_GET["NAME"];
+                $records["status"]="ok";
+            }
+            else
+            {
+                $records["status"]="Insert Failed";
+            }
+            echo json_encode($records);
+            break;
+        case 'get_settings':
+            echo json_encode( array(
+                "settings"=>get_settings(),
+                "need_reboot"=>is_reboot_needed()
+            ));
+        break;
+        case 'reboot':
+            die(do_reboot());    
+            break;
 
             // case 'change_settings':
             //     echo json_encode(get_settings());     
-            default :
-                echo '{"status":"error"}';
-                break;
+        default :
+            echo '{"status":"error"}';
+            break;
     
         }
 }

@@ -12,7 +12,7 @@ import SettingsView from './SettingsView';
 import RebootView from './RebootView';
 
 
-class SettingsOrRebootView extends React.Component {
+class SettingsOrRebootView extends Component {
     
   constructor(props){
     super(props);

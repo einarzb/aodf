@@ -10,11 +10,11 @@ class RebootView extends Component{
         this.state = {
             rebootInProgress:false,
             rebootStartTime:false
-        }
+        }        
     }
     
     confirm= ()=>{
-        this.props.reboot();
+        this.props.reboot();        
         let d = new Date();
         this.setState({rebootInProgress:true, rebootStartTime:d.toDateString()})
         this.props.reboot()
