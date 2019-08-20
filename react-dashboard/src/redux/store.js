@@ -1,7 +1,7 @@
-import { createStore, compose, applyMiddleware } from "redux";
+import { createStore, compose, applyMiddleware } from "../../node_modules/redux";
 import rootReducer from "./reducers/reducersIndex";
-import { createLogger } from 'redux-logger';
-import thunk from 'redux-thunk';
+import { createLogger } from '../../node_modules/redux-logger';
+import thunk from '../../node_modules/redux-thunk';
 
 const middleWare = [];
 middleWare.push(thunk);

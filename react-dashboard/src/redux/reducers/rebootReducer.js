@@ -1,4 +1,4 @@
-import { FETCH_SETTINGS , CHECK_SWITCHES, SWITCH_PINGER} from '../actions/settings-actions';
+import { FETCH_SETTINGS , CHECK_SWITCHES, SWITCH_PINGER, TOGGLE_REBOOT } from '../actions/settings-actions';
 
 let needReboot = false;
 let rebootSafe = false; 
@@ -20,6 +20,8 @@ export default function rebootReducer (state=initState, action){
            return switchPinger();
          case CHECK_SWITCHES:
            return checkSwitchesStatus (action.data);
+         case TOGGLE_REBOOT:
+           return toggleRebootView(state, action.data);
          case (! action.data || action.data == ''):
            return initState;  
          default:          
@@ -52,3 +54,8 @@ function checkSwitchesStatus(data){
     console.log(initState.checkingSwitches);
     return {...initState}
   }
+
+function toggleRebootView() {
+  initState.rebootOngoing = !initState.rebootOngoing;
+  return {...initState}
+}

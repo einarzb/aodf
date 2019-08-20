@@ -6,19 +6,25 @@ import {Heading} from 'grommet/components/Heading'
 class RebootView extends Component{
     constructor(){
         super()
+        //init
         this.state = {
             rebootInProgress:false,
             rebootStartTime:false
-        }        
+        }   
     }
-    confirm= ()=>{
+
+    confirm = () => {        
         this.props.reboot();        
         let d = new Date();
+        // maybe I should update redux cause I have reboot reducer 
         this.setState({rebootInProgress:true, rebootStartTime:d.toDateString()})
-        this.props.reboot()
+        this.props.reboot(); // why twice? 
+    }
+    toggle = () => {
+        this.props.toggle();        
     }
     render(){
-        let {rebootInProgress, rebootStartTime} = this.state
+        let {rebootInProgress, rebootStartTime} = this.state        
         return (
         <RebootDiv>
                
@@ -33,7 +39,7 @@ class RebootView extends Component{
             {
                 !rebootInProgress&& <ButtonsFlexer>
                 <OButton label={'CONFIRM REBOOT'} onClick={this.confirm} ></OButton>
-                <OButton label={'CANCEL'} onClick={this.toggle} ></OButton>
+                <OButton label={'CANCEL'} onClick={this.toggle} ></OButton> 
                 </ButtonsFlexer>
             }
             {
@@ -41,14 +47,17 @@ class RebootView extends Component{
                 Reboot command sent to machine at {rebootStartTime} 
                 <br/>
                 <br/>
-                You can refresh this page after ~ 1 minute
+                You can refresh this page after ~ 1 minute 
                 </Heading>
+                // maybe change to countdown of 1 min
 
             }
 
-        </RebootDiv>);
+        </RebootDiv>
+        );
     }
 }
+
 export default RebootView;
 
 const RebootDiv = styled.div`

@@ -51,3 +51,11 @@ export const clearUnSavedChangesAction = (fieldKey, value, fieldName) => ({
     fieldName
    }
 });
+
+export const TOGGLE_REBOOT = 'TOGGLE_REBOOT';
+export const toggleRebootAction = (data) => ({
+  type: TOGGLE_REBOOT,
+  data: {
+    data
+   }
+});
