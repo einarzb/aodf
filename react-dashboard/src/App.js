@@ -63,10 +63,7 @@ class App extends Component {
   updateTimeInState = (res) => {
     return res;
   }  
-  sendResToRedux = (res) => {        
-    console.log('yo');
-    console.log(res);
-    
+  sendResToRedux = (res) => {            
     return res;  
   }
   sendSwitchesToRedux = (res) => {    
@@ -150,21 +147,25 @@ class App extends Component {
   }
 
 
+/*=================
+    REBOOT PART 
+ ================= */
+
   toggleReboot = () => {       
-    let { toggleRebootRedux } = this.props;
-    let rebootOngoing = !this.props.rebootOngoing;    
-    //update state
-      toggleRebootRedux(rebootOngoing);
+    let { toggleRebootRedux } = this.props; 
+    let rebootOngoing = !this.props.rebootOngoing; //local for view   
+    toggleRebootRedux(rebootOngoing);
   }
 
   toggleRebootRedux = (rebootOngoing) => {
     return rebootOngoing;
   }
 
-  //move this to an action
-  reboot=()=> {
+  reboot = () => {
     // TODO check that we don't have any scheduled switching
-    MicroApi.reboot().then(r=>{alert("SYSTEM REBOOTED, TRY REFRESHING THIS PAGE IN A MINUTE")})
+    MicroApi.reboot().then(r => {
+      alert("SYSTEM REBOOTED, TRY REFRESHING THIS PAGE IN A MINUTE")
+    })
   }
 
   dumpLogAndGetFile = ()=>{
@@ -181,7 +182,7 @@ class App extends Component {
     return (
 
       <Grommet theme={myTheme} className="App">
-       {/** <TabsView/> */} 
+      <TabsView/> 
        
       {
           showPasscodeModal ? 
@@ -193,8 +194,9 @@ class App extends Component {
         {/*
         TODO:// move to another view that TABS view would direct him as SETTINGS VIEW      */}
 
+        
         <div>    
-              { 
+              { // if true than it presented 
                 rebootOngoing 
                 ?  
                 <RebootView 

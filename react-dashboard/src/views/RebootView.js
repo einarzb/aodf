@@ -9,10 +9,32 @@ class RebootView extends Component{
         //init
         this.state = {
             rebootInProgress:false,
-            rebootStartTime:false
+            rebootStartTime:false,
+            minutes: 1,
+            seconds: 0
         }   
     }
-
+    componentDidMount() {
+        this.myInterval = setInterval(() => {
+          const { seconds, minutes } = this.state
+          if (seconds > 0) {
+            this.setState(({ seconds }) => ({
+              seconds: seconds - 1
+            }))
+          }
+          if (seconds === 0) {
+            if (minutes === 0) {
+              clearInterval(this.myInterval);
+              window.location.reload();
+            } else {
+              this.setState(({ minutes }) => ({
+                minutes: minutes - 1,
+                seconds: 59
+              }))
+            }
+          }
+        }, 1000)
+      }
     confirm = () => {        
         this.props.reboot();        
         let d = new Date();
@@ -20,11 +42,9 @@ class RebootView extends Component{
         this.setState({rebootInProgress:true, rebootStartTime:d.toDateString()})
         this.props.reboot(); // why twice? 
     }
-    toggle = () => {
-        this.props.toggle();        
-    }
+
     render(){
-        let {rebootInProgress, rebootStartTime} = this.state        
+        let { rebootInProgress, rebootStartTime, minutes, seconds } = this.state        
         return (
         <RebootDiv>
                
@@ -39,7 +59,7 @@ class RebootView extends Component{
             {
                 !rebootInProgress&& <ButtonsFlexer>
                 <OButton label={'CONFIRM REBOOT'} onClick={this.confirm} ></OButton>
-                <OButton label={'CANCEL'} onClick={this.toggle} ></OButton> 
+                <OButton label={'CANCEL'} onClick={this.props.toggle} ></OButton>
                 </ButtonsFlexer>
             }
             {
@@ -47,10 +67,9 @@ class RebootView extends Component{
                 Reboot command sent to machine at {rebootStartTime} 
                 <br/>
                 <br/>
-                You can refresh this page after ~ 1 minute 
+               Page will refresh in { minutes }:{ seconds < 10 ? `0${ seconds }` : seconds } seconds
+                <br/>
                 </Heading>
-                // maybe change to countdown of 1 min
-
             }
 
         </RebootDiv>
@@ -64,7 +83,7 @@ const RebootDiv = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top:250px;
+    padding-top:0px auto;
 `;
 
 const ButtonsFlexer = styled.div`
