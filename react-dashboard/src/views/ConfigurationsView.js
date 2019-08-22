@@ -30,20 +30,31 @@ class ConfigurationsView extends React.Component {
     render(){
         let { onSettingChanged, unSavedChanges, settings, tryToSave} = this.props
         let currentSettings = settings;
-        let {mac_address, part_and_serial_numbers, optic_cable_list, temp} = currentSettings;
+        let {mac_address, part_and_serial_numbers, optic_cable_list, temp, hostname} = currentSettings;
 
         return (
 
               <ConfigurationContainer tryToSave={this.tryToSave}>
+
                   <ConfigurationRow label={'MAC Address'} model={mac_address} />
-                  <ConfigurationRow label={'Robotic Part Number'} model={part_and_serial_numbers.robot.part} />
-                  <ConfigurationRow label={'Robotic Serial Number'} model={part_and_serial_numbers.robot.serial} />
-                  <ConfigurationRow label={'Optical Part number'} model={part_and_serial_numbers.aodf.part} />
-                  <ConfigurationRow label={'Optical Serial number'} model={part_and_serial_numbers.aodf.serial} />
-                  <ConfigurationRow label={'Plate Fiber Optic Cable'} model={optic_cable_list.plates_fiber_optic_cable.model} />
-                  <ConfigurationRow label={'Reels Fiber Optic Cable'} model={optic_cable_list.reels_fiber_optic_cable.model} />
-                  <ConfigurationRow label={'High temp Range'} model={temp.aodf.high} /> 
-                  <ConfigurationRow label={'low temp Range'} model={temp.aodf.low} />
+              
+    
+                   <ConfigurationRow label={'Robotic Part number'} model={part_and_serial_numbers.robot.part} onChange={part_and_serial_numbers =>{onSettingChanged('part_and_serial_numbers.robot.part',part_and_serial_numbers,'part_and_serial_numbers.robot.part')}}/>
+                 
+                     <ConfigurationRow label={'Robotic Serial number'} model={part_and_serial_numbers.robot.serial} onChange={part_and_serial_numbers =>{onSettingChanged('part_and_serial_numbers.robot.serial',part_and_serial_numbers,'part_and_serial_numbers.robot.serial')}}/>
+                 
+
+                   <ConfigurationRow label={'Optical Part number'} model={part_and_serial_numbers.aodf.part} onChange={part_and_serial_numbers =>{onSettingChanged('part_and_serial_numbers.aodf.part',part_and_serial_numbers,'part_and_serial_numbers.aodf.part')}}/>
+
+                  <ConfigurationRow label={'Optical Serial number'} model={part_and_serial_numbers.aodf.serial} onChange={part_and_serial_numbers =>{onSettingChanged('part_and_serial_numbers.aodf.serial',part_and_serial_numbers,'part_and_serial_numbers.aodf.serial')}}/>
+                 
+                  <ConfigurationRow label={'Plate Fiber Optic Cable'} model={optic_cable_list.plates_fiber_optic_cable.model} onChange={optic_cable_list =>{onSettingChanged('optic_cable_list.plates_fiber_optic_cable.model',optic_cable_list,'optic_cable_list.plates_fiber_optic_cable.model')}} />
+
+                  <ConfigurationRow label={'Reels Fiber Optic Cable'} model={optic_cable_list.reels_fiber_optic_cable.model} onChange={optic_cable_list =>{onSettingChanged('optic_cable_list.reels_fiber_optic_cable.model',optic_cable_list,'optic_cable_list.reels_fiber_optic_cable.model')}}/>
+
+                  <ConfigurationRow label={'Temperature Range'} />
+                  <ConfigurationRow label={'High'} model={temp.aodf.high} onChange={temp =>{onSettingChanged('temp.aodf.high',temp,'temp.aodf.high')}}/>
+                  <ConfigurationRow label={'Low'} model={temp.aodf.low} onChange={temp =>{onSettingChanged('temp.aodf.low',temp,'temp.aodf.low')}} />
                   <ConfigurationRow label={'Module ID Number'} />
                     
                   <ButtonsRow>
@@ -58,10 +69,14 @@ class ConfigurationsView extends React.Component {
 }
 
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state) => {
+  let props = {
     settings:state.configSettingsReducer,
     unSavedChanges:state.saveChangesReducer
-});
+  }
+    console.log(props);
+    return props;
+};
 
 
 const mapDispatchToProps = (dispatch) =>({
