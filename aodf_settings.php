@@ -335,4 +335,57 @@
     }
     // set_hostname("omg");
     // echo "WOW"; 
+
+    // configuration screen
+    function get_config_settings(){
+        return array_merge(
+            array('part_and_serial_numbers'=>get_parts_list(),
+                  'mac_address'=>get_mac_address(),
+                  'temp'=>get_temparture(),
+                  'optic_cable_list'=>get_optic_cable_list()
+             )
+
+        );
+    }
+    function get_temparture(){
+        $str= shell_exec("cat /etc/hw-list/hw-list.json");
+        
+        $decoded =  json_decode($str , true );
+        
+        if(!$decoded) {
+            $s = str_replace('NC",','NC"',$str);
+            $decoded =  json_decode($s , TRUE );
+        }
+
+        return array(
+            'aodf'=>array(
+                'high'=>$decoded['AODF']['Temperature']['high'],
+                'low'=>$decoded['AODF']['Temperature']['low']
+            )
+        );
+        return $decoded;
+    }
+    function get_optic_cable_list(){
+        $str= shell_exec("cat /etc/hw-list/hw-list.json");
+        
+        $decoded =  json_decode($str , true );
+        
+        if(!$decoded) {
+            $s = str_replace('NC",','NC"',$str);
+            $decoded =  json_decode($s , TRUE );
+        }
+
+        return array(
+            'plates_fiber_optic_cable'=>array(
+                'manufacture'=>$decoded['plates fiber optic cable']['Manufacture'],
+                'model'=>$decoded['plates fiber optic cable']['Model']
+            ),
+            'reels_fiber_optic_cable' => array(
+                'manufacture'=>$decoded['reels fiber optic cable']['Manufacture'],
+                'model'=>$decoded['reels fiber optic cable']['Model']
+            )
+        );
+        return $decoded;
+    }
+ 
 ?>
