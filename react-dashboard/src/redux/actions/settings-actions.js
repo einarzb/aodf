@@ -59,3 +59,12 @@ export const toggleRebootAction = (data) => ({
     data
    }
 });
+
+
+export const FETCH_CONFIG = 'FETCH_CONFIG';
+export const fetchConfigSettingsAction = (res) => ({
+  type: FETCH_CONFIG,
+  data: {
+    res
+  }  
+});

@@ -3,7 +3,6 @@ import { UPDATE_SETTINGS, CLEAR_CACHE } from '../actions/settings-actions';
 let unSavedChanges = [];
 
 export default function saveChangesReducer(state=unSavedChanges, action){  
-
     switch (action.type) {
         case UPDATE_SETTINGS:
           return checkForChangesToSave(action.data).unSavedChanges;

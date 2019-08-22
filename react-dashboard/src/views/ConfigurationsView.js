@@ -3,34 +3,50 @@ import {connect } from 'react-redux';
 
 import styled from 'styled-components';
 import SettingsRow, {ConfigurationRow} from './SettingsRow';
+import {ButtonsRow, BigButt} from './styled';
 
 // ACTIONS
 import { settingsChangedAction } from '../redux/actions/settings-actions';
 
 class ConfigurationsView extends React.Component{
-    
     render(){
-        let {onTimeChanged, onSettingChanged, unSavedChanges, settings, tryToSave} = this.props
+        let { onSettingChanged, unSavedChanges, settings, tryToSave} = this.props
         let currentSettings = settings;
-        let {mac_address, part_and_serial_numbers} = currentSettings;
-
+        let {mac_address, part_and_serial_numbers, optic_cable_list, temp} = currentSettings;}
+/** needs to make them rewriteable */
         return (
-            <ConfigurationContainer tryToSave={this.tryToSave} 
-            onTimeChanged={this.onTimeChanged}>
-                <ConfigurationRow label={'MAC Address'} model={mac_address} />
-                <ConfigurationRow label={'Robotic Part Number'} model={part_and_serial_numbers.robot.part} />
-                <ConfigurationRow label={'Robotic Serial Number'} model={part_and_serial_numbers.robot.serial} onChange={part_and_serial_numbers =>{onSettingChanged('part_and_serial_numbers.robot.serial',part_and_serial_numbers.robot.serial,'Robotic Serial Number')}}/>
 
-              </ConfigurationContainer>
+              <ConfigurationContainer tryToSave={this.tryToSave}>
+                  <ConfigurationRow label={'MAC Address'} model={mac_address} />
+                  <ConfigurationRow label={'Robotic Part Number'} model={part_and_serial_numbers.robot.part} />
+                  <ConfigurationRow label={'Robotic Serial Number'} model={part_and_serial_numbers.robot.serial} />
+                  <ConfigurationRow label={'Optical Part number'} model={part_and_serial_numbers.aodf.part} />
+                  <ConfigurationRow label={'Optical Serial number'} model={part_and_serial_numbers.aodf.serial} />
+                  <ConfigurationRow label={'Plate Fiber Optic Cable'} model={optic_cable_list.plates_fiber_optic_cable.model} />
+                  <ConfigurationRow label={'Reels Fiber Optic Cable'} model={optic_cable_list.reels_fiber_optic_cable.model} />
+                  <ConfigurationRow label={'High temp Range'} model={temp.aodf.high} /> 
+                  <ConfigurationRow label={'low temp Range'} model={temp.aodf.low} />
+                  <ConfigurationRow label={'Module ID Number'} />
+                    
+                  <ButtonsRow>
+                        {
+                          (unSavedChanges.length > 0) &&
+                          <BigButt onClick={tryToSave} label={'SAVE'}></BigButt>
+                        }
+                  </ButtonsRow>
+           </ConfigurationContainer>
           )
     }
 }
 
 //
-const mapStateToProps = (state) => ({  
-  settings:state.settingsReducer,
-  unSavedChanges:state.saveChangesReducer
-});
+const mapStateToProps = (state) => {  
+  let props = {
+    settings:state.configSettingsReducer,
+    unSavedChanges:state.saveChangesReducer
+  }
+  return props;
+};
 
 
 const mapDispatchToProps = (dispatch) => {

@@ -12,13 +12,12 @@ import {p} from './views/p'
 import './App.css';
 import styled from 'styled-components';
 import {Grommet} from 'grommet/components/Grommet';
-import {Heading} from 'grommet/components/Heading';
 import { ModalBG, myTheme } from './views/styled';
 
 // data 
 import { MicroApi } from './micro-api';
 // ACTIONS
-import { fetchSettingsAction, checkSwitchesAction, updateTimeInStateAction, clearUnSavedChangesAction, toggleRebootAction } from './redux/actions/settings-actions';
+import { fetchSettingsAction, checkSwitchesAction, updateTimeInStateAction, clearUnSavedChangesAction, toggleRebootAction, fetchConfigSettingsAction } from './redux/actions/settings-actions';
 
 let switchesPinger;
 
@@ -40,14 +39,23 @@ class App extends Component {
 
     setInterval(() => {
       let { updateTimeInState } = this.props;
+     
       MicroApi.getDate().then(res => {     
         let updatedState = {...this.state.settings, time:res.date};        
         updateTimeInState(updatedState);             
       })
+
     }, 10*1000);
   }
+
   refreshData = () => {            
-      let { sendResToRedux } = this.props;
+      let { sendResToRedux, sendConfigSettingToRedux } = this.props;
+      
+      MicroApi.getConfigSettings().then((res) => {
+        console.log(res.config_settings);
+        sendConfigSettingToRedux(res.config_settings);
+      });
+
       MicroApi.getSettings().then((res) => {
         sendResToRedux(res);
         
@@ -66,12 +74,15 @@ class App extends Component {
   sendResToRedux = (res) => {            
     return res;  
   }
+  sendConfigSettingToRedux = (res) => {            
+    return res;  
+  }
   sendSwitchesToRedux = (res) => {    
     return res;
   }
 
 //local
-  tryToSave = ()=>{    
+  tryToSave = () => {    
     this.setState({showPasscodeModal:true})
   }
   closeModal = ( )=> {
@@ -148,7 +159,7 @@ class App extends Component {
 
 
 /*=================
-    REBOOT PART 
+    REBOOT PART -- move to setting or reboot view
  ================= */
 
   toggleReboot = () => {       
@@ -167,6 +178,9 @@ class App extends Component {
       alert("SYSTEM REBOOTED, TRY REFRESHING THIS PAGE IN A MINUTE")
     })
   }
+
+
+
 
   dumpLogAndGetFile = ()=>{
     MicroApi.dumpLog().then(()=>{
@@ -195,23 +209,7 @@ class App extends Component {
         TODO:// move to another view that TABS view would direct him as SETTINGS VIEW      */}
 
         
-        <div>    
-              { // if true than it presented 
-                rebootOngoing 
-                ?  
-                <RebootView 
-                  reboot={this.reboot} 
-                  toggle={this.toggleReboot} 
-                />         
-                :
-                <SettingsView 
-                  tryToSave={this.tryToSave} 
-                  dumpLogAndGetFile={this.dumpLogAndGetFile}
-                  reboot={this.toggleReboot} onTimeChanged={this.onTimeChanged}
-                  showPasscodeModal={showPasscodeModal} 
-                />
-              }
-        </div>
+
        
         <a href="/logread.txt" hidden={true} ref={this.logRef} download></a>
        
@@ -229,7 +227,9 @@ const mapStateToProps = (state) => {
     rebootSafe:state.rebootReducer.rebootSafe,
     checkingSwitches:state.rebootReducer.checkingSwitches,
     rebootOngoing:state.rebootReducer.rebootOngoing,
+    configSettings:state.configSettingsReducer
   }    
+  console.log(props);
   return props;
 };
 
@@ -239,7 +239,8 @@ const mapDispatchToProps = (dispatch) => ({
     sendSwitchesToRedux:(res) => dispatch(checkSwitchesAction(res)),
     updateTimeInState: (res) => dispatch(updateTimeInStateAction(res)),
     clearUnSavedChanges: () => dispatch(clearUnSavedChangesAction()),
-    toggleRebootRedux: (rebootOngoing) => dispatch(toggleRebootAction(rebootOngoing))
+    toggleRebootRedux: (rebootOngoing) => dispatch(toggleRebootAction(rebootOngoing)),
+    sendConfigSettingToRedux:(res) => dispatch(fetchConfigSettingsAction(res))
     //sendTimeToRedux:(time) => dispatch(timeChangedAction(time))    
   });
 

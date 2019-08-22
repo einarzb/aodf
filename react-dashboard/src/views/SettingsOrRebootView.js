@@ -11,25 +11,35 @@ import RebootView from './RebootView';
     super(props);
     //local state
     this.state = {
-    settings:{...this.props.settings},
-    showPasscodeModal:false,
-    verifyPIN:"111111"
-  };  
+      settings:{...this.props.settings},
+      showPasscodeModal:false,
+      verifyPIN:"111111"
+     };  
+     console.log('yo');
+     console.log(this.props);
+     
+
     }
       render(){
-        let { showPasscodeModal } = this.state;
+        let { showPasscodeModal, rebootOngoing } = this.props;
         return (
-            <div>    
-                {
-                  this.props.rebootOngoing ?  
-                  <RebootView reboot={this.reboot} toggle={this.toggleReboot} />         
-                  :
-                  <SettingsView tryToSave={this.tryToSave} dumpLogAndGetFile={this.dumpLogAndGetFile}
-                  onTimeChanged={this.onTimeChanged} reboot={this.toggleReboot}
-                  showPasscodeModal={showPasscodeModal} />
-
-                }
-          </div>
+          <div>    
+              { // if true than it presented 
+                rebootOngoing 
+                ?  
+                <RebootView 
+                  reboot={this.reboot} 
+                  toggle={this.toggleReboot} 
+                />         
+                :
+                <SettingsView 
+                  tryToSave={this.tryToSave} 
+                  dumpLogAndGetFile={this.dumpLogAndGetFile}
+                  reboot={this.toggleReboot} onTimeChanged={this.onTimeChanged}
+                  showPasscodeModal={showPasscodeModal} 
+                />
+              }
+         </div>
         )
     }
 }

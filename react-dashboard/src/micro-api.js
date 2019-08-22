@@ -84,7 +84,7 @@ export const MicroApi = {
     dumpLog:()=>{
         return  _query({method:'POST', func:'dump_log',body:{method:'dump_log'}});
     },
-    /// quick commands /// 
+    /// configuration screen /// 
     
     getConfigSettings:()=>{        
         return _query({method:'GET',func:'get_config_settings',body:false})

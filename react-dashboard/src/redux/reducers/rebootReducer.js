@@ -21,7 +21,7 @@ export default function rebootReducer (state=initState, action){
          case CHECK_SWITCHES:
            return checkSwitchesStatus (action.data);
          case TOGGLE_REBOOT:
-           return toggleRebootView(state, action.data);
+           return toggleRebootView();
          case (! action.data || action.data == ''):
            return initState;  
          default:          
@@ -59,3 +59,4 @@ function toggleRebootView() {
   initState.rebootOngoing = !initState.rebootOngoing;
   return {...initState}
 }
+

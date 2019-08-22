@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import {OButton, FormRow} from './styled';
+import {OButton} from './styled';
 import {Heading} from 'grommet/components/Heading'
 
 class RebootView extends Component{
@@ -16,12 +16,15 @@ class RebootView extends Component{
     }
     componentDidMount() {
         this.myInterval = setInterval(() => {
-          const { seconds, minutes } = this.state
+          
+          let { seconds, minutes } = this.state
+       
           if (seconds > 0) {
             this.setState(({ seconds }) => ({
               seconds: seconds - 1
             }))
           }
+
           if (seconds === 0) {
             if (minutes === 0) {
               clearInterval(this.myInterval);
@@ -35,6 +38,7 @@ class RebootView extends Component{
           }
         }, 1000)
       }
+
     confirm = () => {        
         this.props.reboot();        
         let d = new Date();
