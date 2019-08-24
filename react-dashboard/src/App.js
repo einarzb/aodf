@@ -40,8 +40,8 @@ class App extends Component {
     setInterval(() => {
       let { updateTimeInState } = this.props;
      
-      MicroApi.getDate().then(res => {     
-        let updatedState = {...this.state.settings, time:res.date};        
+      MicroApi.getDate().then(res => {             
+        let updatedState = {...this.props.settings, time:res.date};        
         updateTimeInState(updatedState);             
       })
 
@@ -229,7 +229,7 @@ const mapStateToProps = (state) => {
     rebootOngoing:state.rebootReducer.rebootOngoing,
     configSettings:state.configSettingsReducer
   }    
-  console.log(props);
+  //console.log(props);
   return props;
 };
 

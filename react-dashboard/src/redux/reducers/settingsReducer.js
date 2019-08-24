@@ -42,8 +42,9 @@ function updateTimeForSettings(state, action) {
 
 //push the new data for the view
 function checkSettings (state, data){  
-  state[data.fieldKey]=data.value;    
-  return {...state};
+  state[data.fieldKey]=data.value;   
+  resState = state; 
+  return {...resState};
 }
 
 function updateTime (state,data){
