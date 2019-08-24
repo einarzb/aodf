@@ -17,7 +17,7 @@ import { ModalBG, myTheme } from './views/styled';
 // data 
 import { MicroApi } from './micro-api';
 // ACTIONS
-import { fetchSettingsAction, checkSwitchesAction, updateTimeInStateAction, clearUnSavedChangesAction, toggleRebootAction } from './redux/actions/settings-actions';
+import { fetchSettingsAction, checkSwitchesAction, updateTimeInStateAction, clearUnSavedChangesAction, toggleRebootAction, fetchConfigSettingsAction } from './redux/actions/settings-actions';
 
 let switchesPinger;
 
@@ -33,7 +33,7 @@ class App extends Component {
       verifyPIN:"111111"
     };        
   }
-  /*should stay here*/
+  
   componentDidMount(){
     this.refreshData();    
 
@@ -47,9 +47,14 @@ class App extends Component {
 
     }, 10*1000);
   }
-  /*should stay here*/
+
   refreshData = () => {            
       let { sendResToRedux, sendConfigSettingToRedux } = this.props;
+      
+      MicroApi.getConfigSettings().then((res) => {
+        console.log(res.config_settings);
+        sendConfigSettingToRedux(res.config_settings);
+      });
 
       MicroApi.getSettings().then((res) => {
         sendResToRedux(res);
@@ -66,8 +71,12 @@ class App extends Component {
   updateTimeInState = (res) => {
     return res;
   }  
-
-
+  sendResToRedux = (res) => {            
+    return res;  
+  }
+  sendConfigSettingToRedux = (res) => {            
+    return res;  
+  }
   sendSwitchesToRedux = (res) => {    
     return res;
   }
@@ -182,7 +191,7 @@ class App extends Component {
 
   render() {
     let { showPasscodeModal } = this.state;
-    //let {rebootOngoing} = this.props;
+    let {rebootOngoing} = this.props;
     
     return (
 
@@ -218,7 +227,9 @@ const mapStateToProps = (state) => {
     rebootSafe:state.rebootReducer.rebootSafe,
     checkingSwitches:state.rebootReducer.checkingSwitches,
     rebootOngoing:state.rebootReducer.rebootOngoing,
+    configSettings:state.configSettingsReducer
   }    
+  console.log(props);
   return props;
 };
 
@@ -228,7 +239,8 @@ const mapDispatchToProps = (dispatch) => ({
     sendSwitchesToRedux:(res) => dispatch(checkSwitchesAction(res)),
     updateTimeInState: (res) => dispatch(updateTimeInStateAction(res)),
     clearUnSavedChanges: () => dispatch(clearUnSavedChangesAction()),
-    toggleRebootRedux: (rebootOngoing) => dispatch(toggleRebootAction(rebootOngoing))
+    toggleRebootRedux: (rebootOngoing) => dispatch(toggleRebootAction(rebootOngoing)),
+    sendConfigSettingToRedux:(res) => dispatch(fetchConfigSettingsAction(res))
     //sendTimeToRedux:(time) => dispatch(timeChangedAction(time))    
   });
 

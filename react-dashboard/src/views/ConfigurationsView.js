@@ -6,32 +6,15 @@ import SettingsRow, {ConfigurationRow} from './SettingsRow';
 import {ButtonsRow, BigButt} from './styled';
 
 // ACTIONS
-import { MicroApi } from '../micro-api';
+import { settingsChangedAction } from '../redux/actions/settings-actions';
 
-import { fetchConfigSettingsAction, settingsChangedAction } from '../redux/actions/settings-actions';
-
-class ConfigurationsView extends React.Component {
-    constructor(props){
-      super(props);
-
-    }
-    componentDidMount(){
-      this.refreshData();
-    }
-
-    refreshData = () => {
-       let { sendConfigSettingToRedux } = this.props;
-    
-        MicroApi.getConfigSettings().then((res) => {
-          sendConfigSettingToRedux(res.config_settings);
-        });
-     }
-
+class ConfigurationsView extends React.Component{
     render(){
         let { onSettingChanged, unSavedChanges, settings, tryToSave} = this.props
         let currentSettings = settings;
-        let {mac_address, part_and_serial_numbers, optic_cable_list, temp, hostname} = currentSettings;
 
+        let {mac_address, part_and_serial_numbers, optic_cable_list, temp} = currentSettings;
+/** needs to make them rewriteable */
         return (
 
               <ConfigurationContainer tryToSave={this.tryToSave}>
@@ -68,21 +51,24 @@ class ConfigurationsView extends React.Component {
     }
 }
 
-
-const mapStateToProps = (state) => {
+const mapStateToProps = (state) => {  
   let props = {
     settings:state.configSettingsReducer,
     unSavedChanges:state.saveChangesReducer
   }
     console.log(props);
     return props;
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {  
+    onSettingChanged:(fieldKey, value, fieldName) => {
+      dispatch(
+        settingsChangedAction(fieldKey, value, fieldName)
+      )
+    }
+  }
 };
-
-
-const mapDispatchToProps = (dispatch) =>({
-    sendConfigSettingToRedux:(res) => dispatch(fetchConfigSettingsAction(res)),
-    onSettingChanged:(fieldKey, value, fieldName) => dispatch(settingsChangedAction(fieldKey, value, fieldName))
-});
 
 export default connect(
   mapStateToProps,
