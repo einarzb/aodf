@@ -45,7 +45,7 @@ class PasscodeModal extends React.Component{
 }
 
 const mapStateToProps = (state) => ({  
-  unSavedChanges:state.saveChangesReducer
+    unSavedChanges:state.saveChangesReducer
 });
 
 //connecting this view to the store

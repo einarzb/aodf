@@ -10,14 +10,12 @@ import { settingsChangedAction } from '../redux/actions/settings-actions';
 
 class ConfigurationsView extends React.Component{
     render(){
-        let { onSettingChanged, unSavedChanges, settings, tryToSave} = this.props
-        let currentSettings = settings;
-
+        let { onSettingChanged, unSavedChanges, configs, tryToSave} = this.props
+        let currentSettings = configs;
         let {mac_address, part_and_serial_numbers, optic_cable_list, temp} = currentSettings;
-/** needs to make them rewriteable */
         return (
 
-              <ConfigurationContainer tryToSave={this.tryToSave}>
+              <ConfigurationContainer>
 
                   <ConfigurationRow label={'MAC Address'} model={mac_address} />
               
@@ -53,9 +51,10 @@ class ConfigurationsView extends React.Component{
 
 const mapStateToProps = (state) => {  
   let props = {
-    settings:state.configSettingsReducer,
+    configs:state.configSettingsReducer,
     unSavedChanges:state.saveChangesReducer
   }
+  
     console.log(props);
     return props;
 }

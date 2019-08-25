@@ -97,10 +97,11 @@ class App extends Component {
   }
 
   onPasscodeEntered = (ep) => {    
+    
     //init 
     const requiringReboot = ['ip', 'hostname', 'ntp_server', 'netmask', 'gateway'];
     let rebootNeeded = false;
-    let { clearUnSavedChanges } = this.props;
+    let { clearUnSavedChanges, sendPCMToRedux, showPasscodeModal } = this.props;
 
     
     if ( ep == this.state.verifyPIN) {
@@ -115,10 +116,10 @@ class App extends Component {
       }); 
       
       console.log(settingsMap)
-      clearUnSavedChanges(); //redux
-      this.props.showPasscodeModal = false;
-
-      //this.setState({showPasscodeModal:false}); //local 
+    
+      showPasscodeModal = !this.props.showPasscodeModal; //false local for view
+      sendPCMToRedux(showPasscodeModal); //false
+      clearUnSavedChanges(); //clear changes array
 
       MicroApi.changeSettings(settingsMap).then((res)=>{     
         console.log(res);
@@ -131,9 +132,6 @@ class App extends Component {
     }
   }
 
-  clearUnSavedChanges = () => {    
-    return;
-  }
   //move this to an action
   onTimeChanged = (time)=>{
     console.log(time)    
@@ -205,7 +203,7 @@ class App extends Component {
     return (
 
       <Grommet theme={myTheme} className="App">
-      <TabsView/> 
+     {/* <TabsView/> */} 
        
       {
           showPasscodeModal ? 
@@ -270,7 +268,6 @@ const mapDispatchToProps = (dispatch) => ({
     toggleRebootRedux: (rebootOngoing) => dispatch(toggleRebootAction(rebootOngoing)),
     sendConfigSettingToRedux:(res) => dispatch(fetchConfigSettingsAction(res)),
     sendPCMToRedux:(showPasscodeModal) => dispatch(savePasscodeModelAction(showPasscodeModal))
-    // look at sendSwitchesToRedux 
     
     //sendTimeToRedux:(time) => dispatch(timeChangedAction(time))    
   });
