@@ -1,15 +1,17 @@
-import { FETCH_SETTINGS , CHECK_SWITCHES, SWITCH_PINGER, TOGGLE_REBOOT } from '../actions/settings-actions';
+import { FETCH_SETTINGS , CHECK_SWITCHES, SWITCH_PINGER, TOGGLE_REBOOT, SAVE_SETTINGS } from '../actions/settings-actions';
 
 let needReboot = false;
 let rebootSafe = false; 
 let checkingSwitches = false;
 let rebootOngoing = false;
+let showPasscodeModal = false;
 
 let initState = {
   needReboot:needReboot, 
   rebootSafe:rebootSafe,
   checkingSwitches:checkingSwitches,
-  rebootOngoing:rebootOngoing
+  rebootOngoing:rebootOngoing,
+  showPasscodeModal:showPasscodeModal
 }
 
 export default function rebootReducer (state=initState, action){            
@@ -22,12 +24,21 @@ export default function rebootReducer (state=initState, action){
            return checkSwitchesStatus (action.data);
          case TOGGLE_REBOOT:
            return toggleRebootView();
+         case SAVE_SETTINGS:
+           return savePassCodeModal(action.data);  
          case (! action.data || action.data == ''):
            return initState;  
          default:          
           return initState;  
       }
 }
+
+//open modal once you hit save btn
+function savePassCodeModal (data) {
+  initState.showPasscodeModal = data.res;
+  return {...initState}
+}
+
 
 //fetch reboot status from API
 function fetchRebootStatus (data) {    

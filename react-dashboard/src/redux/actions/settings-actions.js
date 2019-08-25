@@ -68,3 +68,11 @@ export const fetchConfigSettingsAction = (res) => ({
     res
   }  
 });
+
+export const SAVE_SETTINGS = 'SAVE_SETTINGS';
+export const savePasscodeModelAction = (res) => ({
+  type: SAVE_SETTINGS,
+  data: {
+    res
+  }  
+});
