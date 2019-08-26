@@ -4,27 +4,30 @@ import {connect } from 'react-redux';
 import styled from 'styled-components';
 import SettingsRow, {ConfigurationRow} from './SettingsRow';
 import {ButtonsRow, BigButt} from './styled';
+import PasscodeModal from './PasscodeModal';
+import { ModalBG, myTheme } from './styled';
 
 // ACTIONS
 import { MicroApi } from '../micro-api';
 
-import {  configSettingsChangedAction, updateTimeInStateAction, fetchConfigSettingsAction } from '../redux/actions/settings-actions';
+import {  configSettingsChangedAction, updateTimeInStateAction, fetchConfigSettingsAction, savePasscodeModelAction } from '../redux/actions/settings-actions';
 
 class ConfigurationsView extends React.Component {
     constructor(props){
       super(props);
       this.state = {
-        configs:this.props.configs
+        configs:{...this.props.configs}
       }
 
     }
     componentDidMount(){
       this.refreshData();
+     
       setInterval(() => {
         let { updateTimeInState } = this.props;
        
         MicroApi.getDate().then(res => {     
-          let updatedState = {...this.props.configs, time:res.date};                  
+          let updatedState = {...this.props.configs, time:res.date};                            
           updateTimeInState(updatedState);             
         })
   
@@ -35,8 +38,10 @@ class ConfigurationsView extends React.Component {
        let { sendConfigSettingToRedux } = this.props;
     
         MicroApi.getConfigSettings().then((res) => {
+          console.log(res);
           
         //concating data
+        let mac_address = res.config_settings.mac_address;
         let plates_fiber_optic_cable_model = res.config_settings.optic_cable_list.plates_fiber_optic_cable.model;
         let reels_fiber_optic_cable_model = res.config_settings.optic_cable_list.reels_fiber_optic_cable.model;
         let part_and_serial_numbers_aodf_part = res.config_settings.part_and_serial_numbers.aodf.part;
@@ -45,10 +50,11 @@ class ConfigurationsView extends React.Component {
         let part_and_serial_numbers_robot_serial = res.config_settings.part_and_serial_numbers.robot.serial;
         let temp_aodf_high = res.config_settings.temp.aodf.high;
         let temp_aodf_low = res.config_settings.temp.aodf.low;
+
  
         //runover
         res.config_settings = {
-          mac_address:res.config_settings.mac_address,
+          mac_address:mac_address,
           plates_fiber_optic_cable_model:plates_fiber_optic_cable_model,
           reels_fiber_optic_cable_model:reels_fiber_optic_cable_model,
           part_and_serial_numbers_aodf_part:part_and_serial_numbers_aodf_part,
@@ -57,17 +63,67 @@ class ConfigurationsView extends React.Component {
           part_and_serial_numbers_robot_serial:part_and_serial_numbers_robot_serial,
           temp_aodf_high:temp_aodf_high,
           temp_aodf_low:temp_aodf_low
-        }    
-
+        }              
           sendConfigSettingToRedux(res.config_settings);
         });
-        sendConfigSettingToRedux = (res) => {            
-          return res;  
-        }
      }
 
+     tryToSave = () => {  
+       console.log('tryong to save');
+       
+      let {sendPCMToRedux} = this.props;
+      let showPasscodeModal = !this.props.showPasscodeModal; //true local for view
+      console.log(showPasscodeModal);
+      
+      sendPCMToRedux(showPasscodeModal)
+    }
+   
+    closeModal = ( )=> {
+      let {sendPCMToRedux} = this.props;
+      let showPasscodeModal = !this.props.showPasscodeModal; //turn false local for view
+      sendPCMToRedux(showPasscodeModal)
+    }
+    onPasscodeEntered = (ep) => {    
+      console.log('im fucking here');
+      
+      //init 
+      const requiringReboot = ['ip', 'hostname', 'ntp_server', 'netmask', 'gateway'];
+      let rebootNeeded = false;
+      let { clearUnSavedChanges, sendPCMToRedux, showPasscodeModal } = this.props;
+  
+      
+      if ( ep == this.state.verifyPIN) {
+        let settingsMap = {};
+  
+        this.props.unSavedChanges.forEach(change => {
+          settingsMap[change.fieldKey] = change.value;
+          
+          if (requiringReboot.indexOf(change.fieldKey)!= -1){          
+            rebootNeeded = true;
+          }
+        }); 
+        
+        console.log(settingsMap)
+      
+        showPasscodeModal = !this.props.showPasscodeModal; //false local for view
+        console.log(showPasscodeModal);
+        
+        sendPCMToRedux(showPasscodeModal); //false
+       // clearUnSavedChanges(); //clear changes array
+  
+        MicroApi.changeSettings(settingsMap).then((res)=>{     
+          console.log(res);
+                     
+          if (rebootNeeded){          
+            this.startPinger();
+          }
+          this.refreshData()
+        })
+      }
+    }
+  
     render(){
-        let { onSettingChanged, unSavedConfigs, configs, tryToSave} = this.props
+        let { onSettingChanged, unSavedChanges, configs, showPasscodeModal} = this.props
         let currentConfigs = configs;
         let {mac_address, plates_fiber_optic_cable_model, reels_fiber_optic_cable_model, part_and_serial_numbers_aodf_part, part_and_serial_numbers_aodf_serial, part_and_serial_numbers_robot_part, part_and_serial_numbers_robot_serial, temp_aodf_high, temp_aodf_low} = currentConfigs;
 
@@ -75,21 +131,17 @@ class ConfigurationsView extends React.Component {
         return (
 
               <ConfigurationContainer>
-
+              {
+                  showPasscodeModal ? 
+                    <PasscodeModal onPasscodeEntered={this.onPasscodeEntered} close={()=>{
+                      this.closeModal();
+                    }}/>
+                  :
+                    <span></span> 
+                  }
+                <ModalBG visible={showPasscodeModal}/>
                   <ConfigurationRow label={'MAC Address'} model={mac_address} />
-                {/** 
-                  <ConfigurationRow 
-                  label={'Customer Minor ID'} //the text in ui
-                  model={CUSTOMER_MINOR_ID} //data
-                  onChange={id =>{
-                    onSettingChanged('CUSTOMER_MINOR_ID',id,'Customer Minor ID')} //fieldKey, value, label
-                    } /> 
-
-                     <SettingsRow isIp={false} label={'AODF Name'} model={hostname} 
-              onChange={hostname =>{onSettingChanged('hostname',hostname,'AODF Name')}} />
-
-                */}
-
+        
                    <ConfigurationRow 
                         label={'Robotic Part number'} 
                         model={part_and_serial_numbers_robot_part} 
@@ -140,8 +192,10 @@ class ConfigurationsView extends React.Component {
                     
                     <ButtonsRow>
                           {
-                            (unSavedConfigs.length > 0) &&
-                            <BigButt onClick={tryToSave} label={'SAVE'}></BigButt>
+                            (unSavedChanges.length > 0) &&
+                            <BigButt onClick={()=>{
+                              this.tryToSave();
+                            }} label={'SAVE'}></BigButt>
                           }
                     </ButtonsRow>
            </ConfigurationContainer>
@@ -153,7 +207,8 @@ class ConfigurationsView extends React.Component {
 const mapStateToProps = (state) => {
   let props = {
     configs:state.configSettingsReducer,
-    unSavedConfigs:state.saveConfigReducer
+    unSavedChanges:state.updateConfigsReducer,
+    showPasscodeModal:state.saveConfigsReducer.showPasscodeModal
   }
     console.log(props);
     return props;
@@ -163,7 +218,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) =>({
    sendConfigSettingToRedux:(res) => dispatch(fetchConfigSettingsAction(res)),
     onSettingChanged:(fieldKey, value, fieldName) => dispatch(configSettingsChangedAction(fieldKey, value, fieldName)),
-    updateTimeInState: (res) => dispatch(updateTimeInStateAction(res))
+    updateTimeInState: (res) => dispatch(updateTimeInStateAction(res)),
+    sendPCMToRedux:(showPasscodeModal) => dispatch(savePasscodeModelAction(showPasscodeModal))
 
 });
 

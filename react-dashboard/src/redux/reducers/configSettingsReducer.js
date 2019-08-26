@@ -8,17 +8,16 @@ let defaultState = {
   "part_and_serial_numbers_robot_serial":"0032",
   "plates_fiber_optic_cable_model":"FBR00007-12",
   "reels_fiber_optic_cable_model":"FBR00013",
-  "temp_aodf_high":"50",
+  "temp_aodf_high":"20",
   "temp_aodf_low":"0"
 }
-
 
 let confState = {}
 
 export default function configSettingsReducer(state=defaultState, action){  
     switch (action.type) {
         case FETCH_CONFIG:
-          return fetchConfigSettings(action.data);
+          return fetchConfigSettings(action);
         case UPDATE_CONFIG:
           return checkConfigs(state, action.data);  
         case (! action.data || action.data == ''):
@@ -29,8 +28,9 @@ export default function configSettingsReducer(state=defaultState, action){
 }
 
 //fetch initial data from the API
-function fetchConfigSettings( data) {  
-  confState=data.res;  
+function fetchConfigSettings(data) {  
+  console.log(data.data.res);
+  confState=data.data.res;  
   return {...confState};
 }
 
@@ -39,4 +39,5 @@ function checkConfigs (state, data){
    state[data.fieldKey]=data.value;
    return {...state};
   }
+
 
