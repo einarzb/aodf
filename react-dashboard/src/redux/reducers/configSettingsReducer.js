@@ -1,12 +1,28 @@
-import { FETCH_CONFIG } from '../actions/settings-actions';
-//problem is it's empty to begin with so needs to do some dummy text 
+import { FETCH_CONFIG, UPDATE_CONFIG } from '../actions/settings-actions';
+import _ from 'lodash';
+import _get from "lodash.get";
 
-let resState = {}
+let defaultState = {
+  "mac_address":"00:00:00:00:00:00",
+  "part_and_serial_numbers_aodf_part":"AOD10005",
+  "part_and_serial_numbers_aodf_serial":"02005",
+  "part_and_serial_numbers_robot_part":"AOR10004",
+  "part_and_serial_numbers_robot_serial":"0032",
+  "plates_fiber_optic_cable_model":"FBR00007-12",
+  "reels_fiber_optic_cable_model":"FBR00013",
+  "temp_aodf_high":"50",
+  "temp_aodf_low":"0"
+}
 
-export default function configSettingsReducer(state=resState, action){  
+
+let confState = {}
+
+export default function configSettingsReducer(state=defaultState, action){  
     switch (action.type) {
         case FETCH_CONFIG:
           return fetchConfigSettings(action.data);
+        case UPDATE_CONFIG:
+          return checkConfigs(state, action.data);  
         case (! action.data || action.data == ''):
           return state;  
         default:
@@ -15,7 +31,14 @@ export default function configSettingsReducer(state=resState, action){
 }
 
 //fetch initial data from the API
-function fetchConfigSettings(data) {  
-  resState=data.res;  
-  return {...resState};
+function fetchConfigSettings( data) {  
+  confState=data.res;  
+  return {...confState};
 }
+
+//push the new data for the view
+function checkConfigs (state, data){  
+   state[data.fieldKey]=data.value;
+   return {...state};
+  }
+

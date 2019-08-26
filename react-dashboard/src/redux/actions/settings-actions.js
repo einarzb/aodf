@@ -60,6 +60,7 @@ export const toggleRebootAction = (data) => ({
    }
 });
 
+// configuration screen 
 
 export const FETCH_CONFIG = 'FETCH_CONFIG';
 export const fetchConfigSettingsAction = (res) => ({
@@ -69,6 +70,17 @@ export const fetchConfigSettingsAction = (res) => ({
   }  
 });
 
+export const UPDATE_CONFIG = 'UPDATE_CONFIG';
+export const configSettingsChangedAction = (fieldKey, value, fieldName) => ({
+    type: UPDATE_CONFIG,
+    data: {
+      fieldKey,
+      value,
+      fieldName
+     }
+  });
+
+//save btn 
 export const SAVE_SETTINGS = 'SAVE_SETTINGS';
 export const savePasscodeModelAction = (res) => ({
   type: SAVE_SETTINGS,

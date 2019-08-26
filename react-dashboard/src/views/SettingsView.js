@@ -49,6 +49,7 @@ class SettingsView extends React.Component{
 
             <SettingsRow isIp={false} label={'AODF Name'} model={hostname} 
               onChange={hostname =>{onSettingChanged('hostname',hostname,'AODF Name')}} />
+              
             <SettingsRow isIp={true} label={'Repository IP'} model={repo_ip} 
               onChange={repo_ip =>{onSettingChanged('repo_ip',repo_ip,'Repository IP')}} />
             <SettingsRow isIp={false} label={'NTP address'} model={ntp_server} 

@@ -68,9 +68,9 @@ export default class SettingsRow extends React.Component{
                     <MaskedInput value={model} onChange={(e)=>{onChange(e.target.value)}}
                     mask={IP_INPUT_PROPS}></MaskedInput>
                     :
-                    <TextInput value={model} onChange={(e)=>{onChange(e.target.value)}}></TextInput>
+                    <TextInput value={model} onChange={(e)=>
+                      {onChange(e.target.value)}}></TextInput>
                   }
-                    
                   </InputContainer>              
                   
                 </RowData>
@@ -112,7 +112,9 @@ export class ConfigurationRow extends React.Component{
               <MaskedInput value={model} onChange={(e)=>{onChange(e.target.value)}}
               mask={IP_INPUT_PROPS}></MaskedInput>
               :
-              <TextInput value={model} onChange={(e)=>{onChange(e.target.value)}}></TextInput>
+              <TextInput value={model} onChange={(e)=>{
+                onChange(e.target.value);
+              }}></TextInput>
             }
               
             </InputContainer>              

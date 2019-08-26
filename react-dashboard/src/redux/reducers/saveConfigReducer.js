@@ -14,27 +14,26 @@ export default function saveConfigReducer(state=unSavedConfigChanges, action){
 }
 
 function checkForConfigChangesToSave (data) { //(fieldKey,value ,fieldName) 
-   console.log(data);
+   //console.log(data);
     
   let alreadyChangedIndex = unSavedConfigChanges.findIndex((e) => {
     return e.fieldKey === data.fieldKey
   });
   
-  if (alreadyChangedIndex == -1) {
+  if (alreadyChangedIndex == -1) {    
     unSavedConfigChanges.push(
       {
         ...data
       }
     );      
-    console.log(unSavedConfigChanges); 
-    console.log(data);
+    //console.log(unSavedConfigChanges); 
        
   } else {
     unSavedConfigChanges[alreadyChangedIndex] = {
       ...data
     }
   }  
-  console.log(unSavedConfigChanges);
+ // console.log(unSavedConfigChanges);
   
   return {unSavedConfigChanges}
 }
