@@ -1,6 +1,4 @@
 import { FETCH_CONFIG, UPDATE_CONFIG } from '../actions/settings-actions';
-import _ from 'lodash';
-import _get from "lodash.get";
 
 let defaultState = {
   "mac_address":"00:00:00:00:00:00",

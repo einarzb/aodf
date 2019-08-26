@@ -7,8 +7,6 @@
     "@material-ui/icons": "^4.2.1",
     "grommet": "^2.6.5",
     "grommet-icons": "^4.2.0",
-    "lodash": "^4.17.15",
-    "lodash.get": "^4.4.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-redux": "^7.1.0",
