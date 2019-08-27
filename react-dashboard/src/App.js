@@ -197,7 +197,7 @@ class App extends Component {
     return (
 
       <Grommet theme={myTheme} className="App">
-     <TabsView/> 
+    {/** <TabsView/> */} 
        
       {
           showPasscodeModal ? 
