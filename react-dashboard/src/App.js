@@ -71,11 +71,11 @@ class App extends Component {
   sendResToRedux = (res) => {            
     return res;  
   }
-
+/*
   sendSwitchesToRedux = (res) => {    
     return res;
   }
-
+*/
 
 //local
   tryToSave = () => {  
@@ -138,9 +138,13 @@ class App extends Component {
     });
   }
   startPinger = () => {    
+    console.log('pinging');
+    
     let {sendSwitchesToRedux} = this.props;
     if (!switchesPinger && !this.props.checkingSwitches){
+      console.log(this.props.checkingSwitches); //shoud be true
       
+
       switchesPinger = setInterval(() => {
         this.checkingSwitchesUpdate(); //this.setState({checkingSwitches:true})  
 
@@ -153,6 +157,9 @@ class App extends Component {
 
   checkingSwitchesUpdate = () => {
     this.props.checkingSwitches = true;
+    console.log('checking');
+    console.log(this.props.checkingSwitches);
+    
     return this.props.checkingSwitches;
   }
 
@@ -257,6 +264,8 @@ const mapStateToProps = (state) => {
     rebootOngoing:state.rebootReducer.rebootOngoing,
     showPasscodeModal:state.rebootReducer.showPasscodeModal
   }    
+  console.log(props);
+  
   return props;
 };
 
