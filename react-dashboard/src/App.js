@@ -79,6 +79,8 @@ class App extends Component {
 
 //local
   tryToSave = () => {  
+    console.log('trying to save');
+    
     let {sendPCMToRedux} = this.props;
     let showPasscodeModal = !this.props.showPasscodeModal; //true local for view
     sendPCMToRedux(showPasscodeModal)
@@ -197,19 +199,27 @@ class App extends Component {
     return (
 
       <Grommet theme={myTheme} className="App">
-    {/** <TabsView/> */} 
+      <TabsView/> 
        
+      {/**this should be duplicated when you wherever u have save btn  */}
+     
       {
-          showPasscodeModal ? 
-            <PasscodeModal onPasscodeEntered={this.onPasscodeEntered} close={()=>{
+          showPasscodeModal
+           ? 
+          <PasscodeModal 
+            onPasscodeEntered={this.onPasscodeEntered} 
+            close={()=>{
               this.closeModal();
             }}/>
           :
             <span></span> 
-          }
+      }
+
         <ModalBG visible={showPasscodeModal}/>
+        
         {/*
         TODO:// move to another view that TABS view would direct him as SETTINGS VIEW      */}
+       
         <div>    
                   { // if true than it presented 
                     rebootOngoing 
@@ -223,7 +233,6 @@ class App extends Component {
                       tryToSave={this.tryToSave} 
                       dumpLogAndGetFile={this.dumpLogAndGetFile}
                       reboot={this.toggleReboot} onTimeChanged={this.onTimeChanged}
-                      showPasscodeModal={showPasscodeModal} 
                     />
                   }
             </div>

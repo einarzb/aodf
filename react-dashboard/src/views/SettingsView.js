@@ -12,7 +12,7 @@ import { settingsChangedAction } from '../redux/actions/settings-actions';
 class SettingsView extends React.Component{
     
     render(){
-        let {dumpLogAndGetFile, onTimeChanged, onSettingChanged, unSavedChanges, settings, tryToSave, needReboot, rebootSafe, reboot} = this.props
+        let {dumpLogAndGetFile, onTimeChanged, onSettingChanged, unSavedChanges, settings, tryToSave, needReboot, rebootSafe, reboot } = this.props
         let currentSettings = settings;
         let {ntp_sync, ip, netmask , mac_address, gateway, time, 
             hostname, repo_ip, ntp_server, part_and_serial_numbers, 
@@ -76,12 +76,17 @@ class SettingsView extends React.Component{
     }
 }
 
-const mapStateToProps = (state) => ({  
+const mapStateToProps = (state) => {
+  let props = {
     settings:state.settingsReducer,
     unSavedChanges:state.saveChangesReducer,
     needReboot:state.rebootReducer.needReboot,
-    rebootSafe:state.rebootReducer.rebootSafe
-});
+    rebootSafe:state.rebootReducer.rebootSafe,
+    showPasscodeModal:state.rebootReducer.showPasscodeModal
+  }  
+  console.log(props);
+  return props;
+};
 
 
 const mapDispatchToProps = (dispatch) => {
