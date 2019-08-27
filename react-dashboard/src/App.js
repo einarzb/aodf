@@ -226,7 +226,7 @@ class App extends Component {
         
         {/*
         TODO:// move to another view that TABS view would direct him as SETTINGS VIEW      */}
-       
+       {/** 
         <div>    
                   { // if true than it presented 
                     rebootOngoing 
@@ -243,7 +243,7 @@ class App extends Component {
                     />
                   }
             </div>
-        
+       */} 
 
        
         <a href="/logread.txt" hidden={true} ref={this.logRef} download></a>
