@@ -8,17 +8,14 @@ import { FormContainer, ButtonsRow, BigButt, Spacer, AlertButton } from './style
 
 // ACTIONS
 import { MicroApi } from '../micro-api';
-import { settingsChangedAction } from '../redux/actions/settings-actions';
+import { settingsChangedAction, savePasscodeModelAction, toggleRebootAction } from '../redux/actions/settings-actions';
 
 class SettingsView extends React.Component {
   constructor(props){
     super(props);
     this.logRef = React.createRef();
-
-    //local state holds local ui functions 
     this.state = {
       settings:{...this.props.settings},
-     // showPasscodeModal:false,
       verifyPIN:"111111"
     };        
   }
@@ -29,8 +26,22 @@ class SettingsView extends React.Component {
       this.logRef.current.click();
     })
   }
+  //local
+  tryToSave = () => {  
+    console.log('trying to save');
+    
+    let {sendPCMToRedux} = this.props;
+    let showPasscodeModal = !this.props.showPasscodeModal; //true local for view
+    sendPCMToRedux(showPasscodeModal)
+  }
+  toggleReboot = () => {           
+    let { toggleRebootRedux } = this.props; 
+    let rebootOngoing = !this.props.rebootOngoing; //true - local for view   
+    toggleRebootRedux(rebootOngoing);
+  }
+
     render(){
-        let {dumpLogAndGetFile, onTimeChanged, onSettingChanged, unSavedChanges, settings, tryToSave, needReboot, rebootSafe, reboot } = this.props
+        let {onTimeChanged, onSettingChanged, unSavedChanges, settings, tryToSave, needReboot, rebootSafe, reboot, sendPCMToRedux, toggleRebootRedux } = this.props
         let currentSettings = settings;
         let {ntp_sync, ip, netmask , mac_address, gateway, time, 
             hostname, repo_ip, ntp_server, part_and_serial_numbers, 
@@ -41,12 +52,12 @@ class SettingsView extends React.Component {
             <ButtonsRow>
               {
                 (unSavedChanges.length > 0) &&
-                <BigButt onClick={tryToSave} label={'SAVE'}></BigButt>
+                <BigButt onClick={this.tryToSave} label={'SAVE'}></BigButt>
               }
               <Spacer></Spacer>
               {
                 (needReboot && rebootSafe ) && 
-                <AlertButton onClick={reboot} label={'REBOOT'}></AlertButton>}
+                <AlertButton onClick={this.toggleReboot} label={'REBOOT'}></AlertButton>}
                  {
                 (needReboot &&  !rebootSafe) && 
                 <BigButt disabled={true} label={'REBOOT NEEDED BUT SWITCHES ARE IN PROGRESS'}></BigButt>}
@@ -102,22 +113,20 @@ const mapStateToProps = (state) => {
     unSavedChanges:state.saveChangesReducer,
     needReboot:state.rebootReducer.needReboot,
     rebootSafe:state.rebootReducer.rebootSafe,
-    showPasscodeModal:state.rebootReducer.showPasscodeModal
+    showPasscodeModal:state.rebootReducer.showPasscodeModal,
+    rebootOngoing:state.rebootReducer.rebootOngoing
+
   }  
   console.log(props);
   return props;
 };
 
 
-const mapDispatchToProps = (dispatch) => {
-  return {  
-    onSettingChanged:(fieldKey, value, fieldName) => {
-      dispatch(
-        settingsChangedAction(fieldKey, value, fieldName)
-      )
-    }
-  }
-};
+const mapDispatchToProps = (dispatch) => ({  
+    onSettingChanged:(fieldKey, value, fieldName) => dispatch(settingsChangedAction(fieldKey, value, fieldName)),
+    sendPCMToRedux:(showPasscodeModal) => dispatch(savePasscodeModelAction(showPasscodeModal)),
+    toggleRebootRedux: (rebootOngoing) => dispatch(toggleRebootAction(rebootOngoing))
+});
 
 export default connect(
   mapStateToProps,

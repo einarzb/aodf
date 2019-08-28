@@ -78,6 +78,7 @@ class App extends Component {
 */
 
 //local
+/*
   tryToSave = () => {  
     console.log('trying to save');
     
@@ -85,7 +86,8 @@ class App extends Component {
     let showPasscodeModal = !this.props.showPasscodeModal; //true local for view
     sendPCMToRedux(showPasscodeModal)
   }
- 
+ */
+
   closeModal = ( )=> {
     let {sendPCMToRedux} = this.props;
     let showPasscodeModal = !this.props.showPasscodeModal; //turn false local for view
@@ -207,7 +209,7 @@ class App extends Component {
         
         {/*
         TODO:// move to another view that TABS view would direct him as SETTINGS VIEW      */}
-       {/**     */} 
+       {/**     
         <div>    
                   { // if true than it presented 
                     rebootOngoing 
@@ -223,7 +225,7 @@ class App extends Component {
                     />
                   }
             </div>
-   
+   */} 
 
        
        
@@ -255,7 +257,7 @@ const mapDispatchToProps = (dispatch) => ({
     updateTimeInState: (res) => dispatch(updateTimeInStateAction(res)),
     clearUnSavedChanges: () => dispatch(clearUnSavedChangesAction()),
   
-    sendPCMToRedux:(showPasscodeModal) => dispatch(savePasscodeModelAction(showPasscodeModal))
+   // sendPCMToRedux:(showPasscodeModal) => dispatch(savePasscodeModelAction(showPasscodeModal))
     
     //sendTimeToRedux:(time) => dispatch(timeChangedAction(time))    
   });

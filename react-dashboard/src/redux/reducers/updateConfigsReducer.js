@@ -1,5 +1,5 @@
 import { UPDATE_CONFIG, CLEAR_CACHE } from '../actions/settings-actions';
-
+//try with update settings 
 let unSavedConfigChanges = [];
 
 export default function updateConfigsReducer(state=unSavedConfigChanges, action){  

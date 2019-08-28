@@ -19,8 +19,6 @@ export default function saveConfigsReducer(state=initState, action){
 }
 
 function saveConfigChanges (data) {
-  console.log(data); //false
-  console.log(data.res); //false 
   initState.showPasscodeModal = data.res;
   return {...initState}
 }

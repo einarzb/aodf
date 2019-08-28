@@ -29,7 +29,7 @@ export default function configSettingsReducer(state=defaultState, action){
 
 //fetch initial data from the API
 function fetchConfigSettings(data) {  
-  console.log(data.data.res);
+ // console.log(data.data.res);
   confState=data.data.res;  
   return {...confState};
 }

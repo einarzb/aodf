@@ -87,14 +87,7 @@ export const OButton = styled(Button)`
   }
 `;
 
-export const NicePopup = styled.div`
-    position:absolute;
-    z-index:1000;
-    padding:20px;
-    box-shadow:rgba(0, 0, 0, 0.75) 10px 10px 28px 0px;
-    background-color:whitesmoke;
 
-`;
 export const BigButt = styled(OButton)`    
     margin: 10px;
 `;
@@ -141,6 +134,17 @@ export const ModalBG = styled.div`
   z-index:999;
   border:2px solid
   
+`;
+
+export const NicePopup = styled.div`
+    position:fixed;
+    left:0;
+    top:0;
+    z-index:1000;
+    padding:20px;
+    box-shadow:rgba(0, 0, 0, 0.75) 10px 10px 28px 0px;
+    background-color:whitesmoke;
+
 `;
 
 

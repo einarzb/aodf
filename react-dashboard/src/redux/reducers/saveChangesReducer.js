@@ -28,6 +28,8 @@ function checkForChangesToSave (data) {
         ...data
       }
   }  
+  console.log(unSavedChanges);
+  console.log('im settings unsavedchanged! ');
   return {unSavedChanges}
 }
 

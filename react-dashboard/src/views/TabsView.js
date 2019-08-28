@@ -7,6 +7,8 @@ import ConfigurationsView from './ConfigurationsView';
 import SettingsOrRebootView from './SettingsOrRebootView';
 import QuickCommandsView from './QuickCommandsView';
 import SettingsView from './SettingsView';
+import PasscodeModal from './PasscodeModal';
+import RebootView from './RebootView';
 
 export default class TabsView extends React.Component{
     
@@ -31,11 +33,18 @@ export default class TabsView extends React.Component{
                           <Link to="/quickcommands">Quick Commands</Link>
                         </Tab>
                         <Tab>
+                        <Link to="/passcodemodal">passcodemodal</Link>
+                        </Tab>
+                        <Tab>
+                        <Link to="/reboot">reboot</Link>
                         </Tab>
                   </TabMenu>
                         <Route exact path="/" component={SettingsView} /> 
                {/**     <Route exact path="/" component={SettingsOrRebootView} />*/}
                   <Route path="/configuration" component={ConfigurationsView} />
+                  <Route path="/passcodemodal" component={PasscodeModal} />
+                  <Route path="/reboot" component={RebootView} />
+
 
                   </div>
             </Router>
