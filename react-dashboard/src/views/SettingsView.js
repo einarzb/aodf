@@ -7,10 +7,28 @@ import SettingsDateRow from './SettingsDateRow';
 import { FormContainer, ButtonsRow, BigButt, Spacer, AlertButton } from './styled';
 
 // ACTIONS
+import { MicroApi } from '../micro-api';
 import { settingsChangedAction } from '../redux/actions/settings-actions';
 
-class SettingsView extends React.Component{
-    
+class SettingsView extends React.Component {
+  constructor(props){
+    super(props);
+    this.logRef = React.createRef();
+
+    //local state holds local ui functions 
+    this.state = {
+      settings:{...this.props.settings},
+     // showPasscodeModal:false,
+      verifyPIN:"111111"
+    };        
+  }
+  
+  dumpLogAndGetFile = ()=>{
+    MicroApi.dumpLog().then(()=>{
+      // after refreshing log on machine, programatically press link
+      this.logRef.current.click();
+    })
+  }
     render(){
         let {dumpLogAndGetFile, onTimeChanged, onSettingChanged, unSavedChanges, settings, tryToSave, needReboot, rebootSafe, reboot } = this.props
         let currentSettings = settings;
@@ -64,14 +82,16 @@ class SettingsView extends React.Component{
               model={CUSTOMER_MINOR_ID} onChange={id =>{onSettingChanged('CUSTOMER_MINOR_ID',id,'Customer Minor ID')}} /> 
             <SettingsNTPSyncRow label={'NTP Usage'} model={ntp_sync} onChange={ntp_sync =>{onSettingChanged('ntp_sync',ntp_sync,'NTP SYNC ENABLED')}} />
             <SettingsDownloadRow label={'AODF Log'} model={'/aodf.log'} refresher={false}  />
-            <SettingsDownloadRow label={'System Log'} model={false} refresher={dumpLogAndGetFile} />   
+            <SettingsDownloadRow label={'System Log'} model={false} refresher={this.dumpLogAndGetFile} />   
 
             <HalfRow labelLeft={'AODF Part number'} modelLeft={part_and_serial_numbers.aodf.part}
               labelRight={'AODF Serial number'} modelRight={part_and_serial_numbers.aodf.serial}></HalfRow>
               <HalfRow labelLeft={'Robot Part number'} modelLeft={part_and_serial_numbers.robot.part}
               labelRight={'Robot Serial number'} modelRight={part_and_serial_numbers.robot.serial}></HalfRow>
+               <a href="/logread.txt" hidden={true} ref={this.logRef} download></a>
 
           </FormContainer>
+
           )
     }
 }

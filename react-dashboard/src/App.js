@@ -17,14 +17,14 @@ import { ModalBG, myTheme } from './views/styled';
 // data 
 import { MicroApi } from './micro-api';
 // ACTIONS
-import { fetchSettingsAction, checkSwitchesAction, updateTimeInStateAction, clearUnSavedChangesAction, toggleRebootAction, savePasscodeModelAction  } from './redux/actions/settings-actions';
+import { fetchSettingsAction, checkSwitchesAction, updateTimeInStateAction, clearUnSavedChangesAction, savePasscodeModelAction  } from './redux/actions/settings-actions';
 
 let switchesPinger;
 
 class App extends Component {
   constructor(props){
     super(props);
-    this.logRef = React.createRef();
+//    this.logRef = React.createRef();
 
     //local state holds local ui functions 
     this.state = {
@@ -173,32 +173,13 @@ class App extends Component {
     REBOOT PART -- move to setting or reboot view
  ================= */
 
-  toggleReboot = () => {       
-    let { toggleRebootRedux } = this.props; 
-    let rebootOngoing = !this.props.rebootOngoing; //local for view   
-    toggleRebootRedux(rebootOngoing);
-  }
-
-  toggleRebootRedux = (rebootOngoing) => {
-    return rebootOngoing;
-  }
-
-  reboot = () => {
-    // TODO check that we don't have any scheduled switching
-    MicroApi.reboot().then(r => {
-      alert("SYSTEM REBOOTED, TRY REFRESHING THIS PAGE IN A MINUTE")
-    })
-  }
 
 
 
 
-  dumpLogAndGetFile = ()=>{
-    MicroApi.dumpLog().then(()=>{
-      // after refreshing log on machine, programatically press link
-      this.logRef.current.click();
-    })
-  }
+
+
+
 
   render() {
     let {rebootOngoing, showPasscodeModal} = this.props;
@@ -226,7 +207,7 @@ class App extends Component {
         
         {/*
         TODO:// move to another view that TABS view would direct him as SETTINGS VIEW      */}
-       {/** 
+       {/**     */} 
         <div>    
                   { // if true than it presented 
                     rebootOngoing 
@@ -238,15 +219,13 @@ class App extends Component {
                     :
                     <SettingsView 
                       tryToSave={this.tryToSave} 
-                      dumpLogAndGetFile={this.dumpLogAndGetFile}
                       reboot={this.toggleReboot} onTimeChanged={this.onTimeChanged}
                     />
                   }
             </div>
-       */} 
+   
 
        
-        <a href="/logread.txt" hidden={true} ref={this.logRef} download></a>
        
       </Grommet>
     );
@@ -275,7 +254,7 @@ const mapDispatchToProps = (dispatch) => ({
     sendSwitchesToRedux:(res) => dispatch(checkSwitchesAction(res)),
     updateTimeInState: (res) => dispatch(updateTimeInStateAction(res)),
     clearUnSavedChanges: () => dispatch(clearUnSavedChangesAction()),
-    toggleRebootRedux: (rebootOngoing) => dispatch(toggleRebootAction(rebootOngoing)),
+  
     sendPCMToRedux:(showPasscodeModal) => dispatch(savePasscodeModelAction(showPasscodeModal))
     
     //sendTimeToRedux:(time) => dispatch(timeChangedAction(time))    
