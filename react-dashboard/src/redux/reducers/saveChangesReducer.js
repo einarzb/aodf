@@ -34,7 +34,9 @@ function checkForChangesToSave (data) {
 }
 
 //clear unSavedChanges after passcode modal is finished 
+
 function clearCacheAfterSaving (state){ 
+ // console.log('clearing');  
   unSavedChanges = [];
   state = unSavedChanges;  
   return {...state}

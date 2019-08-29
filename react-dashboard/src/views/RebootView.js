@@ -12,9 +12,9 @@ import {toggleRebootAction} from '../redux/actions/settings-actions';
 import SettingsView from './SettingsView';
 
 
-class RebootView extends Component{
-    constructor(){
-        super()
+export class RebootView extends React.Component{
+    constructor(props){
+        super(props)
         //init
         this.state = {
             rebootInProgress:false,
@@ -70,7 +70,6 @@ class RebootView extends Component{
         let { rebootInProgress, rebootStartTime, minutes, seconds } = this.state;             
         return (
         <RebootDiv>
-           {/**  { rebootOngoing ? <RebootView/> : <SettingsView/> }   */}
             { 
             !rebootInProgress &&<Heading textAlign={'center'}>
                 Are you sure? 
@@ -116,11 +115,12 @@ const mapDispatchToProps = (dispatch) => ({
   toggleRebootRedux: (rebootOngoing) => dispatch(toggleRebootAction(rebootOngoing))
  })
 
-export default connect (
-  mapStateToProps,
-  mapDispatchToProps)
-  (RebootView);
-
+  export default connect(
+    mapStateToProps,
+    mapDispatchToProps)
+    (RebootView)
+  
+  
 const RebootDiv = styled.div`
     display: flex;
     flex-direction: column;

@@ -52,7 +52,7 @@ function checkSwitchesStatus(data){
      initState.rebootSafe = false;
   } else {
     initState.rebootSafe = true;
-    initState.checkingSwitches = false;
+    initState.checkingSwitches = false;    
   }
   return {...initState}
   }
@@ -66,8 +66,12 @@ function checkSwitchesStatus(data){
     return {...initState}
   }
 
-function toggleRebootView() {  
+function toggleRebootView() {    
+  console.log('yyyy');
+  
   initState.rebootOngoing = !initState.rebootOngoing;  
+  console.log(initState.rebootOngoing); //true
+  
   return {...initState}
 }
 

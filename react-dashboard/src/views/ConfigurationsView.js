@@ -11,7 +11,7 @@ import { ModalBG, myTheme } from './styled';
 import { MicroApi } from '../micro-api';
 import {  configSettingsChangedAction, updateTimeInStateAction, fetchConfigSettingsAction, savePasscodeModelAction } from '../redux/actions/settings-actions';
 
-const Greeting = () => <h1>Hello World today!</h1>;
+//const Greeting = () => <h1>Hello World today!</h1>;
 
 class ConfigurationsView extends React.Component {
     constructor(props){
@@ -21,6 +21,15 @@ class ConfigurationsView extends React.Component {
       }
 
     }
+      //local
+  tryToSave = () => {  
+    //console.log('trying to save in config');
+    
+    let {sendPCMToRedux} = this.props;
+    let showPasscodeModal = !this.props.showPasscodeModal; //true local for view
+    sendPCMToRedux(showPasscodeModal)
+  }
+
     componentDidMount(){
       this.refreshData();
      
@@ -69,67 +78,17 @@ class ConfigurationsView extends React.Component {
         });
      }
 
-/*
-    tryToSave = () => {         
-      let {sendPCMToRedux} = this.props;
-      let showPasscodeModal = !this.props.showPasscodeModal; //true local for view      
-      sendPCMToRedux(showPasscodeModal)
-    }
-   
-    closeModal = ( )=> {
-      let {sendPCMToRedux} = this.props;
-      let showPasscodeModal = !this.props.showPasscodeModal; //turn false local for view
-      sendPCMToRedux(showPasscodeModal)
-    }*/
-    /*
-    onPasscodeEntered = (ep) => {          
-      //init 
-      const requiringReboot = ['ip', 'hostname', 'ntp_server', 'netmask', 'gateway'];
-      let rebootNeeded = false;
-      let { clearUnSavedChanges, sendPCMToRedux, showPasscodeModal } = this.props;
-  
-      
-      if ( ep == this.state.verifyPIN) {
-        let settingsMap = {};
-  
-        this.props.unSavedChanges.forEach(change => {
-          settingsMap[change.fieldKey] = change.value;
-          
-          if (requiringReboot.indexOf(change.fieldKey)!= -1){          
-            rebootNeeded = true;
-          }
-        }); 
-        
-        console.log(settingsMap)
-      
-        showPasscodeModal = !this.props.showPasscodeModal; //false local for view
-        console.log(showPasscodeModal);
-        
-        sendPCMToRedux(showPasscodeModal); //false
-       // clearUnSavedChanges(); //clear changes array
-  
-        MicroApi.changeSettings(settingsMap).then((res)=>{     
-          console.log(res);
-                     
-          if (rebootNeeded){          
-            this.startPinger();
-          }
-          this.refreshData()
-        })
-      }
-    }
-  */
     render(){
-        let { onSettingChanged, unSavedChanges, configs, tryToSave} = this.props
+        let { onSettingChanged, unSavedChanges, configs} = this.props
         let currentConfigs = configs;
         let {mac_address, plates_fiber_optic_cable_model, reels_fiber_optic_cable_model, part_and_serial_numbers_aodf_part, part_and_serial_numbers_aodf_serial, part_and_serial_numbers_robot_part, part_and_serial_numbers_robot_serial, temp_aodf_high, temp_aodf_low} = currentConfigs;
 
 
         return (
 
-              <ConfigurationContainer tryToSave={tryToSave} 
+              <ConfigurationContainer
               >
-                <Greeting />
+               {/**  <Greeting />*/}
                   <ConfigurationRow label={'MAC Address'} model={mac_address} />
         
                    <ConfigurationRow 
@@ -182,7 +141,7 @@ class ConfigurationsView extends React.Component {
                     <ButtonsRow>
                           {
                             (unSavedChanges.length > 0) &&
-                            <BigButt onClick={tryToSave} label={'SAVE'}></BigButt>
+                            <BigButt onClick={this.tryToSave} label={'SAVE'}></BigButt>
                           }
                     </ButtonsRow>
            </ConfigurationContainer>
@@ -195,9 +154,12 @@ const mapStateToProps = (state) => {
   let props = {
     configs:state.configSettingsReducer,
     unSavedChanges:state.updateConfigsReducer,
-    showPasscodeModal:state.saveConfigsReducer.showPasscodeModal
+    showPasscodeModal:state.rebootReducer.showPasscodeModal,
   }
-    console.log(props);    
+  /*
+  console.log('im props of config view:');
+  console.log(props);
+  console.log('--------------');*/
     return props;
 };
 

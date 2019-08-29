@@ -30,8 +30,10 @@ function checkForConfigChangesToSave (data) {
       ...data
     }
   }    
-  console.log(unSavedConfigChanges);
+  console.log('***************');
   
+  console.log(unSavedConfigChanges);
+  console.log('***************');
   return {unSavedConfigChanges}
 }
 

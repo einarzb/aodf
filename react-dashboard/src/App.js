@@ -6,7 +6,9 @@ import PasscodeModal from './views/PasscodeModal';
 import SettingsView from './views/SettingsView';
 import TabsView from './views/TabsView';
 import RebootView from './views/RebootView';
-import {p} from './views/p'
+import {p} from './views/p';
+
+
  
 // styling dependencies
 import './App.css';
@@ -17,9 +19,9 @@ import { ModalBG, myTheme } from './views/styled';
 // data 
 import { MicroApi } from './micro-api';
 // ACTIONS
-import { fetchSettingsAction, checkSwitchesAction, updateTimeInStateAction, clearUnSavedChangesAction, savePasscodeModelAction  } from './redux/actions/settings-actions';
+import { updateTimeInStateAction  } from './redux/actions/settings-actions';
 
-let switchesPinger;
+//let switchesPinger;
 
 class App extends Component {
   constructor(props){
@@ -30,13 +32,13 @@ class App extends Component {
     this.state = {
       settings:{...this.props.settings},
      // showPasscodeModal:false,
-      verifyPIN:"111111"
+      //verifyPIN:"111111"
     };        
   }
   
   componentDidMount(){
-    this.refreshData();    
-
+   // this.refreshData();    
+/*
     setInterval(() => {
       let { updateTimeInState } = this.props;
      
@@ -45,9 +47,9 @@ class App extends Component {
         updateTimeInState(updatedState);             
       })
 
-    }, 10*1000);
+    }, 10*1000);*/
   }
-
+/*
   refreshData = () => {            
       let { sendResToRedux } = this.props;
       
@@ -64,13 +66,16 @@ class App extends Component {
       MicroApi.getPin().then((data)=>{        
         this.setState({verifyPIN:data.code})
       })
-  }  
+  } 
+  */
+  /*
   updateTimeInState = (res) => {
     return res;
-  }  
+  } */ 
+  /*
   sendResToRedux = (res) => {            
     return res;  
-  }
+  }*/
 /*
   sendSwitchesToRedux = (res) => {    
     return res;
@@ -86,15 +91,14 @@ class App extends Component {
     let showPasscodeModal = !this.props.showPasscodeModal; //true local for view
     sendPCMToRedux(showPasscodeModal)
   }
- */
+
 
   closeModal = ( )=> {
     let {sendPCMToRedux} = this.props;
     let showPasscodeModal = !this.props.showPasscodeModal; //turn false local for view
     sendPCMToRedux(showPasscodeModal)
   }
-
-  onPasscodeEntered = (ep) => {    
+    onPasscodeEntered = (ep) => {    
     
     //init 
     const requiringReboot = ['ip', 'hostname', 'ntp_server', 'netmask', 'gateway'];
@@ -130,7 +134,12 @@ class App extends Component {
     }
   }
 
+ */
+
+ /** move this to pascodemodal . js */
+
   //move this to an action
+  /*
   onTimeChanged = (time)=>{
     console.log(time)    
     MicroApi.setDate(time).then(()=>{
@@ -139,6 +148,9 @@ class App extends Component {
       this.refreshData();
     });
   }
+
+  */
+  /*
   startPinger = () => {    
     console.log('pinging');
     
@@ -156,21 +168,22 @@ class App extends Component {
       },5*1000);
     }
   }
-
-  checkingSwitchesUpdate = () => {
+    checkingSwitchesUpdate = () => {
     this.props.checkingSwitches = true;
     console.log('checking');
     console.log(this.props.checkingSwitches);
     
     return this.props.checkingSwitches;
   }
-
-  stopPinger = ()=>{
+stopPinger = ()=>{
     clearInterval(switchesPinger);
     switchesPinger = false;
   }
 
 
+*/
+
+  
 /*=================
     REBOOT PART -- move to setting or reboot view
  ================= */
@@ -184,28 +197,22 @@ class App extends Component {
 
 
   render() {
-    let {rebootOngoing, showPasscodeModal} = this.props;
+    let { showPasscodeModal } = this.props;
     
     return (
 
       <Grommet theme={myTheme} className="App">
       <TabsView/> 
-       
+    {/**
+     { rebootOngoing ? <RebootView/> : <SettingsView/>} 
+    */}
+    
+ 
+
       {/**this should be duplicated when you wherever u have save btn  */}
      
-      {
-          showPasscodeModal
-           ? 
-          <PasscodeModal 
-            onPasscodeEntered={this.onPasscodeEntered} 
-            close={()=>{
-              this.closeModal();
-            }}/>
-          :
-            <span></span> 
-      }
-
-        <ModalBG visible={showPasscodeModal}/>
+      { showPasscodeModal ? <PasscodeModal /> : <span></span> }
+       <ModalBG visible={showPasscodeModal}/>
         
         {/*
         TODO:// move to another view that TABS view would direct him as SETTINGS VIEW      */}
@@ -245,26 +252,26 @@ const mapStateToProps = (state) => {
     rebootOngoing:state.rebootReducer.rebootOngoing,
     showPasscodeModal:state.rebootReducer.showPasscodeModal
   }    
-  console.log(props);
+  //console.log(props);
   
   return props;
 };
 
-
+/*
 const mapDispatchToProps = (dispatch) => ({  
-    sendResToRedux:(res) => dispatch(fetchSettingsAction(res)),
-    sendSwitchesToRedux:(res) => dispatch(checkSwitchesAction(res)),
-    updateTimeInState: (res) => dispatch(updateTimeInStateAction(res)),
-    clearUnSavedChanges: () => dispatch(clearUnSavedChangesAction()),
+   // sendResToRedux:(res) => dispatch(fetchSettingsAction(res)),
+    //sendSwitchesToRedux:(res) => dispatch(checkSwitchesAction(res)),
+   // updateTimeInState: (res) => dispatch(updateTimeInStateAction(res)),
+//    clearUnSavedChanges: () => dispatch(clearUnSavedChangesAction()),
   
    // sendPCMToRedux:(showPasscodeModal) => dispatch(savePasscodeModelAction(showPasscodeModal))
     
     //sendTimeToRedux:(time) => dispatch(timeChangedAction(time))    
   });
-
+*/
 export default connect(
   mapStateToProps, 
-  mapDispatchToProps)
+  null)
   (App)
 
 

@@ -5,20 +5,50 @@ import styled from 'styled-components';
 import SettingsRow, {SettingsIDRow, SettingsNTPSyncRow, SettingsDownloadRow, HalfRow} from './SettingsRow';
 import SettingsDateRow from './SettingsDateRow';
 import { FormContainer, ButtonsRow, BigButt, Spacer, AlertButton } from './styled';
+import RebootView from './RebootView';
 
 // ACTIONS
 import { MicroApi } from '../micro-api';
-import { settingsChangedAction, savePasscodeModelAction, toggleRebootAction } from '../redux/actions/settings-actions';
+import { settingsChangedAction, savePasscodeModelAction, toggleRebootAction, fetchSettingsAction, updateTimeInStateAction } from '../redux/actions/settings-actions';
 
 class SettingsView extends React.Component {
   constructor(props){
     super(props);
     this.logRef = React.createRef();
     this.state = {
-      settings:{...this.props.settings},
-      verifyPIN:"111111"
+      settings:{...this.props.settings}
     };        
   }
+
+  componentDidMount(){
+    this.refreshData();  
+   
+    setInterval(() => {
+      let { updateTimeInState } = this.props;
+     
+      MicroApi.getDate().then(res => {             
+
+        let updatedState = {...this.props.settings, time:res.date};      
+        /*
+        console.log('---------');  
+        console.log(updatedState);
+        console.log('im updated state');
+        console.log('---------');
+*/
+        updateTimeInState(updatedState);             
+      })
+
+    }, 10*1000);
+   }
+
+  refreshData = () => {            
+    let { sendResToRedux } = this.props;
+    
+    //get settings
+    MicroApi.getSettings().then((res) => {
+      sendResToRedux(res);
+    });
+}  
   
   dumpLogAndGetFile = ()=>{
     MicroApi.dumpLog().then(()=>{
@@ -28,26 +58,45 @@ class SettingsView extends React.Component {
   }
   //local
   tryToSave = () => {  
-    console.log('trying to save');
-    
+  //  console.log('tryToSave');
     let {sendPCMToRedux} = this.props;
     let showPasscodeModal = !this.props.showPasscodeModal; //true local for view
     sendPCMToRedux(showPasscodeModal)
   }
+
   toggleReboot = () => {           
+   // console.log('im toggle reboot ');
     let { toggleRebootRedux } = this.props; 
-    let rebootOngoing = !this.props.rebootOngoing; //true - local for view   
+    let rebootOngoing = !this.props.rebootOngoing; 
+   // console.log(rebootOngoing);//true
     toggleRebootRedux(rebootOngoing);
+  }
+  
+  onTimeChanged = (time)=>{    
+    console.log(time)    
+    MicroApi.setDate(time).then(()=>{
+      this.refreshData();
+    }).catch(()=>{
+      this.refreshData();
+    });
   }
 
     render(){
-        let {onTimeChanged, onSettingChanged, unSavedChanges, settings, tryToSave, needReboot, rebootSafe, reboot, sendPCMToRedux, toggleRebootRedux } = this.props
+        let { onSettingChanged, unSavedChanges, settings, tryToSave, needReboot, rebootSafe, rebootOngoing } = this.props
         let currentSettings = settings;
         let {ntp_sync, ip, netmask , mac_address, gateway, time, 
             hostname, repo_ip, ntp_server, part_and_serial_numbers, 
             EMS_MAJOR_ID, EMS_MINOR_ID, CUSTOMER_MAJOR_ID, CUSTOMER_MINOR_ID } = currentSettings;
     
         return (
+          <div>
+          { 
+            rebootOngoing 
+            ?
+            <RebootView reboot={this.toggleReboot} /> 
+            : 
+
+
         <FormContainer>  
             <ButtonsRow>
               {
@@ -74,7 +123,7 @@ class SettingsView extends React.Component {
             <SettingsDateRow 
               label={'Time & Date'} 
               time={time} 
-              onChange={time =>{onTimeChanged(time)}} />
+              onChange={time =>{this.onTimeChanged(time)}} />
 
             <SettingsRow isIp={false} label={'AODF Name'} model={hostname} 
               onChange={hostname =>{onSettingChanged('hostname',hostname,'AODF Name')}} />
@@ -100,10 +149,10 @@ class SettingsView extends React.Component {
               <HalfRow labelLeft={'Robot Part number'} modelLeft={part_and_serial_numbers.robot.part}
               labelRight={'Robot Serial number'} modelRight={part_and_serial_numbers.robot.serial}></HalfRow>
                <a href="/logread.txt" hidden={true} ref={this.logRef} download></a>
+                 </FormContainer> }
+          </div>
 
-          </FormContainer>
-
-          )
+         )
     }
 }
 
@@ -115,18 +164,24 @@ const mapStateToProps = (state) => {
     rebootSafe:state.rebootReducer.rebootSafe,
     showPasscodeModal:state.rebootReducer.showPasscodeModal,
     rebootOngoing:state.rebootReducer.rebootOngoing
-
-  }  
-  console.log(props);
+    }
+    /*
+    console.log('im props of setting view:');
+    console.log(props);
+    console.log(props.rebootOngoing); //false 
+    console.log('--------------');
+    */
   return props;
 };
 
 
 const mapDispatchToProps = (dispatch) => ({  
+    sendResToRedux:(res) => dispatch(fetchSettingsAction(res)),
     onSettingChanged:(fieldKey, value, fieldName) => dispatch(settingsChangedAction(fieldKey, value, fieldName)),
     sendPCMToRedux:(showPasscodeModal) => dispatch(savePasscodeModelAction(showPasscodeModal)),
-    toggleRebootRedux: (rebootOngoing) => dispatch(toggleRebootAction(rebootOngoing))
-});
+    toggleRebootRedux: (rebootOngoing) => dispatch(toggleRebootAction(rebootOngoing)),
+    updateTimeInState: (res) => dispatch(updateTimeInStateAction(res))
+  });
 
 export default connect(
   mapStateToProps,
