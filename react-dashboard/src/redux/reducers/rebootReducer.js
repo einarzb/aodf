@@ -34,7 +34,7 @@ export default function rebootReducer (state=initState, action){
 }
 
 //open modal once you hit save btn
-function savePassCodeModal (data) {
+function savePassCodeModal (data) {  
   initState.showPasscodeModal = data.res;
   return {...initState}
 }

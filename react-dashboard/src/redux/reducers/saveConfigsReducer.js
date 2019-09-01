@@ -1,24 +1,39 @@
-import { SAVE_SETTINGS } from '../actions/settings-actions';
+import { UPDATE_CONFIG } from '../actions/settings-actions';
 
-let showPasscodeModal = false;
+let unSavedConfigChanges = [];
 
-let initState = {
-  showPasscodeModal:showPasscodeModal
-}
-
-
-export default function saveConfigsReducer(state=initState, action){  
+export default function saveConfigsReducer(state=unSavedConfigChanges, action){  
     switch (action.type) {
-        case SAVE_SETTINGS:
-           return saveConfigChanges(action.data);     
+        case UPDATE_CONFIG:
+          return checkForConfigChangesToSave(action.data).unSavedConfigChanges;
         case (! action.data || action.data == ''):
-          return state;  
+            return state;  
         default:
           return state;  
       }
 }
 
-function saveConfigChanges (data) {
-  initState.showPasscodeModal = data.res;
-  return {...initState}
+
+function checkForConfigChangesToSave (data) { 
+  
+  let alreadyChangedIndex = unSavedConfigChanges.findIndex((e) => {
+    return e.fieldKey === data.fieldKey
+  });
+  
+  if (alreadyChangedIndex == -1) {    
+    unSavedConfigChanges.push(
+      {
+        ...data
+      }
+    );             
+  } else {
+    unSavedConfigChanges[alreadyChangedIndex] = {
+      ...data
+    }
+  }    
+  console.log('******* config changes ********');
+  console.log(unSavedConfigChanges);
+  console.log('***************');
+  return {unSavedConfigChanges}
 }
+

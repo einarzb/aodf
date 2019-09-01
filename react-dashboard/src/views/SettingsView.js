@@ -96,7 +96,6 @@ class SettingsView extends React.Component {
             <RebootView reboot={this.toggleReboot} /> 
             : 
 
-
         <FormContainer>  
             <ButtonsRow>
               {
@@ -165,12 +164,11 @@ const mapStateToProps = (state) => {
     showPasscodeModal:state.rebootReducer.showPasscodeModal,
     rebootOngoing:state.rebootReducer.rebootOngoing
     }
-    /*
-    console.log('im props of setting view:');
+    
+    console.log('----im props of setting view:----');
     console.log(props);
-    console.log(props.rebootOngoing); //false 
     console.log('--------------');
-    */
+    
   return props;
 };
 

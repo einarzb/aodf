@@ -1,4 +1,4 @@
-import { UPDATE_SETTINGS, CLEAR_CACHE } from '../actions/settings-actions';
+import { UPDATE_SETTINGS } from '../actions/settings-actions';
 
 let unSavedChanges = [];
 
@@ -6,8 +6,6 @@ export default function saveChangesReducer(state=unSavedChanges, action){
     switch (action.type) {
         case UPDATE_SETTINGS:
           return checkForChangesToSave(action.data).unSavedChanges;
-        case CLEAR_CACHE:
-          return clearCacheAfterSaving(state);  
         case (! action.data || action.data == ''):
             return state;  
         default:
@@ -28,16 +26,8 @@ function checkForChangesToSave (data) {
         ...data
       }
   }  
+  console.log('******* setings changes ********');
   console.log(unSavedChanges);
-  console.log('im settings unsavedchanged! ');
+  console.log('***************');
   return {unSavedChanges}
-}
-
-//clear unSavedChanges after passcode modal is finished 
-
-function clearCacheAfterSaving (state){ 
- // console.log('clearing');  
-  unSavedChanges = [];
-  state = unSavedChanges;  
-  return {...state}
 }

@@ -23,10 +23,12 @@ class ConfigurationsView extends React.Component {
     }
       //local
   tryToSave = () => {  
-    //console.log('trying to save in config');
+    console.log('trying to save in config');
     
     let {sendPCMToRedux} = this.props;
     let showPasscodeModal = !this.props.showPasscodeModal; //true local for view
+    console.log(showPasscodeModal);
+    
     sendPCMToRedux(showPasscodeModal)
   }
 
@@ -131,11 +133,12 @@ class ConfigurationsView extends React.Component {
                     <ConfigurationRow 
                     label={'High'} isIp={false}
                     model={temp_aodf_high} 
-                    onChange={temp =>{onSettingChanged('temp_aodf_high',temp,'High')}
+                    onChange={temp =>{onSettingChanged('temp_aodf_high',temp,'Temperature Range High')}
                   }
                     /> 
 
-                    <ConfigurationRow label={'Low'} model={temp_aodf_low} onChange={temp =>{onSettingChanged('temp_aodf_low',temp,'Low')}} />
+                    <ConfigurationRow label={'Low'} model={temp_aodf_low} onChange={temp =>{onSettingChanged('temp_aodf_low',temp,'Temperature Range Low')}} />
+                   
                     <ConfigurationRow label={'Module ID Number'} />
                     
                     <ButtonsRow>
@@ -153,13 +156,13 @@ class ConfigurationsView extends React.Component {
 const mapStateToProps = (state) => {
   let props = {
     configs:state.configSettingsReducer,
-    unSavedChanges:state.updateConfigsReducer,
-    showPasscodeModal:state.rebootReducer.showPasscodeModal,
+    unSavedChanges:state.saveConfigsReducer,
+    showPasscodeModal:state.rebootReducer.showPasscodeModal
   }
-  /*
-  console.log('im props of config view:');
+  
+  console.log('-----im props of config view:-----');
   console.log(props);
-  console.log('--------------');*/
+  console.log('--------------');
     return props;
 };
 
