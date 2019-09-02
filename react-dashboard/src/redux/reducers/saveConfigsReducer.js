@@ -1,4 +1,4 @@
-import { UPDATE_CONFIG } from '../actions/settings-actions';
+import { UPDATE_CONFIG, CLEAR_CACHE } from '../actions/settings-actions';
 
 let unSavedConfigChanges = [];
 
@@ -6,6 +6,8 @@ export default function saveConfigsReducer(state=unSavedConfigChanges, action){
     switch (action.type) {
         case UPDATE_CONFIG:
           return checkForConfigChangesToSave(action.data).unSavedConfigChanges;
+        case CLEAR_CACHE:
+          return clearCache(state);    
         case (! action.data || action.data == ''):
             return state;  
         default:
@@ -15,7 +17,6 @@ export default function saveConfigsReducer(state=unSavedConfigChanges, action){
 
 
 function checkForConfigChangesToSave (data) { 
-  
   let alreadyChangedIndex = unSavedConfigChanges.findIndex((e) => {
     return e.fieldKey === data.fieldKey
   });
@@ -37,3 +38,9 @@ function checkForConfigChangesToSave (data) {
   return {unSavedConfigChanges}
 }
 
+//clears array
+function clearCache(state){
+  unSavedConfigChanges = [];
+  state = unSavedConfigChanges; 
+  return {...state}
+}

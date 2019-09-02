@@ -18,12 +18,13 @@ class PasscodeModal extends React.Component{
     super(props);
     this.state = {
       verifyPIN:"111111",
-      combined:this.mergeArrays()
+      combined:{...this.mergeArrays()}
     };        
     console.log('im state');
     console.log(this.state);
     console.log('------  state -----');
   }
+
 
   componentDidMount(){
     this.refreshData();  
@@ -31,8 +32,7 @@ class PasscodeModal extends React.Component{
 
   refreshData = () => {            
     let { sendResToRedux } = this.props;
-    
-    this.mergeArrays();
+
     //get settings
     MicroApi.getSettings().then((res) => {
       sendResToRedux(res);
@@ -56,9 +56,19 @@ class PasscodeModal extends React.Component{
     let { unSavedChanges , unSavedConfigChanges } = this.props;
       let a = unSavedChanges;
       let b = unSavedConfigChanges;
-      let combinedDataToSave = [...a, ...b] 
-      console.log(combinedDataToSave);      
-      return {combinedDataToSave};
+
+      let combinedDataToSave = [...a, ...b];
+       console.log('im combined obj after filled ')
+       console.log(combinedDataToSave);
+       //a = [];
+       //b = []; 
+       console.log(a);
+       console.log(b);
+       
+      return {combinedDataToSave}
+    
+      
+      //return {combinedDataToSave};
       // TODO: CLEAR THIS ARRAY
   }
 
@@ -66,7 +76,7 @@ class PasscodeModal extends React.Component{
     //init 
     const requiringReboot = ['ip', 'hostname', 'ntp_server', 'netmask', 'gateway'];
     let rebootNeeded = false;
-    let { clearUnSavedChanges, sendPCMToRedux, showPasscodeModal } = this.props;
+    let { clearUnSavedChanges, sendPCMToRedux, showPasscodeModal, unSavedChanges, unSavedConfigChanges } = this.props;
     
     if ( ep == this.state.verifyPIN) {
       
@@ -94,11 +104,13 @@ class PasscodeModal extends React.Component{
       showPasscodeModal = !this.props.showPasscodeModal; //false local for view
       //ui - close modal 
       sendPCMToRedux(showPasscodeModal); 
+
       //clear changes array
-
       clearUnSavedChanges(); 
-      this.state.combined.combinedDataToSave = [];
+      console.log('clearing state too');
+      this.combinedDataToSave = [];
 
+      console.log(this.combinedDataToSave);
       //settings
       MicroApi.changeSettings(settingsMap).then((res)=>{     
         console.log(res);

@@ -29,7 +29,7 @@ export default function rebootReducer (state=initState, action){
          case (! action.data || action.data == ''):
            return initState;  
          default:          
-          return initState;  
+           return initState;  
       }
 }
 
@@ -38,7 +38,6 @@ function savePassCodeModal (data) {
   initState.showPasscodeModal = data.res;
   return {...initState}
 }
-
 
 //fetch reboot status from API
 function fetchRebootStatus (data) {    

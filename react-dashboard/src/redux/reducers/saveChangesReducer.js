@@ -1,4 +1,4 @@
-import { UPDATE_SETTINGS } from '../actions/settings-actions';
+import { UPDATE_SETTINGS, CLEAR_CACHE } from '../actions/settings-actions';
 
 let unSavedChanges = [];
 
@@ -6,8 +6,10 @@ export default function saveChangesReducer(state=unSavedChanges, action){
     switch (action.type) {
         case UPDATE_SETTINGS:
           return checkForChangesToSave(action.data).unSavedChanges;
+        case CLEAR_CACHE:
+          return clearCache(state);      
         case (! action.data || action.data == ''):
-            return state;  
+          return state;  
         default:
           return state;  
       }
@@ -30,4 +32,11 @@ function checkForChangesToSave (data) {
   console.log(unSavedChanges);
   console.log('***************');
   return {unSavedChanges}
+}
+
+//clears array
+function clearCache(state){
+  unSavedChanges = [];
+  state = unSavedChanges; 
+  return {...state}
 }

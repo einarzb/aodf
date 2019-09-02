@@ -24,11 +24,8 @@ class ConfigurationsView extends React.Component {
       //local
   tryToSave = () => {  
     console.log('trying to save in config');
-    
     let {sendPCMToRedux} = this.props;
-    let showPasscodeModal = !this.props.showPasscodeModal; //true local for view
-    console.log(showPasscodeModal);
-    
+    let showPasscodeModal = !this.props.showPasscodeModal; //true local for view    
     sendPCMToRedux(showPasscodeModal)
   }
 
@@ -159,11 +156,13 @@ const mapStateToProps = (state) => {
     unSavedChanges:state.saveConfigsReducer,
     showPasscodeModal:state.rebootReducer.showPasscodeModal
   }
-  
+  /*
   console.log('-----im props of config view:-----');
   console.log(props);
   console.log('--------------');
-    return props;
+  */ 
+  
+  return props;
 };
 
 
