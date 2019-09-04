@@ -95,7 +95,6 @@ int main(int argc, char **argv)
     case COMMAND_REPO_IP:      
       return writeToConfFile("/etc/hosts", inputData);  
     case COMMAND_SET_TEMP: 
-      printf (inputData); 
       return writeToConfFile("/etc/hw-list/hw-list.json", inputData);  
     case COMMAND_NTP_ADDRESS:
       return writeToConfFile("/etc/default/ntpdate", inputData);  

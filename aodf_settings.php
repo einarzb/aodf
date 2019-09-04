@@ -238,31 +238,31 @@
             }
 
             switch($key){
-                case'ip':
+                case 'ip':
                     // $ip_and_mask['ip'] = $value;
                     set_ip($value);
                     $need_reboot = TRUE;
                     break;
-                case'netmask':
+                case 'netmask':
                     set_netmask($value);
                     $need_reboot = TRUE;
                    
                     break;
-                case'gateway':
+                case 'gateway':
                     set_gateway($value);
                     $need_reboot = TRUE;
                     
                     break;
-                case'hostname':
+                case 'hostname':
                     $need_reboot = TRUE;
                 // echo "should set hostname to $value\n";
                     set_hostname($value);
                     break;    
-                case'repo_ip':
+                case 'repo_ip':
                     // echo "should set repo_ip to $value\n";
                     set_repo_ip($value);
                     break;  
-                case'ntp_server':
+                case 'ntp_server':
                     // echo "should set ntp_server to $value\n";
                     set_ntp_server($value);
                     break;  
@@ -392,12 +392,11 @@
     function change_configs($configs_map){
         foreach($configs_map as $key => $value){
             switch($key){
-                case'temp_aodf_low':
-                    set_temp($value);
-                    break;
+                case 'temp_aodf_low':
+                      set_temp($value);
+                      break;
             }
         }
-        
         return array(
             "configs"=>get_config_settings()
         );
@@ -406,7 +405,7 @@
     // make a whole json
     function set_temp($new_low_temp) {
         //new value from user 
-        $new_low_temp; 
+        echo $new_low_temp; 
         $temp_str = '{
             "AODF" : {
               "MAC" : "00-1B-C5-05-00-01",
@@ -535,8 +534,8 @@
               "Model" : "FBR00013"
             }
           }';
-          echo $temp_str;
+        //  echo $temp_str;
           return shell_exec("/root/run_root_settings 11 '$temp_str'");
-
     }
    
+?>
