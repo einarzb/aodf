@@ -40,7 +40,7 @@ class PasscodeModal extends React.Component{
         this.startPinger();
       }
     });
-
+/*
     //get configs
     MicroApi.getConfigSettings().then((res) => { 
       console.log('refreshed res');
@@ -50,7 +50,7 @@ class PasscodeModal extends React.Component{
       sendConfigSettingToRedux(res);
     });
 
-    
+    */
     MicroApi.getPin().then((data)=>{        
       this.setState({verifyPIN:data.code})
     })
@@ -241,7 +241,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({  
   sendPCMToRedux:(showPasscodeModal) => dispatch(savePasscodeModelAction(showPasscodeModal)),
-  sendConfigSettingToRedux:(res) => dispatch(fetchConfigSettingsAction(res)),
+ // sendConfigSettingToRedux:(res) => dispatch(fetchConfigSettingsAction(res)),
   clearUnSavedChanges: () => dispatch(clearUnSavedChangesAction()),
   sendSwitchesToRedux:(res) => dispatch(checkSwitchesAction(res)),
   sendResToRedux:(res) => dispatch(fetchSettingsAction(res)),

@@ -397,23 +397,16 @@
                     break;
             }
         }
+        
         return array(
             "configs"=>get_config_settings()
         );
+        
     }
     // make a whole json
     function set_temp($new_low_temp) {
-        //fetch data
-      //  $old_file = shell_exec('cat /etc/hw-list/hw-list.json');
-       // $old_temp =  get_temparture();
- 
-        //original data
-     //   $old_low_temp = $old_temp['aodf']['low']; // works! 0 
-      //  $old_high_temp = $old_temp['aodf']['high']; //works! 50
-
         //new value from user 
         $new_low_temp; 
-
         $temp_str = '{
             "AODF" : {
               "MAC" : "00-1B-C5-05-00-01",
@@ -542,9 +535,8 @@
               "Model" : "FBR00013"
             }
           }';
-
+          echo $temp_str;
           return shell_exec("/root/run_root_settings 11 '$temp_str'");
 
     }
    
-?>

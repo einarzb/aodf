@@ -47,7 +47,7 @@ class ConfigurationsView extends React.Component {
        let { sendConfigSettingToRedux } = this.props;
     
         MicroApi.getConfigSettings().then((res) => {
-          console.log(res);
+       //   console.log(res);
           console.log('-----');
           
         //concating data
