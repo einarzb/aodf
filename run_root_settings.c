@@ -19,8 +19,6 @@
 #define COMMAND_REBOOT_FLAG_OFF 8
 #define COMMAND_GET_REBOOT_FLAG 9
 #define COMMAND_SET_DATE 10
-#define COMMAND_SET_TEMP 11
-
 // const char *HOS = "Howdy";
 regex_t regex;
 int reti;
@@ -94,8 +92,6 @@ int main(int argc, char **argv)
       return writeToConfFile("/etc/hostname", inputData);
     case COMMAND_REPO_IP:      
       return writeToConfFile("/etc/hosts", inputData);  
-    case COMMAND_SET_TEMP: 
-      return writeToConfFile("/etc/hw-list/hw-list.json", inputData);  
     case COMMAND_NTP_ADDRESS:
       return writeToConfFile("/etc/default/ntpdate", inputData);  
     case COMMAND_EMS_CUSTOMER_ID:

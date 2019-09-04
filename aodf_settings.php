@@ -187,7 +187,6 @@
         $str=   shell_exec("cat /etc/hw-list/hw-list.json");
 
         $decoded =  json_decode($str , true );
-
         if(!$decoded) {
             $s = str_replace('NC",','NC"',$str);
             $decoded =  json_decode($s , TRUE );
@@ -339,11 +338,13 @@
 
     // configuration screen
     function get_config_settings(){
-        return array(
-                  'part_and_serial_numbers'=>get_parts_list(),
+        return array_merge(
+            array('part_and_serial_numbers'=>get_parts_list(),
                   'mac_address'=>get_mac_address(),
                   'temp'=>get_temparture(),
                   'optic_cable_list'=>get_optic_cable_list()
+             )
+
         );
     }
     function get_temparture(){
@@ -355,7 +356,7 @@
             $s = str_replace('NC",','NC"',$str);
             $decoded =  json_decode($s , TRUE );
         }
-      
+
         return array(
             'aodf'=>array(
                 'high'=>$decoded['AODF']['Temperature']['high'],
@@ -384,10 +385,8 @@
                 'model'=>$decoded['reels fiber optic cable']['Model']
             )
         );
-    
         return $decoded;
     }
-
 
     function change_configs($configs_map){
         foreach($configs_map as $key => $value){
@@ -538,4 +537,5 @@
           return shell_exec("/root/run_root_settings 11 '$temp_str'");
     }
    
+
 ?>

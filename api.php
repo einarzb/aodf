@@ -17,10 +17,10 @@ if(isset($post_data["method"])&&!empty ($post_data["method"])){
     // ec(json_encode($_POST["method"]));
     switch( $post_data["method"]){
         case 'change_settings':
+            
             die(json_encode(change_settings($post_data['settings'])));
-        case 'change_configs':
-            die(json_encode(change_configs($post_data['configs'])));    
         case 'set_date':
+            
             die(json_encode(set_machine_date($post_data['date'])));
         case 'get_date':
             
@@ -341,7 +341,7 @@ if(isset($_GET["functionname"])&&!empty ($_GET["functionname"]))
         break;
         case 'get_config_settings':
             echo json_encode( array(
-                "configs"=>get_config_settings()
+                "config_settings"=>get_config_settings()
             ));
         break;
         case 'reboot':
