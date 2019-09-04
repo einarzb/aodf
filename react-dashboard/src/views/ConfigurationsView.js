@@ -47,13 +47,7 @@ class ConfigurationsView extends React.Component {
        let { sendConfigSettingToRedux } = this.props;
     
         MicroApi.getConfigSettings().then((res) => {
-<<<<<<< HEAD
-       //   console.log(res);
-          console.log('-----');
-=======
-          //console.log(res);
->>>>>>> parent of a6e3dc5... update for ziv
-          
+
         //concating data
         let mac_address = res.config_settings.mac_address;
         let plates_fiber_optic_cable_model = res.config_settings.optic_cable_list.plates_fiber_optic_cable.model;
