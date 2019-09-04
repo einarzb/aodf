@@ -47,18 +47,19 @@ class ConfigurationsView extends React.Component {
        let { sendConfigSettingToRedux } = this.props;
     
         MicroApi.getConfigSettings().then((res) => {
-          //console.log(res);
+          console.log(res);
+          console.log('-----');
           
         //concating data
-        let mac_address = res.config_settings.mac_address;
-        let plates_fiber_optic_cable_model = res.config_settings.optic_cable_list.plates_fiber_optic_cable.model;
-        let reels_fiber_optic_cable_model = res.config_settings.optic_cable_list.reels_fiber_optic_cable.model;
-        let part_and_serial_numbers_aodf_part = res.config_settings.part_and_serial_numbers.aodf.part;
-        let part_and_serial_numbers_aodf_serial = res.config_settings.part_and_serial_numbers.aodf.serial;
-        let part_and_serial_numbers_robot_part = res.config_settings.part_and_serial_numbers.robot.part;
-        let part_and_serial_numbers_robot_serial = res.config_settings.part_and_serial_numbers.robot.serial;
-        let temp_aodf_high = res.config_settings.temp.aodf.high;
-        let temp_aodf_low = res.config_settings.temp.aodf.low;
+        let mac_address = res.configs.mac_address;
+        let plates_fiber_optic_cable_model = res.configs.optic_cable_list.plates_fiber_optic_cable.model;
+        let reels_fiber_optic_cable_model = res.configs.optic_cable_list.reels_fiber_optic_cable.model;
+        let part_and_serial_numbers_aodf_part = res.configs.part_and_serial_numbers.aodf.part;
+        let part_and_serial_numbers_aodf_serial = res.configs.part_and_serial_numbers.aodf.serial;
+        let part_and_serial_numbers_robot_part = res.configs.part_and_serial_numbers.robot.part;
+        let part_and_serial_numbers_robot_serial = res.configs.part_and_serial_numbers.robot.serial;
+        let temp_aodf_high = res.configs.temp.aodf.high;
+        let temp_aodf_low = res.configs.temp.aodf.low;
 
  
         //runover
