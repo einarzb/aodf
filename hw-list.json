@@ -15,6 +15,12 @@
     "Model" : "C170",
     "S/N" : "564759E0"
   },
+
+  "Robot" : {        
+    "P/N" : "AOR10004" ,
+    "S/N" : "0032"      
+  },
+
   "Elevator motor" : {
     "Manufacture" : "LDO",
     "Model" : " LDO-57STH76-1504L1800N"
