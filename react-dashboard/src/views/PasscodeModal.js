@@ -9,7 +9,7 @@ import {NicePopup, OButton, SaveModal, ModalActions, MTextInput, MOButton, Chang
 
 //data
 import { MicroApi } from '../micro-api';
-import { savePasscodeModelAction, clearUnSavedChangesAction, checkSwitchesAction, fetchSettingsAction, fetchConfigSettingsAction } from '../redux/actions/settings-actions';
+import { savePasscodeModelAction, clearUnSavedChangesAction, checkSwitchesAction, fetchSettingsAction } from '../redux/actions/settings-actions';
 let switchesPinger;
 
 class PasscodeModal extends React.Component{
@@ -41,16 +41,6 @@ class PasscodeModal extends React.Component{
       }
     });
 
-    //get configs
-    MicroApi.getConfigSettings().then((res) => { 
-      console.log('refreshed res');
-      console.log('-----');
-      console.log(res);
-      
-      sendConfigSettingToRedux(res);
-    });
-
-    
     MicroApi.getPin().then((data)=>{        
       this.setState({verifyPIN:data.code})
     })
@@ -242,7 +232,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({  
   sendPCMToRedux:(showPasscodeModal) => dispatch(savePasscodeModelAction(showPasscodeModal)),
-  sendConfigSettingToRedux:(res) => dispatch(fetchConfigSettingsAction(res)),
   clearUnSavedChanges: () => dispatch(clearUnSavedChangesAction()),
   sendSwitchesToRedux:(res) => dispatch(checkSwitchesAction(res)),
   sendResToRedux:(res) => dispatch(fetchSettingsAction(res)),

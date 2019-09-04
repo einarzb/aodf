@@ -47,8 +47,12 @@ class ConfigurationsView extends React.Component {
        let { sendConfigSettingToRedux } = this.props;
     
         MicroApi.getConfigSettings().then((res) => {
+<<<<<<< HEAD
        //   console.log(res);
           console.log('-----');
+=======
+          //console.log(res);
+>>>>>>> parent of a6e3dc5... update for ziv
           
         //concating data
         let mac_address = res.config_settings.mac_address;

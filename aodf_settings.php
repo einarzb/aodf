@@ -387,6 +387,7 @@
         );
         return $decoded;
     }
+<<<<<<< HEAD
 
     function change_configs($configs_map){
         foreach($configs_map as $key => $value){
@@ -538,4 +539,7 @@
     }
    
 
+=======
+ 
+>>>>>>> parent of a6e3dc5... update for ziv
 ?>
