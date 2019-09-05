@@ -9,7 +9,7 @@ import {NicePopup, OButton, SaveModal, ModalActions, MTextInput, MOButton, Chang
 
 //data
 import { MicroApi } from '../micro-api';
-import { savePasscodeModelAction, clearUnSavedChangesAction, checkSwitchesAction, fetchSettingsAction } from '../redux/actions/settings-actions';
+import { savePasscodeModelAction, clearUnSavedChangesAction, checkSwitchesAction, fetchSettingsAction, fetchConfigSettingsAction } from '../redux/actions/settings-actions';
 let switchesPinger;
 
 class PasscodeModal extends React.Component{
@@ -31,7 +31,7 @@ class PasscodeModal extends React.Component{
   }
 
   refreshData = () => {            
-    let { sendResToRedux } = this.props;
+    let { sendResToRedux, sendConfigSettingToRedux } = this.props;
 
     //get settings
     MicroApi.getSettings().then((res) => {
@@ -40,7 +40,17 @@ class PasscodeModal extends React.Component{
         this.startPinger();
       }
     });
+/*
+    //get configs
+    MicroApi.getConfigSettings().then((res) => { 
+      console.log('refreshed res');
+      console.log('-----');
+      console.log(res);
+      
+      sendConfigSettingToRedux(res);
+    });
 
+    */
     MicroApi.getPin().then((data)=>{        
       this.setState({verifyPIN:data.code})
     })
@@ -120,15 +130,14 @@ class PasscodeModal extends React.Component{
         this.refreshData()
       });
 
-      /*
       //configs view
-      MicroApi.changeConfigs(settingsMap).then((res)=>{    
-        console.log('====');
+      MicroApi.changeConfigs(settingsMap).then((res)=>{    console.log(settingsMap);
+        console.log('== im new configs ==');
         console.log(res);
         console.log('=======');
         this.refreshData()
       });
-*/
+
 
     }
   }
@@ -222,16 +231,18 @@ const mapStateToProps = (state) => {
       checkingSwitches:state.rebootReducer.checkingSwitches, 
       unSavedConfigChanges:state.saveConfigsReducer
     }
+    /*
     console.log('----props of passcodemodal-----');
     console.log(props);
     console.log('---end props of passcodemodal------');
-
+*/
   return props;  
 };
 
 
 const mapDispatchToProps = (dispatch) => ({  
   sendPCMToRedux:(showPasscodeModal) => dispatch(savePasscodeModelAction(showPasscodeModal)),
+ // sendConfigSettingToRedux:(res) => dispatch(fetchConfigSettingsAction(res)),
   clearUnSavedChanges: () => dispatch(clearUnSavedChangesAction()),
   sendSwitchesToRedux:(res) => dispatch(checkSwitchesAction(res)),
   sendResToRedux:(res) => dispatch(fetchSettingsAction(res)),

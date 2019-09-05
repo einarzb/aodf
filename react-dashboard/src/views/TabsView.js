@@ -6,8 +6,7 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import ConfigurationsView from './ConfigurationsView';
 import QuickCommandsView from './QuickCommandsView';
 import SettingsView from './SettingsView';
-import PasscodeModal from './PasscodeModal';
-import RebootView from './RebootView';
+import CalibrationView from './CalibrationView';
 
 export default class TabsView extends React.Component{
     
@@ -31,21 +30,13 @@ export default class TabsView extends React.Component{
                         <Tab>
                           <Link to="/quickcommands">Quick Commands</Link>
                         </Tab>
-                        <Tab>
-                        <Link to="/passcodemodal">passcodemodal</Link>
-                        </Tab>
-                        <Tab>
-                        <Link to="/reboot">reboot</Link>
-                        </Tab>
+                        <Tab></Tab>
                   </TabMenu>
 
 
                        <Route exact path="/settings" component={SettingsView} /> 
-            {/**         <Route exact path="/" component={SettingsOrRebootView} />*/}
                   <Route path="/configuration" component={ConfigurationsView} />
-                  <Route path="/passcodemodal" component={PasscodeModal} />
-                  <Route path="/reboot" component={RebootView} />
-
+                  <Route path="/calibration" component={CalibrationView} />
 
                   </div>
             </Router>

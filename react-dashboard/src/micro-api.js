@@ -88,5 +88,15 @@ export const MicroApi = {
     
     getConfigSettings:()=>{        
         return _query({method:'GET',func:'get_config_settings',body:false})
+    },
+    
+    // calibration view
+    plateRestart:()=>{
+        return  _query({method:'POST', func:'plate_restart',body:{method:'plate_restart'}});
+    },
+   
+    reelCalibration:()=>{
+        return  _query({method:'GET',func: 'reel_calibration',body:false});
     }
+
 };

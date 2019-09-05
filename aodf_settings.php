@@ -217,7 +217,6 @@
                   'mac_address'=>get_mac_address(),
                   'ntp_sync'=>get_ntp_sync()
         )
-
         );
     }
 
@@ -237,31 +236,31 @@
             }
 
             switch($key){
-                case 'ip':
+                case'ip':
                     // $ip_and_mask['ip'] = $value;
                     set_ip($value);
                     $need_reboot = TRUE;
                     break;
-                case 'netmask':
+                case'netmask':
                     set_netmask($value);
                     $need_reboot = TRUE;
                    
                     break;
-                case 'gateway':
+                case'gateway':
                     set_gateway($value);
                     $need_reboot = TRUE;
                     
                     break;
-                case 'hostname':
+                case'hostname':
                     $need_reboot = TRUE;
                 // echo "should set hostname to $value\n";
                     set_hostname($value);
                     break;    
-                case 'repo_ip':
+                case'repo_ip':
                     // echo "should set repo_ip to $value\n";
                     set_repo_ip($value);
                     break;  
-                case 'ntp_server':
+                case'ntp_server':
                     // echo "should set ntp_server to $value\n";
                     set_ntp_server($value);
                     break;  
@@ -336,40 +335,40 @@
     // set_hostname("omg");
     // echo "WOW"; 
 
-    // configuration screen
+     
+   // configuration screen
     function get_config_settings(){
-        return array_merge(
-            array('part_and_serial_numbers'=>get_parts_list(),
-                  'mac_address'=>get_mac_address(),
-                  'temp'=>get_temparture(),
-                  'optic_cable_list'=>get_optic_cable_list()
-             )
-
-        );
+        return array(
+                'part_and_serial_numbers' => get_parts_list(),
+                'mac_address' => get_mac_address(),
+                'temparture' => get_temparture(),
+                'optic_cable_list' => get_optic_cable_list()
+        );   
     }
+
     function get_temparture(){
         $str= shell_exec("cat /etc/hw-list/hw-list.json");
-        
         $decoded =  json_decode($str , true );
-        
+         // echo $decoded;
+
         if(!$decoded) {
             $s = str_replace('NC",','NC"',$str);
             $decoded =  json_decode($s , TRUE );
         }
-
-        return array(
-            'aodf'=>array(
-                'high'=>$decoded['AODF']['Temperature']['high'],
-                'low'=>$decoded['AODF']['Temperature']['low']
-            )
+        $temp = array(
+            'high'=>$decoded['AODF']['Temperature']['high'],
+            'low'=>$decoded['AODF']['Temperature']['low']
         );
+
+        return $temp;
         return $decoded;
     }
+
     function get_optic_cable_list(){
         $str= shell_exec("cat /etc/hw-list/hw-list.json");
-        
+    
         $decoded =  json_decode($str , true );
-        
+    
         if(!$decoded) {
             $s = str_replace('NC",','NC"',$str);
             $decoded =  json_decode($s , TRUE );
@@ -388,154 +387,15 @@
         return $decoded;
     }
 
-    function change_configs($configs_map){
-        foreach($configs_map as $key => $value){
-            switch($key){
-                case 'temp_aodf_low':
-                      set_temp($value);
-                      break;
-            }
-        }
-        return array(
-            "configs"=>get_config_settings()
-        );
-        
+    function plate_restart(){
+       $e_res = exec("/scripts/plate_restart");
+       $decode =  json_decode($e_res, TRUE);
+       return $decode;
     }
-    // make a whole json
-    function set_temp($new_low_temp) {
-        //new value from user 
-        echo $new_low_temp; 
-        $temp_str = '{
-            "AODF" : {
-              "MAC" : "00-1B-C5-05-00-01",
-              "Manufacture" : "TeliSwitch",
-              "P/N" : "AOD10005",
-              "S/N" : "02005",
-              "Temperature" : {
-                "high" : 50,
-                "low" : '.$new_low_temp.'
-              },
-              "ver" : 2
-            },
-            "Camera ver" : {
-              "Manufacture" : "Logitech",
-              "Model" : "C170",
-              "S/N" : "564759E0"
-            },
-          
-            "Robot" : {        
-              "P/N" : "AOR10004" ,
-              "S/N" : "0032"      
-            },
-          
-            "Elevator motor" : {
-              "Manufacture" : "LDO",
-              "Model" : " LDO-57STH76-1504L1800N"
-            },
-            "Eth Module" : {
-              "Manufacture" : "Teliswitch",
-              "Model" : "PCB12 Rev B"
-            },
-            "Gripper in/out motor" : {
-              "Manufacture" : "MS MOTOR",
-              "Model" : "NEMA 11 11H32H-0604A "
-            },
-            "Gripper open close motor" : {
-              "Manufacture" : "MS MOTOR",
-              "Model" : "NEMA 8 8H33H-0604A + Gear 1/27 22JX10K27G"
-            },
-            "LEDs panel" : {
-              "Manufacture" : "TeliSwitch",
-              "ver" : 2
-            },
-            "Micro switches" : {
-            "right_gripper_oc" : {
-               "Method" : "NC",   
-              }, 
-              "elevator cable" : {
-                "Manufacture" : "alpha wire",
-                "name" : "3541 15/c: 24AWG .25mm pvc ins 105c 600V mil-w-16878e type B"
-              },
-              "inner stage cable" : {
-                "Manufacture" : "alpha wire",
-                "name" : "3541 15/c: 24AWG .25mm pvc ins 105c 600V mil-w-16878e type B"
-              },
-              "outer stage cable" : {
-                "Manufacture" : "alpha wire",
-                "name" : "3541 15/c: 24AWG .25mm pvc ins 105c 600V mil-w-16878e type B"
-              }
-            },
-            "Motor controller" : [
-              {
-                "Manufacture" : "Trinamic",
-                "Model" : "TMCM 110-CAN"
-              },
-              {
-                "Manufacture" : "Trinamic",
-                "Model" : "TMCM 110-CAN"
-              },
-              {
-                "Manufacture" : "Trinamic",
-                "Model" : "TMCM 110-CAN"
-              },
-              {
-                "Manufacture" : "Trinamic",
-                "Model" : "TMCM 310-CAN"
-              }
-            ],
-            "Plate rotated motor" : {
-              "Manufacture" : "MS MOTOR",
-              "Model" : "NEMA 11 11H32H-0604A"
-            },
-            "Plate roteated in/out motor" : {
-              "Manufacture" : "Smooth motors",
-              "Model" : "NEMA 11 11HY105-D1"
-            },
-            "SOC" : {
-              "Manufacture" : "EmBest",
-              "Model" : "SOC8200",
-              "die id" : "778c0000000000000155e9b001015014"
-            },
-            "Stage motor" : {
-              "Manufacture" : "MS MOTOR",
-              "Model" : "NEMA 17 17H185H-04A"
-            },
-            "Temperature sensor" : {
-              "Manufacture" : "National Semiconductor",
-              "Model" : "LM75 AIM"
-            },
-            "home ports" : {
-              "total home ports" : 144
-            },
-            "lower controller isolation print" : {
-              "Manufacture" : "TeliSwitch",
-              "ver" : 1
-            },
-            "plates" : {
-              "parking_number" : 3,
-              "parking_indexes" : [
-                147,
-                98,
-                49
-              ],
-              "regular_number" : 144
-            },
-            "plates fiber optic cable" : {
-              "Manufacture" : "Fujikura",
-              "Model" : "FBR00007-12"
-            },
-            "power card ver" : {
-              "Manufacture" : "TeliSwitch",
-              "ver" : 1
-            },
-            "reels fiber optic cable" : {
-              "Manufacture" : "Fujikura",
-              "Model" : "FBR00013"
-            }
-          }';
-        //  echo $temp_str;
-          return shell_exec("/root/run_root_settings 11 '$temp_str'");
-    }
-   
+
+    function get_reel_calibration(){
+        $e_res = exec("/scripts/restart_home_port_pos");
+        return $e_res;
+     }
 
 ?>

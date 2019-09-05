@@ -17,10 +17,8 @@ if(isset($post_data["method"])&&!empty ($post_data["method"])){
     // ec(json_encode($_POST["method"]));
     switch( $post_data["method"]){
         case 'change_settings':
-            
             die(json_encode(change_settings($post_data['settings'])));
         case 'set_date':
-            
             die(json_encode(set_machine_date($post_data['date'])));
         case 'get_date':
             
@@ -34,7 +32,10 @@ if(isset($post_data["method"])&&!empty ($post_data["method"])){
         case 'dump_log':
             dump_log();
             sleep(3);
-            return "{result:\"OK\"}";          
+            return "{result:\"OK\"}";      
+        case 'plate_restart':
+                die(json_encode(plate_restart()));
+            break;     
         default:    
             break;
     }
@@ -335,19 +336,20 @@ if(isset($_GET["functionname"])&&!empty ($_GET["functionname"]))
             break;
         case 'get_settings':
             echo json_encode( array(
-                "settings"=>get_settings(),
+               "settings"=>get_settings(),
                 "need_reboot"=>is_reboot_needed()
             ));
-        break;
+            break;
         case 'get_config_settings':
-            echo json_encode( array(
+                echo json_encode( array(
                 "config_settings"=>get_config_settings()
             ));
         break;
         case 'reboot':
             die(do_reboot());    
             break;
-
+        case 'reel_calibration':
+            die(get_reel_calibration());
             // case 'change_settings':
             //     echo json_encode(get_settings());     
         default :

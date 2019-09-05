@@ -47,7 +47,6 @@ class ConfigurationsView extends React.Component {
        let { sendConfigSettingToRedux } = this.props;
     
         MicroApi.getConfigSettings().then((res) => {
-
         //concating data
         let mac_address = res.config_settings.mac_address;
         let plates_fiber_optic_cable_model = res.config_settings.optic_cable_list.plates_fiber_optic_cable.model;
@@ -56,8 +55,8 @@ class ConfigurationsView extends React.Component {
         let part_and_serial_numbers_aodf_serial = res.config_settings.part_and_serial_numbers.aodf.serial;
         let part_and_serial_numbers_robot_part = res.config_settings.part_and_serial_numbers.robot.part;
         let part_and_serial_numbers_robot_serial = res.config_settings.part_and_serial_numbers.robot.serial;
-        let temp_aodf_high = res.config_settings.temp.aodf.high;
-        let temp_aodf_low = res.config_settings.temp.aodf.low;
+        let temp_aodf_high = res.config_settings.temparture.high;
+        let temp_aodf_low = res.config_settings.temparture.low;
 
  
         //runover
