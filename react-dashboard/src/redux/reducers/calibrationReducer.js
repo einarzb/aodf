@@ -1,16 +1,11 @@
 import { UPDATE_CALIBRATION } from '../actions/settings-actions';
 
-let defaultState = {
-  "plate_number":1,
-  "sample":2
-}
+let unSavedCalibrationChanges = [];
 
-let confState = {}
-
-export default function calibrationReducer(state=defaultState, action){  
+export default function calibrationReducer(state=unSavedCalibrationChanges, action){  
     switch (action.type) {
         case UPDATE_CALIBRATION:
-          return updateCalibrationSettings(action);
+          return checkForConfigChangesToSave(action.data);
         case (! action.data || action.data == ''):
           return state;  
         default:
@@ -20,8 +15,31 @@ export default function calibrationReducer(state=defaultState, action){
 
 
 //update initial data from the API
+/*
 function updateCalibrationSettings(data) {  
    confState=data.data;  
    return {...confState};
  }
- 
+ */
+
+ function checkForConfigChangesToSave (data) { 
+  let alreadyChangedIndex = unSavedCalibrationChanges.findIndex((e) => {
+    return e.fieldKey === data.fieldKey
+  });
+  
+  if (alreadyChangedIndex == -1) {    
+    unSavedCalibrationChanges.push(
+      {
+        ...data
+      }
+    );             
+  } else {
+    unSavedCalibrationChanges[alreadyChangedIndex] = {
+      ...data
+    }
+  }    
+  console.log('******* calibration changes ********');
+  console.log(unSavedCalibrationChanges);
+  console.log('***************');
+  return {unSavedCalibrationChanges}
+}

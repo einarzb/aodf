@@ -387,7 +387,7 @@
         return $decoded;
     }
 
-    //setter
+    //setter - should get 2 params from ui 
     function plate_restart(){
        $e_res = exec("/scripts/plate_restart");
        return $e_res;
@@ -396,6 +396,11 @@
     function get_reel_calibration(){
         $e_res = exec("/scripts/restart_home_port_pos");
         return $e_res;
-     }
+    }
+
+    function set_reel_to_parking(){
+        $e_res = exec("/scripts/manual_put_homeport_on_park");
+        return $e_res;
+    }
 
 ?>

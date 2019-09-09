@@ -97,6 +97,9 @@ export const MicroApi = {
    
     reelCalibration:()=>{
         return  _query({method:'GET',func: 'reel_calibration',body:false});
+    },
+    setReelToParking:()=>{
+        return  _query({method:'GET',func: 'set_reel_to_parking',body:false});
     }
 
 };

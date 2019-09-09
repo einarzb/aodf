@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import {OButton} from './styled';
 import {Heading} from 'grommet/components/Heading';
-import SettingsRow from './SettingsRow';
+import CalibrationRow from './SettingsRow';
 
 
 // DATA
@@ -16,18 +16,36 @@ export class CalibrationView extends React.Component{
     constructor(props){
         super(props)
         this.state = {
-          plateCalibration:this.plateCalibration,
           reelCalibration:this.reelCalibration
         }   
     }
 
-    plateCalibration = () => {
+
+    
+     
+    setReelToParking = () => {
+      MicroApi.setReelToParking().then(res => {     
+        console.log('im set reel to park');
+        console.log(res);
+      })
+    }
+       
+  
+
+    plateCalibration = (plate, sample) => {
+      console.log(plate);
+      console.log(sample);
+      
         MicroApi.plateRestart().then((res)=>{
-          this.setState({plateCalibration:res});
+          console.log('plateRestart');
+         // console.log(res);
+          
+         // this.setState({plateCalibration:res});
         });        
     }
 
     reelCalibration = () => {
+      console.log('reel calibration')
         MicroApi.reelCalibration().then((res)=>{
           this.setState({reelCalibration:res});
         })
@@ -35,36 +53,35 @@ export class CalibrationView extends React.Component{
 
     render(){
       let { onSettingChanged, sample, plate } = this.props
-      let { plateCalibration, reelCalibration } = this.state;             
       return (
         <CalibrationDiv>
            <h1>Test Routines</h1>
             <br/>
             <p> Plate Calibration</p>
-            {
-                <ButtonsFlexer>
-                     
-                      <SettingsRow 
-                          label={'plate number'}
-                          model={plate} 
-                          onChange={plate =>{onSettingChanged('plate_number',plate,'plate')}}
-                      />
+            <div>
+           <CalibrationRow label={'plate number'} model={plate} 
+            onChange={plate =>{onSettingChanged('plate_number',plate,'plate')}} />
+            <CalibrationRow
+              label={'sample number'}
+              model={sample} 
+              onChange={sample =>{onSettingChanged('sample',sample,'sample')}}/>
+            <ButtonsFlexer>
+              <OButton label={'run'} onClick={this.plateCalibration(plate, sample)} ></OButton>
+            </ButtonsFlexer>
+            </div>
 
-                       <SettingsRow
-                          label={'sample number'}
-                          model={sample} 
-                          onChange={sample =>{onSettingChanged('sample',sample,'sample')}}
-                      />
-                  
-                  <OButton label={'run'} onClick={this.plateCalibration} ></OButton>
-              </ButtonsFlexer>
-         }
+      
              <p> Reel Calibration</p>
-             {
-                 <ButtonsFlexer>
-                     <OButton label={'run reel calibration'} onClick={this.reelCalibration} ></OButton>
-                </ButtonsFlexer>
-             }
+              <ButtonsFlexer>
+                  <OButton label={'run reel calibration'} onClick={this.reelCalibration} ></OButton>
+            </ButtonsFlexer>
+
+
+            <p>set Reel To Parking plate</p> 
+            <ButtonsFlexer>
+                  <OButton label={'Run'} onClick={this.setReelToParking} ></OButton>
+            </ButtonsFlexer>
+
           <div>
             Output: <br/>
               <OutputBox>
@@ -78,7 +95,7 @@ export class CalibrationView extends React.Component{
 
 const mapStateToProps = (state) => {
   let props = {
-    unSavedCalibration:state.calibrationReducer,
+    unSavedCalibration:state.calibrationReducer.unSavedCalibrationChanges,
   }
   console.log(props);
   console.log('=-----=');
@@ -116,3 +133,4 @@ const OutputBox = styled.div`
     height:300px;
     width: 500px;
 `;
+

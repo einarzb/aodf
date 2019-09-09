@@ -79,8 +79,15 @@ export const InputContainer = styled(RowChild)`
 `;
 
 export const InputCalibContainer = styled(InputContainer)`
-  
+  border:1px solid red;
 `
+
+export const CalibRowChild = styled(RowChild)`
+  font-weight:normal;
+  flex:4;
+  
+`;
+
 export const OButton = styled(Button)`
     color:${COLOR_PRIMARY} ;
     border-color:${COLOR_PRIMARY} ;
@@ -89,6 +96,7 @@ export const OButton = styled(Button)`
 
   }
 `;
+
 
 
 export const BigButt = styled(OButton)`    

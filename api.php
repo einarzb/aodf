@@ -350,6 +350,8 @@ if(isset($_GET["functionname"])&&!empty ($_GET["functionname"]))
             break;
         case 'reel_calibration':
             die(get_reel_calibration());
+        case 'set_reel_to_parking':
+            die(set_reel_to_parking());    
             // case 'change_settings':
             //     echo json_encode(get_settings());     
         default :
