@@ -34,8 +34,8 @@ if(isset($post_data["method"])&&!empty ($post_data["method"])){
             sleep(3);
             return "{result:\"OK\"}";      
         case 'plate_restart':
-                die(json_encode(plate_restart()));
-            break;     
+                die(json_encode(plate_restart()));          
+                break;     
         default:    
             break;
     }
@@ -352,6 +352,18 @@ if(isset($_GET["functionname"])&&!empty ($_GET["functionname"]))
             die(get_reel_calibration());
         case 'set_reel_to_parking':
             die(set_reel_to_parking());    
+        case 'plate_rot_in':
+            die(plate_rot_in());     
+        case 'plate_rot_out':
+            die(plate_rot_out());  
+        case 'gripper_in':
+            die(gripper_in());
+        case 'gripper_out':
+            die(gripper_out());   
+        case 'gripper_close':
+            die(gripper_close());   
+        case 'gripper_open':
+            die(gripper_open());                       
             // case 'change_settings':
             //     echo json_encode(get_settings());     
         default :

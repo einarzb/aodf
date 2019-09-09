@@ -45,7 +45,7 @@ export class CalibrationView extends React.Component{
     }
 
     reelCalibration = () => {
-      console.log('reel calibration')
+      console.log('reel calibration');
         MicroApi.reelCalibration().then((res)=>{
           this.setState({reelCalibration:res});
         })

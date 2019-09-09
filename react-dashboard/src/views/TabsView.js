@@ -37,6 +37,7 @@ export default class TabsView extends React.Component{
                        <Route exact path="/settings" component={SettingsView} /> 
                   <Route path="/configuration" component={ConfigurationsView} />
                   <Route path="/calibration" component={CalibrationView} />
+                  <Route path="/quickcommands" component={QuickCommandsView} />
 
                   </div>
             </Router>

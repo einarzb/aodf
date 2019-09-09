@@ -337,6 +337,7 @@
 
      
    // configuration screen
+
     function get_config_settings(){
         return array(
                 'part_and_serial_numbers' => get_parts_list(),
@@ -387,7 +388,10 @@
         return $decoded;
     }
 
-    //setter - should get 2 params from ui 
+    //calibration screen
+    
+    //should get 2 params from ui 
+    
     function plate_restart(){
        $e_res = exec("/scripts/plate_restart");
        return $e_res;
@@ -403,4 +407,35 @@
         return $e_res;
     }
 
+    //quick commands
+
+    function plate_rot_in(){
+        $e_res = exec("/scripts/plt_io 1");
+        return $e_res;
+    }
+
+    function plate_rot_out(){
+        $e_res = exec("/scripts/plt_io_reset");
+        return $e_res;
+    }
+
+    function gripper_in() {
+        $e_res = exec("/scripts/grp_io 1");
+        return $e_res;
+    }
+
+    function gripper_out() {
+        $e_res = exec("/scripts/grp_io_reset");
+        return $e_res;
+    }
+
+    function gripper_close() {
+        $e_res = exec("/scripts/grp_oc 0");
+        return $e_res;
+    }
+
+    function gripper_open() {
+        $e_res = exec("/scripts/grp_oc_reset");
+        return $e_res;
+    }
 ?>

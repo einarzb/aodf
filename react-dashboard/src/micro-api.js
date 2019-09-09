@@ -100,6 +100,26 @@ export const MicroApi = {
     },
     setReelToParking:()=>{
         return  _query({method:'GET',func: 'set_reel_to_parking',body:false});
+    },
+    // quick commands 
+    plateRotIn:()=>{
+        return  _query({method:'GET',func: 'plate_rot_in',body:false});
+    },
+    plateRotOut:()=>{
+        return  _query({method:'GET',func: 'plate_rot_out',body:false});
+    },
+    gripperIn:()=>{
+        return  _query({method:'GET',func: 'gripper_in',body:false});
+    },
+    gripperOut:()=>{
+        return  _query({method:'GET',func: 'gripper_out',body:false});
+    },
+    gripperClose:()=>{
+        return  _query({method:'GET',func: 'gripper_close',body:false});
+    },
+    gripperOpen:()=>{
+        return  _query({method:'GET',func: 'gripper_open',body:false});
     }
+    
 
 };
