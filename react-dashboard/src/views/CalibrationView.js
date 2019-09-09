@@ -5,75 +5,95 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import {OButton} from './styled';
 import {Heading} from 'grommet/components/Heading';
+import SettingsRow from './SettingsRow';
+
 
 // DATA
 import { MicroApi } from '../micro-api';
+import { calibrationSettingsChangedAction } from '../redux/actions/settings-actions';
 
 export class CalibrationView extends React.Component{
     constructor(props){
         super(props)
         this.state = {
-          plate:this.plateCalibration,
-          reel:this.reelCalibration
+          plateCalibration:this.plateCalibration,
+          reelCalibration:this.reelCalibration
         }   
     }
 
     plateCalibration = () => {
         MicroApi.plateRestart().then((res)=>{
-          console.log(res);
-          
-          this.setState({plate:res});
+          this.setState({plateCalibration:res});
         });        
     }
 
     reelCalibration = () => {
         MicroApi.reelCalibration().then((res)=>{
-          this.setState({reel:res});
+          this.setState({reelCalibration:res});
         })
     }
 
     render(){
-       let { plate, reel } = this.state;             
-        return (
+      let { onSettingChanged, sample, plate } = this.props
+      let { plateCalibration, reelCalibration } = this.state;             
+      return (
         <CalibrationDiv>
            <h1>Test Routines</h1>
+            <br/>
+            <p> Plate Calibration</p>
             {
                 <ButtonsFlexer>
+                     
+                      <SettingsRow 
+                          label={'plate number'}
+                          model={plate} 
+                          onChange={plate =>{onSettingChanged('plate_number',plate,'plate')}}
+                      />
 
-                  <OButton label={'plate calibration'} onClick={this.plateCalibration} ></OButton>
-                  <OButton label={'reel calibration'} onClick={this.reelCalibration} ></OButton>
+                       <SettingsRow
+                          label={'sample number'}
+                          model={sample} 
+                          onChange={sample =>{onSettingChanged('sample',sample,'sample')}}
+                      />
+                  
+                  <OButton label={'run'} onClick={this.plateCalibration} ></OButton>
+              </ButtonsFlexer>
+         }
+             <p> Reel Calibration</p>
+             {
+                 <ButtonsFlexer>
+                     <OButton label={'run reel calibration'} onClick={this.reelCalibration} ></OButton>
                 </ButtonsFlexer>
-            }
+             }
           <div>
             Output: <br/>
               <OutputBox>
-                calibrate plate : { plate } <br/>
-                calibrate reel : { reel }
+            
               </OutputBox>
           </div>
         </CalibrationDiv>
         );
     }
 }
-/*
+
 const mapStateToProps = (state) => {
-  const props = {
-    needReboot:state.rebootReducer.needReboot,
-    rebootSafe:state.rebootReducer.rebootSafe,
-    checkingSwitches:state.rebootReducer.checkingSwitches,
-    rebootOngoing:state.rebootReducer.rebootOngoing,
-  }    
+  let props = {
+    unSavedCalibration:state.calibrationReducer,
+  }
   console.log(props);
+  console.log('=-----=');
   
   return props;
-};
+}
+
 
 const mapDispatchToProps = (dispatch) => ({ 
+  onSettingChanged:(fieldKey, value, fieldName) => dispatch(calibrationSettingsChangedAction(fieldKey, value, fieldName))
  })
-*/
+
   export default connect(
-    null,
-    null)
+    mapStateToProps,
+    mapDispatchToProps)
     (CalibrationView)
   
   

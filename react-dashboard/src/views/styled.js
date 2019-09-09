@@ -78,6 +78,9 @@ export const InputContainer = styled(RowChild)`
   padding:0 15px;
 `;
 
+export const InputCalibContainer = styled(InputContainer)`
+  
+`
 export const OButton = styled(Button)`
     color:${COLOR_PRIMARY} ;
     border-color:${COLOR_PRIMARY} ;

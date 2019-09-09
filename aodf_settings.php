@@ -387,10 +387,10 @@
         return $decoded;
     }
 
+    //setter
     function plate_restart(){
        $e_res = exec("/scripts/plate_restart");
-       $decode =  json_decode($e_res, TRUE);
-       return $decode;
+       return $e_res;
     }
 
     function get_reel_calibration(){

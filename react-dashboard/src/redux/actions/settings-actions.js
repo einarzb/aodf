@@ -89,3 +89,12 @@ export const savePasscodeModelAction = (res) => ({
   }  
 });
 
+export const UPDATE_CALIBRATION = 'UPDATE_CALIBRATION';
+export const calibrationSettingsChangedAction = (fieldKey, value, fieldName) => ({
+    type: UPDATE_CALIBRATION,
+    data: {
+      fieldKey,
+      value,
+      fieldName
+     }
+  });

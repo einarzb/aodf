@@ -11,7 +11,7 @@ import { Heading } from 'grommet/components/Heading'
 import { Save } from 'grommet-icons/icons/Save'
 import { Undo } from 'grommet-icons/icons/Undo'
 // import { Calendar } from 'grommet-icons/icons/Calendar'
-import {ConfRow, FormRow, RowTitle, RowData, DataText, OButton,RowChild, InputContainer} from './styled'
+import {ConfRow, FormRow, RowTitle, RowData, DataText, OButton,RowChild, InputContainer, InputCalibContainer} from './styled'
 
 const IP_INPUT_PROPS = [
     {
@@ -44,6 +44,8 @@ const IP_INPUT_PROPS = [
   
     }
   ];
+
+
 
 export default class SettingsRow extends React.Component{
 
@@ -89,6 +91,47 @@ export default class SettingsRow extends React.Component{
           </FormRow>);  
     }
 }
+
+
+export class CalibrationRow extends React.Component{
+
+  render(){
+            let {onChange, label, model, isIp} = this.props;
+      
+      if (onChange) {
+          return (
+          <FormRow>
+              <RowTitle>
+                {label}
+              </RowTitle>
+              <RowData>
+                <RowChild>
+                  <DataText>
+                    {model}
+                  </DataText>
+                </RowChild>
+                <InputCalibContainer>            
+                  <TextInput value={model} onChange={(e)=>
+                    {onChange(e.target.value)}}></TextInput>
+                </InputCalibContainer>              
+                
+              </RowData>
+            </FormRow>)
+      }
+      return (
+       <FormRow>
+          <RowTitle>
+            {label}
+          </RowTitle>
+          <RowData>
+              <DataText>
+                    {model}
+              </DataText>
+          </RowData>
+        </FormRow>);  
+  }
+}
+
 
 
 export class ConfigurationRow extends React.Component{

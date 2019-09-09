@@ -15,7 +15,7 @@ middleWare.push(loggerMiddleware);
 export default createStore (
   rootReducer, 
   compose(
-    applyMiddleware(...middleWare),
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(), //remove when push to client!
+    applyMiddleware(...middleWare)
+   // window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(), //remove when push to client!
   )
 );
