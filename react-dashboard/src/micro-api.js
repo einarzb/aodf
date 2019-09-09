@@ -89,6 +89,9 @@ export const MicroApi = {
     getConfigSettings:()=>{        
         return _query({method:'GET',func:'get_config_settings',body:false})
     },
+    changeConfigs: (configs)=> {
+        return  _query({method:'POST', func:'change_configs',body:{method:'change_configs', configs}});
+    },
     
     // calibration view
     plateRestart:()=>{

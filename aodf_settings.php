@@ -411,6 +411,8 @@
 
     function plate_rot_in(){
         $e_res = exec("/scripts/plt_io 1");
+        echo "----";
+        echo $e_res;
         return $e_res;
     }
 

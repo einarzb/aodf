@@ -65,12 +65,8 @@ function checkSwitchesStatus(data){
     return {...initState}
   }
 
-function toggleRebootView() {    
-  console.log('yyyy');
-  
-  initState.rebootOngoing = !initState.rebootOngoing;  
-  console.log(initState.rebootOngoing); //true
-  
+function toggleRebootView() {      
+  initState.rebootOngoing = !initState.rebootOngoing;    
   return {...initState}
 }
 
