@@ -54,11 +54,12 @@ export class CalibrationView extends React.Component{
     render(){
       let { onSettingChanged, sample, plate } = this.props
       return (
-        <CalibrationDiv>
+        <div>
+        <CalibrationContainer>
            <h1>Test Routines</h1>
-            <br/>
-            <p> Plate Calibration</p>
-            <div>
+           
+           <p> Plate Calibration</p>
+           <MiniWrapper>
            <CalibrationRow label={'plate number'} model={plate} 
             onChange={plate =>{onSettingChanged('plate_number',plate,'plate')}} />
             <CalibrationRow
@@ -68,7 +69,7 @@ export class CalibrationView extends React.Component{
             <ButtonsFlexer>
               <OButton label={'run'} onClick={this.plateCalibration(plate, sample)} ></OButton>
             </ButtonsFlexer>
-            </div>
+            </MiniWrapper>
 
       
              <p> Reel Calibration</p>
@@ -82,13 +83,13 @@ export class CalibrationView extends React.Component{
                   <OButton label={'Run'} onClick={this.setReelToParking} ></OButton>
             </ButtonsFlexer>
 
-          <div>
             Output: <br/>
               <OutputBox>
             
               </OutputBox>
-          </div>
-        </CalibrationDiv>
+        </CalibrationContainer>
+        </div>
+
         );
     }
 }
@@ -114,7 +115,7 @@ const mapDispatchToProps = (dispatch) => ({
     (CalibrationView)
   
   
-const CalibrationDiv = styled.div`
+const CalibrationContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -131,6 +132,15 @@ const ButtonsFlexer = styled.div`
 const OutputBox = styled.div`
     border:1px solid grey;
     height:300px;
-    width: 500px;
+    width: auto;
 `;
 
+
+const MiniWrapper = styled.div`
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    border:1px solid grey;
+    border-radius: 0rem;
+    margin: 15px 0px;
+`;
