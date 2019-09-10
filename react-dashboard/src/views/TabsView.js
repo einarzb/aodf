@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 //views
 import ConfigurationsView from './ConfigurationsView';
-import QuickCommandsView from './QuickCommandsView';
+import QuickCommandsView from './quickCommandsView';
 import SettingsView from './SettingsView';
 import CalibrationView from './CalibrationView';
 
@@ -34,7 +34,7 @@ export default class TabsView extends React.Component{
                   </TabMenu>
 
 
-                       <Route exact path="/settings" component={SettingsView} /> 
+                  <Route exact path="/settings" component={SettingsView} /> 
                   <Route path="/configuration" component={ConfigurationsView} />
                   <Route path="/calibration" component={CalibrationView} />
                   <Route path="/quickcommands" component={QuickCommandsView} />

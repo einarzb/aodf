@@ -1,20 +1,46 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import {Button} from 'grommet/components/Button'
+import {ButtonsFlexer, QCButton} from '../components/Common';
 import styled from 'styled-components';
 
 import { MicroApi } from '../micro-api';
 import RebootView from './RebootView';
+import ButtonsGroup from '../components/ButtonsGroup';
 import { toggleRebootAction } from '../redux/actions/settings-actions';
+
+let elevButtons = [
+  {label: 'Elev Up',onClick:'{this.elevUp}'},
+  {label: 'Elev Down',onClick:'{this.elevDown}'},
+  {label: 'Elev Stop',onClick:'{this.elevStop}'}
+] 
+
+let plateGripperButtons = [
+  {label: 'Plate Rot In',onClick:'{this.plateRotIn}'},
+  {label: 'Gripper In',onClick:'{this.gripperIn}'},
+  {label: 'Gripper Close' ,onClick:'{this.gripperClose}'},
+  {label: 'Plate Rot Out' ,onClick:'{this.plateRotOut}'},
+  {label: 'Gripper Out' ,onClick:'{this.gripperOut}'}
+
+
+] 
+
+let generalButtons = [
+  {label: 'Queue Reset',onClick:'{this.queueReset}'},
+  {label: 'Save Picture' ,onClick:'{this.savePicture}'},
+  {label: 'Reboot' ,onClick:'{this.toggleReboot}'},
+  {label: 'Power Off' ,onClick:'{this.powerOff}'}
+]
+
 
 class quickCommandsView extends Component{
     constructor(){
         super()
         this.state = {
+         
         }
-    }
-
+    } 
+        
     toggleReboot = () => {           
       console.log('im toggle reboot ');
        let { toggleRebootRedux } = this.props; 
@@ -22,7 +48,6 @@ class quickCommandsView extends Component{
       // console.log(rebootOngoing);//true
        toggleRebootRedux(rebootOngoing);
      }
-     
 
     plateRotIn = () => {    
     console.log('im plateRotIn');   
@@ -38,8 +63,6 @@ class quickCommandsView extends Component{
       });
      }
  
-    
-
     gripperIn = () => {       
       console.log('im gripper in');
       MicroApi.gripperIn().then(res =>{
@@ -55,7 +78,7 @@ class quickCommandsView extends Component{
       });
      }
 
-     gripperClose = () => {       
+    gripperClose = () => {       
       console.log('im gripper close');
       MicroApi.gripperClose().then(res =>{
         console.log(res);
@@ -68,53 +91,22 @@ class quickCommandsView extends Component{
         console.log(res);
       });
      }
-
+    
 
     render(){
       let {rebootOngoing} = this.props;
         return (
           <div>
+
          {
           rebootOngoing 
           ?
           <RebootView reboot={this.toggleReboot} /> 
           : 
           <QuickCommandsContainer>
-
-                  <MiniWrapper>
-                      <ButtonsFlexer> 
-                        <QCButton label={'Elev Up'} onClick={this.elevUp} ></QCButton>
-                        <QCButton label={'Elev Down'} onClick={this.elevDown} ></QCButton>
-                        <QCButton label={'Elev Stop'} onClick={this.elevStop} ></QCButton>
-                     </ButtonsFlexer>
-                  </MiniWrapper>
-
-                  <MiniWrapper>
-                      <ButtonsFlexer> 
-                        <QCButton label={'Plate Rot In'} onClick={this.plateRotIn} ></QCButton>
-                        <QCButton label={'Plate Rot Out'} onClick={this.plateRotOut} ></QCButton>
-                     </ButtonsFlexer>
-
-                     <ButtonsFlexer> 
-                        <QCButton label={'Gripper In'} onClick={this.gripperIn} ></QCButton>
-                        <QCButton label={'Gripper Out'} onClick={this.gripperOut} ></QCButton>
-                     </ButtonsFlexer>
-                     <ButtonsFlexer> 
-                       <QCButton label={'Gripper Open'} onClick={this.gripperOpen} ></QCButton>
-                        <QCButton label={'Gripper Close'} onClick={this.gripperClose} ></QCButton>
-                     </ButtonsFlexer>
-
-                  </MiniWrapper>
-                  <MiniWrapper>
-                    <ButtonsFlexer> 
-                          <QCButton label={'Queue Reset'} onClick={this.queueReset} ></QCButton>
-                          <QCButton label={'Save Picture'} onClick={this.savePicture} ></QCButton>
-                      </ButtonsFlexer>
-                      <ButtonsFlexer> 
-                          <QCButton label={'Reboot'} onClick={this.toggleReboot} ></QCButton>
-                          <QCButton label={'Power Off'} onClick={this.powerOff} ></QCButton>
-                      </ButtonsFlexer>
-                  </MiniWrapper>
+              <ButtonsGroup btnsArr={elevButtons}></ButtonsGroup>
+              <ButtonsGroup btnsArr={plateGripperButtons}></ButtonsGroup>
+              <ButtonsGroup btnsArr={generalButtons} ></ButtonsGroup>
           </QuickCommandsContainer>
          }
          </div>
@@ -145,27 +137,12 @@ const QuickCommandsContainer = styled.div`
     padding-top:50px;
 `;
 
-
 const MiniWrapper = styled.div`
     display: inline-flex;
     flex-direction: row;
     align-items: center;
     border:1px solid grey;
-    border-radius: 2rem;
+    border-radius: 1rem;
     margin: 15px 0px;
-`;
-
-const ButtonsFlexer = styled.div`
-    display: flex;
-    flex-direction: column;
-    width: auto;
-    margin: 15px 0px;
-    justify-content:space-between;
-`;
-
-const QCButton = styled(Button)`
-    color: #00000 ;
-    margin: 6px;
-    padding: 15px 10px;
 `;
 

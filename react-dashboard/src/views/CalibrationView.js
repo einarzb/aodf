@@ -57,7 +57,7 @@ export class CalibrationView extends React.Component{
         <div>
         <CalibrationContainer>
            <h1>Test Routines</h1>
-           
+
            <p> Plate Calibration</p>
            <MiniWrapper>
            <CalibrationRow label={'plate number'} model={plate} 
@@ -125,14 +125,14 @@ const CalibrationContainer = styled.div`
 const ButtonsFlexer = styled.div`
     display: flex;
     flex-direction: row;
-    width: 500px;
+    width: auto;
     justify-content:space-evenly;
 `;
 
 const OutputBox = styled.div`
     border:1px solid grey;
     height:300px;
-    width: auto;
+    width: 500px;
 `;
 
 
