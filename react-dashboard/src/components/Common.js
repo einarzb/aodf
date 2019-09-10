@@ -17,9 +17,28 @@ export const ButtonsFlexer = styled.div`
     padding:10px;
 `;
 
+export const LedsFlexer = styled(ButtonsFlexer)`
+  flex-direction: column;
+  width: auto;
+`;
+
 export const QCButton = styled(Button)`
     color: #00000 ;
-    width: 30%;
+    width: 29%;
     padding: 15px 10px;
     margin: 10px;
 `;
+
+
+export const SwitchsWrapper = styled.div`
+    width: 95%;
+    display:inline-flex;
+    align-items:center;
+    flex-direction:row;
+    height: auto;
+    border-radius: 1rem;
+    padding: 0;
+    margin: 5px;
+`;
+
+

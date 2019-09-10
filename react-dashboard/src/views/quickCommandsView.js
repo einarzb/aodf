@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import {ButtonsFlexer, QCButton} from '../components/Common';
 import styled from 'styled-components';
 
 import { MicroApi } from '../micro-api';
 import RebootView from './RebootView';
 import ButtonsGroup from '../components/ButtonsGroup';
+import LedsGroup from '../components/LedGroup';
+
 import { toggleRebootAction } from '../redux/actions/settings-actions';
 
 let elevButtons = [
@@ -21,8 +22,6 @@ let plateGripperButtons = [
   {label: 'Gripper Close' ,onClick:'{this.gripperClose}'},
   {label: 'Plate Rot Out' ,onClick:'{this.plateRotOut}'},
   {label: 'Gripper Out' ,onClick:'{this.gripperOut}'}
-
-
 ] 
 
 let generalButtons = [
@@ -30,6 +29,29 @@ let generalButtons = [
   {label: 'Save Picture' ,onClick:'{this.savePicture}'},
   {label: 'Reboot' ,onClick:'{this.toggleReboot}'},
   {label: 'Power Off' ,onClick:'{this.powerOff}'}
+]
+
+let limitSwitchTestButtons = [
+  {label: 'Limit Switch Test', onClick:'{this.switchTest}'}
+]
+
+let rightSwitchesArr = [
+  {ledNum: 'LED 1', status:'indicator'},
+  {ledNum: 'LED 2', status:'indicator'},
+  {ledNum: 'LED 3', status:'indicator'},
+  {ledNum: 'LED 4', status:'indicator'},
+  {ledNum: 'LED 5', status:'indicator'},
+  {ledNum: 'LED 6', status:'indicator'}
+]
+
+
+let leftSwitchesArr = [
+  {ledNum: 'LED 1', status:'indicator'},
+  {ledNum: 'LED 2', status:'indicator'},
+  {ledNum: 'LED 3', status:'indicator'},
+  {ledNum: 'LED 4', status:'indicator'},
+  {ledNum: 'LED 5', status:'indicator'},
+  {ledNum: 'LED 6', status:'indicator'}
 ]
 
 
@@ -104,9 +126,25 @@ class quickCommandsView extends Component{
           <RebootView reboot={this.toggleReboot} /> 
           : 
           <QuickCommandsContainer>
+           
+            <CommandButtonsContainer>
               <ButtonsGroup btnsArr={elevButtons}></ButtonsGroup>
               <ButtonsGroup btnsArr={plateGripperButtons}></ButtonsGroup>
               <ButtonsGroup btnsArr={generalButtons} ></ButtonsGroup>
+            </CommandButtonsContainer>
+           
+            <LedButtonsContainer>
+               <ButtonsGroup btnsArr={limitSwitchTestButtons} border="none"></ButtonsGroup>
+               <SwitchList>
+                  <span> Right Switch Sensor </span>
+                  <LedsGroup switchesArr={rightSwitchesArr}></LedsGroup>
+               </SwitchList>
+               <SwitchList>
+                  <span> Left Switch Sensor </span>
+                  <LedsGroup switchesArr={leftSwitchesArr}></LedsGroup>
+               </SwitchList>
+            </LedButtonsContainer>
+         
           </QuickCommandsContainer>
          }
          </div>
@@ -132,17 +170,39 @@ export default connect(
 
 const QuickCommandsContainer = styled.div`
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    padding-top:50px;
+    padding-top:10px;
+    justify-content:center;
+    margin-left: 12.5%;
+    width: 77%;
 `;
 
-const MiniWrapper = styled.div`
+const CommandButtonsContainer = styled.div`
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+    margin-right: 4rem;
+`;
+
+const LedButtonsContainer = styled.div`
     display: inline-flex;
     flex-direction: row;
     align-items: center;
+    width: 50%;
     border:1px solid grey;
     border-radius: 1rem;
-    margin: 15px 0px;
+    padding: 10px;
 `;
 
+const SwitchList = styled.div`
+    display: inline-flex;
+    flex-direction: column;
+    color:#444444;
+    font-size: 18px;
+    line-height: 24px;
+    font-family:Arial;
+    margin: 0px 10px;
+    width: 33%;
+`;
