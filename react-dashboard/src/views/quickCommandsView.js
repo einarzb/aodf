@@ -36,22 +36,22 @@ let limitSwitchTestButtons = [
 ]
 
 let rightSwitchesArr = [
-  {ledNum: 'LED 1', status:'indicator'},
-  {ledNum: 'LED 2', status:'indicator'},
-  {ledNum: 'LED 3', status:'indicator'},
-  {ledNum: 'LED 4', status:'indicator'},
-  {ledNum: 'LED 5', status:'indicator'},
-  {ledNum: 'LED 6', status:'indicator'}
+  {ledNum: 'LED 1', limitSwitchStatus:'2'},
+  {ledNum: 'LED 2', limitSwitchStatus:'0'},
+  {ledNum: 'LED 3', limitSwitchStatus:'1'},
+  {ledNum: 'LED 4', limitSwitchStatus:'0'},
+  {ledNum: 'LED 5', limitSwitchStatus:'2'},
+  {ledNum: 'LED 6', limitSwitchStatus:'1'}
 ]
 
 
 let leftSwitchesArr = [
-  {ledNum: 'LED 1', status:'indicator'},
-  {ledNum: 'LED 2', status:'indicator'},
-  {ledNum: 'LED 3', status:'indicator'},
-  {ledNum: 'LED 4', status:'indicator'},
-  {ledNum: 'LED 5', status:'indicator'},
-  {ledNum: 'LED 6', status:'indicator'}
+  {ledNum: 'LED 1', limitSwitchStatus:'0'},
+  {ledNum: 'LED 2', limitSwitchStatus:'1'},
+  {ledNum: 'LED 3', limitSwitchStatus:'2'},
+  {ledNum: 'LED 4', limitSwitchStatus:'2'},
+  {ledNum: 'LED 5', limitSwitchStatus:'1'},
+  {ledNum: 'LED 6', limitSwitchStatus:'0'}
 ]
 
 
@@ -137,12 +137,14 @@ class quickCommandsView extends Component{
                <ButtonsGroup btnsArr={limitSwitchTestButtons} border="none"></ButtonsGroup>
                <SwitchList>
                   <span> Right Switch Sensor </span>
-                  <LedsGroup switchesArr={rightSwitchesArr}></LedsGroup>
+                  <LedsGroup switchesArr={rightSwitchesArr} backgroundColor={rightSwitchesArr.limitSwitchStatus}></LedsGroup>
                </SwitchList>
+             
                <SwitchList>
                   <span> Left Switch Sensor </span>
-                  <LedsGroup switchesArr={leftSwitchesArr}></LedsGroup>
+                  <LedsGroup switchesArr={leftSwitchesArr} backgroundColor={leftSwitchesArr.limitSwitchStatus}></LedsGroup>
                </SwitchList>
+
             </LedButtonsContainer>
          
           </QuickCommandsContainer>
