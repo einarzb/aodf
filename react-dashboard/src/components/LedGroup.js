@@ -4,12 +4,12 @@ import styled from 'styled-components'
 
 
 let ledsIndicators = (ledStatus) => {  
-  let colors = {
+  let ledsColorsMap = {
     "0": "#7CFC00", //green
     "1": "#B22222", //red
     "2": "#D3D3D3" // default - grey
   }
-  return colors[ledStatus]
+  return ledsColorsMap[ledStatus]
 }
 
 const LedGroup = ({switchesArr}) => {

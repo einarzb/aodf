@@ -14,7 +14,7 @@ export const ButtonsFlexer = styled.div`
     justify-content:start;
     border:1px solid grey;
     border-radius: 1rem;
-    padding:10px;
+    padding:10px 2px;
 `;
 
 export const LedsFlexer = styled(ButtonsFlexer)`
@@ -39,6 +39,8 @@ export const SwitchsWrapper = styled.div`
     border-radius: 1rem;
     padding: 0;
     margin: 5px;
+    line-height: 1rem;
+    font-size: 12px;
 `;
 
 
