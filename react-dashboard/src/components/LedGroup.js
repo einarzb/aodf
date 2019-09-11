@@ -1,8 +1,16 @@
 import React from 'react';
 import {LedsFlexer, SwitchsWrapper} from './Common'
 import styled from 'styled-components'
-import * as utils from '../utils.js'
 
+
+let ledsIndicators = (ledStatus) => {  
+  let colors = {
+    "0": "#7CFC00", //green
+    "1": "#B22222", //red
+    "2": "#D3D3D3" // default - grey
+  }
+  return colors[ledStatus]
+}
 
 const LedGroup = ({switchesArr}) => {
     
@@ -10,10 +18,9 @@ const LedGroup = ({switchesArr}) => {
    
     return <SwitchsWrapper>
               <SwitchTitle>{led.ledNum}</SwitchTitle>
-              <SwitchHandle style={{backgroundColor:utils.ledsIndicators(led.limitSwitchStatus)}}> </SwitchHandle> 
+              <SwitchHandle style={{backgroundColor:ledsIndicators(led.limitSwitchStatus)}}> </SwitchHandle> 
            </SwitchsWrapper>              
   })
-
 
   return(
     <LedsFlexer> 

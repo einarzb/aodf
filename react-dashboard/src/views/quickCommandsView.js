@@ -35,23 +35,26 @@ let limitSwitchTestButtons = [
   {label: 'Limit Switch Test', onClick:'{this.switchTest}'}
 ]
 
+// 0 - green
+// 1 - red
+// 2 - default grey
 let rightSwitchesArr = [
   {ledNum: 'LED 1', limitSwitchStatus:'2'},
-  {ledNum: 'LED 2', limitSwitchStatus:'0'},
-  {ledNum: 'LED 3', limitSwitchStatus:'1'},
-  {ledNum: 'LED 4', limitSwitchStatus:'0'},
+  {ledNum: 'LED 2', limitSwitchStatus:'2'},
+  {ledNum: 'LED 3', limitSwitchStatus:'2'},
+  {ledNum: 'LED 4', limitSwitchStatus:'2'},
   {ledNum: 'LED 5', limitSwitchStatus:'2'},
-  {ledNum: 'LED 6', limitSwitchStatus:'1'}
+  {ledNum: 'LED 6', limitSwitchStatus:'2'}
 ]
 
 
 let leftSwitchesArr = [
-  {ledNum: 'LED 1', limitSwitchStatus:'0'},
-  {ledNum: 'LED 2', limitSwitchStatus:'1'},
+  {ledNum: 'LED 1', limitSwitchStatus:'2'},
+  {ledNum: 'LED 2', limitSwitchStatus:'2'},
   {ledNum: 'LED 3', limitSwitchStatus:'2'},
   {ledNum: 'LED 4', limitSwitchStatus:'2'},
-  {ledNum: 'LED 5', limitSwitchStatus:'1'},
-  {ledNum: 'LED 6', limitSwitchStatus:'0'}
+  {ledNum: 'LED 5', limitSwitchStatus:'2'},
+  {ledNum: 'LED 6', limitSwitchStatus:'2'}
 ]
 
 
