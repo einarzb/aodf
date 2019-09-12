@@ -42,23 +42,23 @@ class quickCommandsView extends Component{
             {ledNum: 'Gripper O/C LED 6', limitSwitchStatus:'2'}
           ],
           generalButtons: [
-            {label: 'Queue Reset',onClick:'{this.queueReset}'},
-            {label: 'Save Picture' ,onClick:'{this.savePicture}'},
-            {label: 'Reboot' ,onClick:this.toggleReboot},
-            {label: 'Power Off' ,onClick:'{this.powerOff}'}
+            {label: 'Queue Reset', onClick:this.queueReset},
+            {label: 'Save Picture', onClick:this.savePicture},
+            {label: 'Reboot', onClick:this.toggleReboot},
+            {label: 'Power Off', onClick:this.powerOff}
           ],
           elevButtons : [
-            {label: 'Elev Up',onClick:'{this.elevUp}'},
-            {label: 'Elev Down',onClick:'{this.elevDown}'},
-            {label: 'Elev Stop',onClick:'{this.elevStop}'}
+            {label: 'Elev Up', onClick:this.elevUp},
+            {label: 'Elev Down', onClick:this.elevDown},
+            {label: 'Elev Stop', onClick:this.elevStop}
           ], 
           
           plateGripperButtons : [
-            {label: 'Plate Rot In',onClick:'{this.plateRotIn}'},
-            {label: 'Gripper In',onClick:'{this.gripperIn}'},
-            {label: 'Gripper Close' ,onClick:'{this.gripperClose}'},
-            {label: 'Plate Rot Out' ,onClick:'{this.plateRotOut}'},
-            {label: 'Gripper Out' ,onClick:'{this.gripperOut}'}
+            {label: 'Plate Rot In', onClick:this.plateRotIn},
+            {label: 'Gripper In', onClick:this.gripperIn},
+            {label: 'Gripper Close', onClick:this.gripperClose},
+            {label: 'Plate Rot Out', onClick:this.plateRotOut},
+            {label: 'Gripper Out', onClick:this.gripperOut}
           ] 
         }
     } 
@@ -169,7 +169,6 @@ class quickCommandsView extends Component{
           <RebootView reboot={this.toggleReboot} /> 
           : 
           <QuickCommandsContainer>
-           
             <CommandButtonsContainer>
               <ButtonsGroup btnsArr={elevButtons}></ButtonsGroup>
               <ButtonsGroup btnsArr={plateGripperButtons}></ButtonsGroup>
@@ -178,21 +177,15 @@ class quickCommandsView extends Component{
            
             <LedButtonsContainer>
                <ButtonsGroup btnsArr={limitSwitchTestButtons} border="none" width={limitSwitchTestButtons.width} bgColor={limitSwitchTestButtons.bgColor}></ButtonsGroup>
-
                <SwitchList>
                   <span> Left Switch Sensor </span>
                   <LedsGroup switchesArr={leftSwitchesArr} backgroundColor={leftSwitchesArr.limitSwitchStatus}></LedsGroup>
                </SwitchList>
-               
                <SwitchList>
                   <span> Right Switch Sensor </span>
                   <LedsGroup switchesArr={rightSwitchesArr} backgroundColor={rightSwitchesArr.limitSwitchStatus}></LedsGroup>
                </SwitchList>
-             
-             
-
             </LedButtonsContainer>
-         
           </QuickCommandsContainer>
          }
          </div>
