@@ -6,7 +6,6 @@ import {TableRow} from 'grommet/components/TableRow';
 import {TableCell} from 'grommet/components/TableCell';
 import {TableBody} from 'grommet/components/TableBody';
 
-
 const RoutinesTable = ({tableCols, children}) => {   
   let TableColsComponent = tableCols.map(function(col, i) { 
       return <TableCell style={{marginBottom:'10px', width:'auto'}} scope="col" border="bottom" key={i}>

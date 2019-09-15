@@ -15,11 +15,26 @@ import { MicroApi } from '../micro-api';
 
 
 
+
 export class CalibrationView extends React.Component{
     constructor(props){
         super(props)
     
         this.state = {
+          //style for select 
+          customStyles: {
+            control: (base, state) => ({
+              ...base,
+              background: "#FFFFFF",
+              fontSize:"13px",
+              fontColor:"grey",
+              lineHeight:1,
+              borderColor: state.isFocused ? "grey" : "grey",
+              boxShadow: state.isFocused ? null : null,
+              "&:hover": {
+                borderColor: "#fd7c20"
+              }
+            })},
           selectedPlateNumberOption:null,
           selectedPlateAreaOption:null,
           selectedReelNumberOption:null,
@@ -97,7 +112,7 @@ export class CalibrationView extends React.Component{
       
     
     }
-
+    
     motorNumChange = (selectedMotorNumOption) => {
       this.setState({ selectedMotorNumOption });
       console.log(`Option selected:`, selectedMotorNumOption);
@@ -224,7 +239,7 @@ export class CalibrationView extends React.Component{
     }
 
     render(){
-      let {selectedInstructionsOption, selectedReelNumberOption, selectedPlateNumberOption, selectedPlateAreaOption, plateCalibrationGroups, reelCalibrationGroups, setReelToParkingPlate, updatePlateHeight, modifyRobotParameters, routineTableLabels, routineFunctionsList, selectedInsttypeOption, motorNumList, selectedMotorNumOption, resultTable} = this.state
+      let {selectedInstructionsOption, selectedReelNumberOption, selectedPlateNumberOption, selectedPlateAreaOption, plateCalibrationGroups, reelCalibrationGroups, setReelToParkingPlate, updatePlateHeight, modifyRobotParameters, routineTableLabels, routineFunctionsList, selectedInsttypeOption, motorNumList, selectedMotorNumOption, resultTable, customStyles} = this.state
 
       return (
         <div>
@@ -235,6 +250,7 @@ export class CalibrationView extends React.Component{
                 <RoutinesTable tableCols={routineTableLabels}>
                     <TestButton>
                       <Select
+                          styles={customStyles} 
                           autoFocus
                           placeholder='RoR'
                           value={selectedInstructionsOption}
@@ -245,6 +261,7 @@ export class CalibrationView extends React.Component{
                     </TestButton>
                     <TestButton>
                       <Select
+                          styles={customStyles} 
                           autoFocus
                           placeholder='dont care'
                           value={selectedInsttypeOption}
@@ -255,6 +272,7 @@ export class CalibrationView extends React.Component{
                     </TestButton>
                     <TestButton>
                       <Select
+                          styles={customStyles} 
                           autoFocus
                           value={selectedMotorNumOption}
                           onChange={this.motorNumChange}
@@ -264,17 +282,16 @@ export class CalibrationView extends React.Component{
                     </TestButton>
                     <TestButton>
                         <TextInput
-                            style={{fontWeight:'300', width:'120px'}}
+                            style={{fontWeight:'300', width:'90px'}}
                               placeholder="value"
                             //  value={item.plateHeight}
                           />
                     </TestButton>
-                    <SaveButton onClick={this.executeInstructions}>
-                      Execute
+                    <SaveButton onClick={this.executeInstructions} style={{width:'20%', fontSize:'16px'}}>
+                      execute
                     </SaveButton>
-                </RoutinesTable>
-              
-                <p>result</p>
+                </RoutinesTable>   
+                <p>Result</p>
                 <RoutinesTable tableCols={resultTable}>
                     <span>
                       localhost
@@ -301,6 +318,7 @@ export class CalibrationView extends React.Component{
                 <CalibrationGroup calibRow={plateCalibrationGroups}>
                     <SelectBox>
                             <Select
+                                styles={customStyles} 
                                 autoFocus
                                 placeholder='plate #'
                                 value={selectedPlateNumberOption}
@@ -312,6 +330,7 @@ export class CalibrationView extends React.Component{
 
                     <SelectBox>
                           <Select
+                              styles={customStyles} 
                               autoFocus
                               placeholder='plate area'
                               value={selectedPlateAreaOption}
@@ -321,17 +340,18 @@ export class CalibrationView extends React.Component{
                             />
                         </SelectBox>
                     <SaveButton onClick={this.plateCalibration}>
-                      Run
+                      run
                     </SaveButton>
                 </CalibrationGroup>
                 <CalibrationGroup calibRow={reelCalibrationGroups}>
-                    <SaveButton onClick={this.reelCalibration} style={{width:"120px"}}>
+                    <SaveButton onClick={this.reelCalibration} style={{width:"200px"}}>
                       Run Reel Calibration
                     </SaveButton>
                 </CalibrationGroup>
                 <CalibrationGroup calibRow={setReelToParkingPlate}>
                   <SelectBox>
                         <Select
+                            styles={customStyles} 
                             autoFocus
                             placeholder='reel #'
                             value={selectedReelNumberOption}
@@ -341,50 +361,52 @@ export class CalibrationView extends React.Component{
                           />
                       </SelectBox>
                       <SaveButton onClick={this.setReelToParking}>
-                        Run
+                        run
                       </SaveButton>
                 </CalibrationGroup>
                 <CalibrationGroup calibRow={updatePlateHeight}>
-                <SelectBox>
-                        <Select
-                            autoFocus
-                            placeholder='plate #'
-                            value={selectedPlateNumberOption}
-                            onChange={this.plateNumHandleChange}
-                            options={plateCalibrationGroups[0].plateNumbers}
-                            name="select-plate-number"
-                          />
-                    </SelectBox>
+                    <SelectBox>
+                            <Select
+                                styles={customStyles} 
+                                autoFocus
+                                placeholder='plate #'
+                                value={selectedPlateNumberOption}
+                                onChange={this.plateNumHandleChange}
+                                options={plateCalibrationGroups[0].plateNumbers}
+                                name="select-plate-number"
+                              />
+                        </SelectBox>
 
-                    <SelectBox>
-                      <Select
-                          autoFocus
-                          placeholder='plate area'
-                          value={selectedPlateAreaOption}
-                          onChange={this.plateAreaHandleChange}
-                          options={plateCalibrationGroups[0].plateAreas}
-                          name="select-plate-area-number"
-                        />
-                    </SelectBox>
-                          
-                    <DisplayData>
-                      {plateCalibrationGroups[0].plateHeight}
-                    </DisplayData>
-                    <SelectBox>
-                      <TextInput
-                      style={{fontWeight:'300'}}
-                        placeholder="insert height"
-                      //  value={item.plateHeight}
-                      />
-                    </SelectBox>
-                    <SaveButton onClick={this.updatePlateHeight}>
-                      Save
-                    </SaveButton>
+                        <SelectBox>
+                          <Select
+                              styles={customStyles} 
+                              autoFocus
+                              placeholder='plate area'
+                              value={selectedPlateAreaOption}
+                              onChange={this.plateAreaHandleChange}
+                              options={plateCalibrationGroups[0].plateAreas}
+                              name="select-plate-area-number"
+                            />
+                        </SelectBox>
+                              
+                        <DisplayData>
+                          {plateCalibrationGroups[0].plateHeight}
+                        </DisplayData>
+                        <SelectBox>
+                          <TextInput
+                          style={{fontWeight:'300'}}
+                            placeholder="insert height"
+                          //  value={item.plateHeight}
+                          />
+                        </SelectBox>
+                        <SaveButton onClick={this.updatePlateHeight}>
+                          save
+                        </SaveButton>
                 </CalibrationGroup>
                 <CalibrationGroup calibRow={modifyRobotParameters}>
-
                   <SelectBox>
                     <Select
+                        styles={customStyles} 
                         autoFocus
                         placeholder='Parameter'
                         value={selectedPlateAreaOption}
@@ -404,10 +426,11 @@ export class CalibrationView extends React.Component{
                     />
                   </SelectBox>
                   <SaveButton onClick={this.modifyRobotParams}>
-                Save
+                save
               </SaveButton>
            </CalibrationGroup>
            </CalibrationControlButtons> 
+
         </CalibrationContainer>
         </div>
 
@@ -426,8 +449,9 @@ const mapStateToProps = (state) => {
     mapStateToProps,
     null)
     (CalibrationView)
-  
-  
+ 
+
+
 const CalibrationContainer = styled.div`
     display: flex;
     flex-direction: row;
@@ -435,6 +459,7 @@ const CalibrationContainer = styled.div`
     padding-top:0px auto;
     width: 77%;
     margin-left: 12.5%;
+    margin-top: 2rem;
 `;
 
 const CalibrationControlButtons = styled.div`
@@ -480,8 +505,10 @@ const SelectBox = styled.div`
     font-size: 13px;
     font-weight:300;
     margin:0px 4px;
+    color:#000000;
+
     & input {
-      border:1px solid rgba(0,0,0,0.15);
+      border:1px solid grey;
       padding: 10px;
     }
 `;
@@ -491,8 +518,9 @@ const TestButton = styled.div`
     font-size: 13px;
     font-weight:300;
     margin:0px 4px;
+    color:#000000;
     & input {
-      border:1px solid rgba(0,0,0,0.15);
+      border:1px solid grey;
       padding: 10px;
     }
 `;
@@ -507,9 +535,9 @@ const DisplayData = styled.div`
     background: transparent;
     color: inherit;
     margin: 0;
-    border: 1px solid rgba(0,0,0,0.15);
+    border: none;
     border-radius: 4px;
-    width: 140px;
+    width: 50px;
     text-align:center;
 `;
 
