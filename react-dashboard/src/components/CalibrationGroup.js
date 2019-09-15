@@ -2,14 +2,14 @@ import React from 'react';
 import styled from 'styled-components'
 
 
-import {calibrationRow, CalibrationsGroupWrapper} from './Common';
+import {CalibrationsGroupWrapper} from './Common';
 
 
-const CalibrationGroup = ({calibRow, setValue, children}) => {    
+const CalibrationGroup = ({calibRow, children}) => {    
   
-  let CalibrationRowComponents = calibRow.map(function(item) {
+  let CalibrationRowComponents = calibRow.map(function(item, i) {
  
-    return <CalibrationsGroupWrapper>
+    return <CalibrationsGroupWrapper key={i}>
                 <p>{item.headline}</p>
                 <MainRow>
                   {children}
@@ -31,23 +31,17 @@ export const CalibrationWrapper = styled.div`
   flex-direction:column;
   width:50%;
   text-align:left;
+  margin: 0;
+  height:auto;
 `;
 
 export const MainRow = styled.div`
   display:inline-flex;
   flex-direction:row;
   width:100%;
-  justify-content:space-between;
+  justify-content:start;
   align-items:center;
   padding: 7px 0px;
-`;
-
-const CalibrationLabel = styled.label`
-  font-size:12px;
-  width: 36%;
-  height:70px;
-  line-height:1;
-  margin: 0px 8px;  
-
+  margin: 0;
 `;
 

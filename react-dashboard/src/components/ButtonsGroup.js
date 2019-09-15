@@ -2,10 +2,10 @@
 import React from 'react';
 import {ButtonsFlexer, QCButton} from './Common';
 
-const ButtonsGroup = ({btnsArr, width, border, bgColor}) => {
+const ButtonsGroup = ({btnsArr, width, border}) => {
     
-  let buttonComponents = btnsArr.map(function(button) {
-    return <QCButton label={button.label} onClick={button.onClick} style={{width:button.width,backgroundColor:button.bgColor}}></QCButton>
+  let buttonComponents = btnsArr.map(function(button, i) {
+    return <QCButton key={i} label={button.label} onClick={button.onClick} style={{width:button.width,backgroundColor:button.bgColor}}></QCButton>
   })
 
   width = width || "100%"

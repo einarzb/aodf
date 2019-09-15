@@ -27,12 +27,15 @@ export const QCButton = styled(Button)`
     width: 29%;
     padding: 15px 10px;
     margin: 10px;
+    text-align:center;
 `;
 
 
 export const SaveButton = styled(QCButton)`
-    padding: 0px;
     border: 2px solid #fd7c20;
+    padding: 5px 10px;
+    border-radius: 1rem;
+    width: 15%;
 `;
 
 export const SwitchsWrapper = styled.div`
@@ -51,6 +54,7 @@ export const SwitchsWrapper = styled.div`
 export const calibrationRow = styled(ButtonsFlexer)`
     display:inline-flex;
     flex-wrap: no-wrap;
+    margin: 0;
 `;
 
 export const CalibrationsGroupWrapper = styled(calibrationRow)`
@@ -60,7 +64,7 @@ export const CalibrationsGroupWrapper = styled(calibrationRow)`
     & p {
         margin:0px 0px 7px 0px;
         border-bottom: 1px solid grey;
-        width: 75%;
+        width: 90%;
     }
 
 `;

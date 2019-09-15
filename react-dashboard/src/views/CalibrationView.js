@@ -3,10 +3,8 @@ import { connect } from 'react-redux';
 
 // STYLING
 import styled from 'styled-components';
-import {OButton} from './styled';
-import {Heading} from 'grommet/components/Heading';
 import { TextInput } from 'grommet/components/TextInput';
-import { QCButton } from '../components/Common';
+import { SaveButton } from '../components/Common';
 import Select from 'react-select';
 
 //COMPONENTS
@@ -37,7 +35,7 @@ export class CalibrationView extends React.Component{
               labelPlateNum:'plate #',
               labelPlateArea:'plate area',
               labelPlateHeight:'plate height'
-            }
+           }
           ],
           reelCalibrationGroups: [
             {
@@ -88,6 +86,7 @@ export class CalibrationView extends React.Component{
     };
 
     getReelNumbers = () => {
+     // data should come from res
       let reelNumbers = [
         {value: 1, label:1},
         {value: 2, label: 2},
@@ -101,6 +100,7 @@ export class CalibrationView extends React.Component{
     }
 
     getPlateNumbers = () => {
+      // data should come from res
       let plateNumbers = [
         {value: 1, label:1},
         {value: 2, label: 2},
@@ -113,6 +113,7 @@ export class CalibrationView extends React.Component{
       return plateNumbers;
     }
     getPlateAreas = () => {
+      // data should come from res
       let plateAreas =  [ 
       {value: 1, label:1},
       {value: 2, label: 2},
@@ -124,35 +125,35 @@ export class CalibrationView extends React.Component{
       ] 
       return plateAreas;
     }
-    onSettingChanged = () => {
-      console.log('on settings changed ')
-      return;
-    }
+   
     setReelToParking = () => {
+      console.log('im set reel to park');
       MicroApi.setReelToParking().then(res => {     
-        console.log('im set reel to park');
         console.log(res);
       })
     }
-    plateCalibration = (plate, sample) => {
-      console.log(plate);
-      console.log(sample);
-      
+    plateCalibration = () => {
+     console.log('im plateCalibration')
         MicroApi.plateRestart().then((res)=>{
           console.log('plateRestart');
-         // console.log(res);
-          
-         // this.setState({plateCalibration:res});
         });        
     }
 
     reelCalibration = () => {
-      console.log('reel calibration');
+      console.log('run reel calibration');
         MicroApi.reelCalibration().then((res)=>{
           this.setState({reelCalibration:res});
         })
     }
 
+    updatePlateHeight = () => {
+      console.log('im update plate height ')
+      return;
+    }
+    modifyRobotParams = () => {
+      console.log('im modify Robot Params ')
+      return;
+    }
     render(){
       let {selectedReelNumberOption, selectedPlateNumberOption, selectedPlateAreaOption, plateCalibrationGroups, reelCalibrationGroups, setReelToParkingPlate, updatePlateHeight, modifyRobotParameters} = this.state
 
@@ -161,33 +162,38 @@ export class CalibrationView extends React.Component{
         <CalibrationContainer>
            <h1>Test Routines</h1>
 
-          <CalibrationGroup calibRow={plateCalibrationGroups}>
-          <SelectBox>
-                  <Select
-                      autoFocus
-                      placeholder='plate #'
-                      value={selectedPlateNumberOption}
-                      onChange={this.plateNumHandleChange}
-                      options={plateCalibrationGroups[0].plateNumbers}
-                      name="select-plate-number"
-                    />
-              </SelectBox>
+           <CalibrationGroup calibRow={plateCalibrationGroups}>
+              <SelectBox>
+                      <Select
+                          autoFocus
+                          placeholder='plate #'
+                          value={selectedPlateNumberOption}
+                          onChange={this.plateNumHandleChange}
+                          options={plateCalibrationGroups[0].plateNumbers}
+                          name="select-plate-number"
+                        />
+                  </SelectBox>
 
               <SelectBox>
-                <Select
-                    autoFocus
-                    placeholder='plate area'
-                    value={selectedPlateAreaOption}
-                    onChange={this.plateAreaHandleChange}
-                    options={plateCalibrationGroups[0].plateAreas}
-                    name="select-plate-area-number"
-                  />
-              </SelectBox>
-              <QCButton>
+                    <Select
+                        autoFocus
+                        placeholder='plate area'
+                        value={selectedPlateAreaOption}
+                        onChange={this.plateAreaHandleChange}
+                        options={plateCalibrationGroups[0].plateAreas}
+                        name="select-plate-area-number"
+                      />
+                  </SelectBox>
+              <SaveButton onClick={this.plateCalibration}>
                 Run
-              </QCButton>
+              </SaveButton>
            </CalibrationGroup>
            <CalibrationGroup calibRow={reelCalibrationGroups}>
+               <SaveButton onClick={this.reelCalibration}>
+                 Run Reel Calibration
+              </SaveButton>
+           </CalibrationGroup>
+           <CalibrationGroup calibRow={setReelToParkingPlate}>
            <SelectBox>
                 <Select
                     autoFocus
@@ -198,9 +204,9 @@ export class CalibrationView extends React.Component{
                     name="select-reel-number"
                   />
               </SelectBox>
-           </CalibrationGroup>
-           <CalibrationGroup calibRow={setReelToParkingPlate}>
-      
+              <SaveButton onClick={this.setReelToParking}>
+                Run
+              </SaveButton>
            </CalibrationGroup>
            <CalibrationGroup calibRow={updatePlateHeight}>
            <SelectBox>
@@ -235,60 +241,40 @@ export class CalibrationView extends React.Component{
                 //  value={item.plateHeight}
                 />
               </SelectBox>
-              <QCButton>
+              <SaveButton onClick={this.updatePlateHeight}>
                 Save
-              </QCButton>
+              </SaveButton>
           </CalibrationGroup>
           <CalibrationGroup calibRow={modifyRobotParameters}>
-      
+
+              <SelectBox>
+                <Select
+                    autoFocus
+                    placeholder='Parameter'
+                    value={selectedPlateAreaOption}
+                    onChange={this.plateAreaHandleChange}
+                    options={plateCalibrationGroups[0].plateAreas}
+                    name="select-parameter-selector"
+                  />
+              </SelectBox>
+              <DisplayData>
+                {plateCalibrationGroups[0].plateHeight}
+              </DisplayData>
+              <SelectBox>
+                <TextInput
+                style={{fontWeight:'300'}}
+                  placeholder="insert value"
+                //  value={item.plateHeight}
+                />
+              </SelectBox>
+              <SaveButton onClick={this.modifyRobotParams}>
+                Save
+              </SaveButton>
            </CalibrationGroup>
           
    {/**
-
-    <Select
-                  options={plateCalibrationGroups[0].plateNumbers}
-                  value={plateNum}
-                  onChange={({ option }) => setValue(option)}
-                  style={{width:'50px'}}>
-               </Select>       
-
-
-     <CalibrationLabel>
-                      {item.labelPlateNum}
-                      <Select
-                        options={item.plateNumbers}
-                        value={item.plateNumbers}
-                        onChange={({ option }) => setValue(option)}
-                        style={{width:'50px'}}>
-                      </Select>
-                   </CalibrationLabel>
-
-                    <CalibrationLabel>
-                      {item.labelPlateArea}
-                    <Select
-                      options={item.plateAreas}
-                      value={item.plateAreas}
-                      onChange={({ option }) => setValue(option)}
-                        style={{width:'50px'}}>
-                    </Select>
-                    </CalibrationLabel>
-
-                    <CalibrationLabel>
-                         {item.labelplateHeight} 
-                       <DisplayData>
-                         {item.plateHeight}
-                       </DisplayData>
-                    </CalibrationLabel>
-
-                    <CalibrationLabel>
-                      {item.labelPlateHeight}
-                     
-                    </CalibrationLabel>
-                    <QCButton> Save</QCButton>
-                </CalibrationGroup>
-                     */} 
-
-     
+onClick={this.setReelToParking}
+   
        {/**
            <CalibrationRow label={'plate number'} model={plate} 
             onChange={plate =>{onSettingChanged('plate_number',plate,'plate')}} />
@@ -331,14 +317,9 @@ const mapStateToProps = (state) => {
   return props;
 }
 
-
-const mapDispatchToProps = (dispatch) => ({ 
-  onSettingChanged:(fieldKey, value, fieldName) => dispatch(calibrationSettingsChangedAction(fieldKey, value, fieldName))
- })
-
   export default connect(
     mapStateToProps,
-    mapDispatchToProps)
+    null)
     (CalibrationView)
   
   
@@ -360,7 +341,7 @@ export const MainRow = styled.div`
   display:inline-flex;
   flex-direction:row;
   width:100%;
-  justify-content:space-between;
+  justify-content:start;
   align-items:center;
   padding: 7px 0px;
 `;

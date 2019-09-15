@@ -2,7 +2,7 @@
 function copy_php {
     say yo yo you forgot password
     scp -r -P 10560 ./*.php root@82.81.211.231:/usr/share/aodf-web/root/
-    say finished mista
+    say finished mister
 }
 # local machien credentials - -P 443 ./*.php root@192.168.1.61:/usr/share/aodf-web/root/
 #remote machine credentials -  scp -r -P 10560 ./*.php root@82.81.211.231:/usr/share/aodf-web/root/
