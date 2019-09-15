@@ -9,10 +9,9 @@ import Select from 'react-select';
 
 //COMPONENTS
 import CalibrationGroup from '../components/CalibrationGroup';
-
+import RoutinesTable from '../components/RoutinesTable';
 // DATA
 import { MicroApi } from '../micro-api';
-import { calibrationSettingsChangedAction } from '../redux/actions/settings-actions';
 
 
 
@@ -24,6 +23,9 @@ export class CalibrationView extends React.Component{
           selectedPlateNumberOption:null,
           selectedPlateAreaOption:null,
           selectedReelNumberOption:null,
+          selectedInstructionsOption:null,
+          selectedMotorNumOption:null,
+          selectedInsttypeOption:'dont care',
           reelCalibration:this.reelCalibration,
           plateCalibrationGroups: [
             {
@@ -64,11 +66,42 @@ export class CalibrationView extends React.Component{
             {
               headline:'Modify Robot Parameters'
             }
+          ],
+          routineTableLabels: [
+            {label: 'Instructions'},
+            {label: 'Inst Type'},
+            {label: 'Motor Num'},
+            {label: 'Value'},
+          ],
+          routineFunctionsList: [
+            {
+              functionsList: this.getFunctions()
+            }
+          ],
+          motorNumList: [
+            {
+              motorNums: this.getMotorNum()
+            }
+          ],
+          resultTable: [
+            {label:'Host'},
+            {label:'Target'},
+            {label:'Status:'},
+            {label:'Instr'},
+            {label:'Value'},
+            {label:'Diagram:'}
           ]
+
+          
         } 
       
     
     }
+
+    motorNumChange = (selectedMotorNumOption) => {
+      this.setState({ selectedMotorNumOption });
+      console.log(`Option selected:`, selectedMotorNumOption);
+    };
 
     reelNumHandleChange = (selectedReelNumberOption) => {
       this.setState({ selectedReelNumberOption });
@@ -84,7 +117,39 @@ export class CalibrationView extends React.Component{
       this.setState({ selectedPlateNumberOption });
       console.log(`Option selected:`, selectedPlateNumberOption);
     };
-
+    instructionsFunctionChange = (selectedInstructionsOption) => {
+      this.setState({ selectedInstructionsOption });
+      console.log(`Option selected:`, selectedInstructionsOption);
+    };
+    getFunctions = () => {
+      let functionsList = [
+        {value: 1, label:'ROR rotate right'},
+        {value: 2, label: 'ROL rotate left'},
+        {value: 3, label: 'MST motor stop'},
+        {value: 4, label: 'MVP move to position'},
+        {value: 5, label: 'SAP set axis parameter'},
+        {value:6, label: 'GAP get axis parameter'},
+        {value: 7, labebl: 'STAP store axis parameter'}    ,
+        {value: 8, labebl: 'RSAP restore axis parameter'}    ,
+        {value: 9, labebl: 'SGP  set global parameter'}    ,
+        {value: 10, labebl: 'GGP  get global parameter'}    ,
+        {value: 14, labebl: 'SIO set output'},
+        {value: 15, labebl: 'GIO get inputoutput'},    
+        {value: 23, labebl: 'STOP stop TMCL program execution'}           
+      ];
+      return functionsList;
+    }
+    getMotorNum = () => {
+      let motorNums = [
+        {value: 1, label:'Elevator'},
+        {value: 2, label: 'Stage'},
+        {value: 3, label: 'Plate Rotate'},
+        {value: 4, label: 'Plate In/Out'},
+        {value: 5, label: 'Gripper Open/Close'},
+        {value:6, label: 'Gripper In/Out'}     
+      ];
+      return motorNums;
+    }
     getReelNumbers = () => {
      // data should come from res
       let reelNumbers = [
@@ -154,155 +219,195 @@ export class CalibrationView extends React.Component{
       console.log('im modify Robot Params ')
       return;
     }
+    executeInstructions = () => {
+      console.log('execute! ')
+    }
+
     render(){
-      let {selectedReelNumberOption, selectedPlateNumberOption, selectedPlateAreaOption, plateCalibrationGroups, reelCalibrationGroups, setReelToParkingPlate, updatePlateHeight, modifyRobotParameters} = this.state
+      let {selectedInstructionsOption, selectedReelNumberOption, selectedPlateNumberOption, selectedPlateAreaOption, plateCalibrationGroups, reelCalibrationGroups, setReelToParkingPlate, updatePlateHeight, modifyRobotParameters, routineTableLabels, routineFunctionsList, selectedInsttypeOption, motorNumList, selectedMotorNumOption, resultTable} = this.state
 
       return (
         <div>
         <CalibrationContainer>
-           <h1>Test Routines</h1>
-
-           <CalibrationGroup calibRow={plateCalibrationGroups}>
-              <SelectBox>
+         
+           <CalibrationTestRoutines>
+                <p>Test Routines</p>
+                <RoutinesTable tableCols={routineTableLabels}>
+                    <TestButton>
                       <Select
                           autoFocus
-                          placeholder='plate #'
-                          value={selectedPlateNumberOption}
-                          onChange={this.plateNumHandleChange}
-                          options={plateCalibrationGroups[0].plateNumbers}
-                          name="select-plate-number"
+                          placeholder='RoR'
+                          value={selectedInstructionsOption}
+                          onChange={this.instructionsFunctionChange}
+                          options={routineFunctionsList[0].functionsList}
+                          name="functions-list-select"
                         />
-                  </SelectBox>
+                    </TestButton>
+                    <TestButton>
+                      <Select
+                          autoFocus
+                          placeholder='dont care'
+                          value={selectedInsttypeOption}
+                          onChange={this.instructionsFunctionChange}
+                          options={selectedInsttypeOption}
+                          name="inst-type-select"
+                        />
+                    </TestButton>
+                    <TestButton>
+                      <Select
+                          autoFocus
+                          value={selectedMotorNumOption}
+                          onChange={this.motorNumChange}
+                          options={motorNumList[0].motorNums}
+                          name="motornum-list-select"
+                        />
+                    </TestButton>
+                    <TestButton>
+                        <TextInput
+                            style={{fontWeight:'300', width:'120px'}}
+                              placeholder="value"
+                            //  value={item.plateHeight}
+                          />
+                    </TestButton>
+                    <SaveButton onClick={this.executeInstructions}>
+                      Execute
+                    </SaveButton>
+                </RoutinesTable>
+              
+                <p>result</p>
+                <RoutinesTable tableCols={resultTable}>
+                    <span>
+                      localhost
+                    </span>
+                    <DisplayResult>
+                      {plateCalibrationGroups[0].plateHeight}
+                    </DisplayResult>
+                    <DisplayResult>
+                      {plateCalibrationGroups[0].plateHeight}
+                    </DisplayResult>
+                    <DisplayResult>
+                      {plateCalibrationGroups[0].plateHeight}
+                    </DisplayResult>
+                    <DisplayResult>
+                      {plateCalibrationGroups[0].plateHeight}
+                    </DisplayResult>
+                 
+                </RoutinesTable>
+                <p>Output Box</p>
+                <OutputBox></OutputBox>
+           </CalibrationTestRoutines>
 
-              <SelectBox>
+           <CalibrationControlButtons>
+                <CalibrationGroup calibRow={plateCalibrationGroups}>
+                    <SelectBox>
+                            <Select
+                                autoFocus
+                                placeholder='plate #'
+                                value={selectedPlateNumberOption}
+                                onChange={this.plateNumHandleChange}
+                                options={plateCalibrationGroups[0].plateNumbers}
+                                name="select-plate-number"
+                              />
+                        </SelectBox>
+
+                    <SelectBox>
+                          <Select
+                              autoFocus
+                              placeholder='plate area'
+                              value={selectedPlateAreaOption}
+                              onChange={this.plateAreaHandleChange}
+                              options={plateCalibrationGroups[0].plateAreas}
+                              name="select-plate-area-number"
+                            />
+                        </SelectBox>
+                    <SaveButton onClick={this.plateCalibration}>
+                      Run
+                    </SaveButton>
+                </CalibrationGroup>
+                <CalibrationGroup calibRow={reelCalibrationGroups}>
+                    <SaveButton onClick={this.reelCalibration} style={{width:"120px"}}>
+                      Run Reel Calibration
+                    </SaveButton>
+                </CalibrationGroup>
+                <CalibrationGroup calibRow={setReelToParkingPlate}>
+                  <SelectBox>
+                        <Select
+                            autoFocus
+                            placeholder='reel #'
+                            value={selectedReelNumberOption}
+                            onChange={this.reelNumHandleChange}
+                            options={setReelToParkingPlate[0].reelNumbers}
+                            name="select-reel-number"
+                          />
+                      </SelectBox>
+                      <SaveButton onClick={this.setReelToParking}>
+                        Run
+                      </SaveButton>
+                </CalibrationGroup>
+                <CalibrationGroup calibRow={updatePlateHeight}>
+                <SelectBox>
+                        <Select
+                            autoFocus
+                            placeholder='plate #'
+                            value={selectedPlateNumberOption}
+                            onChange={this.plateNumHandleChange}
+                            options={plateCalibrationGroups[0].plateNumbers}
+                            name="select-plate-number"
+                          />
+                    </SelectBox>
+
+                    <SelectBox>
+                      <Select
+                          autoFocus
+                          placeholder='plate area'
+                          value={selectedPlateAreaOption}
+                          onChange={this.plateAreaHandleChange}
+                          options={plateCalibrationGroups[0].plateAreas}
+                          name="select-plate-area-number"
+                        />
+                    </SelectBox>
+                          
+                    <DisplayData>
+                      {plateCalibrationGroups[0].plateHeight}
+                    </DisplayData>
+                    <SelectBox>
+                      <TextInput
+                      style={{fontWeight:'300'}}
+                        placeholder="insert height"
+                      //  value={item.plateHeight}
+                      />
+                    </SelectBox>
+                    <SaveButton onClick={this.updatePlateHeight}>
+                      Save
+                    </SaveButton>
+                </CalibrationGroup>
+                <CalibrationGroup calibRow={modifyRobotParameters}>
+
+                  <SelectBox>
                     <Select
                         autoFocus
-                        placeholder='plate area'
+                        placeholder='Parameter'
                         value={selectedPlateAreaOption}
                         onChange={this.plateAreaHandleChange}
                         options={plateCalibrationGroups[0].plateAreas}
-                        name="select-plate-area-number"
+                        name="select-parameter-selector"
                       />
                   </SelectBox>
-              <SaveButton onClick={this.plateCalibration}>
-                Run
-              </SaveButton>
-           </CalibrationGroup>
-           <CalibrationGroup calibRow={reelCalibrationGroups}>
-               <SaveButton onClick={this.reelCalibration}>
-                 Run Reel Calibration
-              </SaveButton>
-           </CalibrationGroup>
-           <CalibrationGroup calibRow={setReelToParkingPlate}>
-           <SelectBox>
-                <Select
-                    autoFocus
-                    placeholder='reel #'
-                    value={selectedReelNumberOption}
-                    onChange={this.reelNumHandleChange}
-                    options={setReelToParkingPlate[0].reelNumbers}
-                    name="select-reel-number"
-                  />
-              </SelectBox>
-              <SaveButton onClick={this.setReelToParking}>
-                Run
-              </SaveButton>
-           </CalibrationGroup>
-           <CalibrationGroup calibRow={updatePlateHeight}>
-           <SelectBox>
-                  <Select
-                      autoFocus
-                      placeholder='plate #'
-                      value={selectedPlateNumberOption}
-                      onChange={this.plateNumHandleChange}
-                      options={plateCalibrationGroups[0].plateNumbers}
-                      name="select-plate-number"
+                  <DisplayData>
+                    {plateCalibrationGroups[0].plateHeight}
+                  </DisplayData>
+                  <SelectBox>
+                    <TextInput
+                    style={{fontWeight:'300'}}
+                      placeholder="insert value"
+                    //  value={item.plateHeight}
                     />
-              </SelectBox>
-
-              <SelectBox>
-                <Select
-                    autoFocus
-                    placeholder='plate area'
-                    value={selectedPlateAreaOption}
-                    onChange={this.plateAreaHandleChange}
-                    options={plateCalibrationGroups[0].plateAreas}
-                    name="select-plate-area-number"
-                  />
-              </SelectBox>
-                    
-              <DisplayData>
-                {plateCalibrationGroups[0].plateHeight}
-              </DisplayData>
-              <SelectBox>
-                <TextInput
-                style={{fontWeight:'300'}}
-                  placeholder="insert height"
-                //  value={item.plateHeight}
-                />
-              </SelectBox>
-              <SaveButton onClick={this.updatePlateHeight}>
-                Save
-              </SaveButton>
-          </CalibrationGroup>
-          <CalibrationGroup calibRow={modifyRobotParameters}>
-
-              <SelectBox>
-                <Select
-                    autoFocus
-                    placeholder='Parameter'
-                    value={selectedPlateAreaOption}
-                    onChange={this.plateAreaHandleChange}
-                    options={plateCalibrationGroups[0].plateAreas}
-                    name="select-parameter-selector"
-                  />
-              </SelectBox>
-              <DisplayData>
-                {plateCalibrationGroups[0].plateHeight}
-              </DisplayData>
-              <SelectBox>
-                <TextInput
-                style={{fontWeight:'300'}}
-                  placeholder="insert value"
-                //  value={item.plateHeight}
-                />
-              </SelectBox>
-              <SaveButton onClick={this.modifyRobotParams}>
+                  </SelectBox>
+                  <SaveButton onClick={this.modifyRobotParams}>
                 Save
               </SaveButton>
            </CalibrationGroup>
-          
-   {/**
-onClick={this.setReelToParking}
-   
-       {/**
-           <CalibrationRow label={'plate number'} model={plate} 
-            onChange={plate =>{onSettingChanged('plate_number',plate,'plate')}} />
-            <CalibrationRow
-              label={'sample number'}
-              model={sample} 
-              onChange={sample =>{onSettingChanged('sample',sample,'sample')}}/>
-            <ButtonsFlexer>
-              <OButton label={'run'} onClick={this.plateCalibration(plate, sample)} ></OButton>
-            </ButtonsFlexer>
-
-
-             <p> Reel Calibration</p>
-              <ButtonsFlexer>
-                  <OButton label={'run reel calibration'} onClick={this.reelCalibration} ></OButton>
-            </ButtonsFlexer>
-
-            <p>set Reel To Parking plate</p> 
-            <ButtonsFlexer>
-                  <OButton label={'Run'} onClick={this.setReelToParking} ></OButton>
-            </ButtonsFlexer>
-
-            Output: <br/>
-              <OutputBox>
-            
-              </OutputBox>
-
-      */}
+           </CalibrationControlButtons> 
         </CalibrationContainer>
         </div>
 
@@ -325,16 +430,40 @@ const mapStateToProps = (state) => {
   
 const CalibrationContainer = styled.div`
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
+    align-items: initial;
     padding-top:0px auto;
+    width: 77%;
+    margin-left: 12.5%;
 `;
 
+const CalibrationControlButtons = styled.div`
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+    margin-right: 0rem;
+`;
 
+const CalibrationTestRoutines = styled.div`
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+    padding: 10px 2px;
+    text-align:left;
+    & p {
+      width:100%;
+      margin:0 0 10px 0;
+    }
+`;
 const OutputBox = styled.div`
     border:1px solid grey;
-    height:300px;
+    height:200px;
     width: 500px;
+    margin-top: 0px;
+    margin-right: 45px;
+
 `;
 
 export const MainRow = styled.div`
@@ -348,6 +477,17 @@ export const MainRow = styled.div`
 
 const SelectBox = styled.div`
     width:140px;
+    font-size: 13px;
+    font-weight:300;
+    margin:0px 4px;
+    & input {
+      border:1px solid rgba(0,0,0,0.15);
+      padding: 10px;
+    }
+`;
+
+const TestButton = styled.div`
+    width:25%;
     font-size: 13px;
     font-weight:300;
     margin:0px 4px;
@@ -371,4 +511,9 @@ const DisplayData = styled.div`
     border-radius: 4px;
     width: 140px;
     text-align:center;
+`;
+
+const DisplayResult = styled(DisplayData)`
+    width:70px;
+    margin: 0 5px;
 `;

@@ -29,7 +29,7 @@ export default CalibrationGroup
 export const CalibrationWrapper = styled.div`
   display:inline-flex;
   flex-direction:column;
-  width:50%;
+  width:90%;
   text-align:left;
   margin: 0;
   height:auto;
