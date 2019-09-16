@@ -4,14 +4,13 @@ import styled from 'styled-components';
 const PlateDataBlock = ({plateData}) => {
     
   let plateDataBlockComponent = plateData.map(function(data, i) {
-    return <DataRow key={i}>
-             {data.label} : {data.value}
-          </DataRow>
+    return <DataRow key={i}><strong> {data.label}</strong> : {data.value}</DataRow> 
   })
 
   return(
-    <DataWrapper> 
+    <DataWrapper>
       {plateDataBlockComponent}
+
     </DataWrapper>
   )
 }
@@ -19,13 +18,12 @@ const PlateDataBlock = ({plateData}) => {
 export default PlateDataBlock
 
 const DataWrapper = styled.div`
-    display:inline-flex;
-    flex-direaction:row;
-    width: 200px;
-    border:1px solid blue;
+  display:block;
+  width:100%;
+text-align:left;
+margin: 10px 0;
 `;
 
 const DataRow = styled.div`
-display:inline-flex;
-flex-direaction:row;
+
 `;
