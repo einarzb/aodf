@@ -1,21 +1,21 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const PlateDataBlock = ({plateData}) => {
+const DataBlock = ({dataBatch}) => {
     
-  let plateDataBlockComponent = plateData.map(function(data, i) {
+  let dataBlockComponent = dataBatch.map(function(data, i) {
     return <DataRow key={i}><strong> {data.label}</strong> : {data.value}</DataRow> 
   })
 
   return(
     <DataWrapper>
-      {plateDataBlockComponent}
+      {dataBlockComponent}
 
     </DataWrapper>
   )
 }
 
-export default PlateDataBlock
+export default DataBlock
 
 const DataWrapper = styled.div`
   display:block;

@@ -4,7 +4,9 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { SaveButton, SelectBox } from '../components/Common';
 import Select from 'react-select';
-import PlateDataBlock from '../components/PlateDataBlock';
+import { TextInput } from 'grommet/components/TextInput';
+
+import DataBlock from '../components/DataBlock';
 import RoutinesTable from '../components/RoutinesTable';
 
 import { MicroApi } from '../micro-api';
@@ -28,13 +30,20 @@ class opticalPortView extends Component{
               }
             })
           },
+          selectedReelToEditOption:null,
+          selectedPhysicalStatusOption:null,
+          selectedOperatorOption:null,
           selectedPlateToEditOption:null,
           PlatesToEdit: this.getPlatesToEdit(),
-
+          ReelsToEdit:this.getReelsToEdit(),
           plateDataByPlateNum : [
             {label: 'Postion of Plate', value:'1'},
             {label: 'Plate Height', value:'2341701'},
             {label: 'Plate Type', value:'Regular'}
+          ],
+          reelDataByReelNum : [
+            {label: 'Reel Angle', value:'456'},
+            {label: 'Parking Plate Number', value:'1'}
           ],
           plateTableLabels: [
             {label: 'Port'},
@@ -46,14 +55,39 @@ class opticalPortView extends Component{
             {label: 'Counter'},
           ],
 
+          reelTableLabels: [
+            {label: 'Plate #'},
+            {label: 'Plate Port #'},
+            {label: 'Operator Comment'},
+            {label: 'Admin Comment'},
+            {label: 'Physical Status'},
+            {label: 'Counter'},
+          ],
+
           plateTableInput: [
             {value: 1},
             {value: 5},
             {value: 1}
-          ]
-          
+          ],
+
+          operatorsList: [
+            {value: 1, label:'Not Assigned'},
+            {value: 2, label: 'Stokab'},
+             {value: 3, label: 'France Telecom'},
+          ],
+          physicalStatusList: [
+            {value: 1, label:'Available'},
+            {value: 2, label: 'Not Available'},
+             {value: 3, label: 'Not Visible'},
+          ],
+          updateCounter:this.updateChangesCounter()
         }
     } 
+    updateChangesCounter = () => {
+      let counter = 0;
+      counter++;
+      return counter;
+    }
     getPlatesToEdit = () => {
         let platesToEdit = [
           {value: 1, label:1},
@@ -71,14 +105,45 @@ class opticalPortView extends Component{
         ];
         return platesToEdit
     }
-
+    getReelsToEdit = () => {
+      let reelsToEdit = [
+        {value: 1, label:1},
+        {value: 2, label:2},
+        {value: 3, label:3},
+        {value: 4, label:4},
+        {value: 5, label:5},
+        {value: 6, label:6},
+        {value: 7, label:7},
+        {value: 8, label:8},
+        {value: 9, label:9},
+        {value: 10, label:10},
+        {value: 11, label:11},
+        {value: 12, label:12}
+      ];
+      return reelsToEdit
+  }
+    
+    reelToEditHandleChange = (selectedReelToEditOption) => {
+      this.setState({ selectedReelToEditOption });
+      console.log(`Option selected:`, selectedReelToEditOption);
+    }
+    PhysicalStatusHandleChange = (selectedPhysicalStatusOption) => {
+      this.setState({ selectedPhysicalStatusOption });
+      console.log(`Option selected:`, selectedPhysicalStatusOption);
+    }
     plateToEditHandleChange = (selectedPlateToEditOption) => {
       this.setState({ selectedPlateToEditOption });
       console.log(`Option selected:`, selectedPlateToEditOption);
     }
+    operatorsHandleChange = (selectedOperatorOption) => {
+      this.setState({ selectedOperatorOption });
+      console.log(`Option selected:`, selectedOperatorOption);
+    };
+
+
     render(){
       let {} = this.props;
-      let { customStyles, selectedPlateToEditOption, PlatesToEdit, plateDataByPlateNum, plateTableLabels, plateTableInput }  = this.state;
+      let { customStyles, selectedPlateToEditOption, PlatesToEdit, plateDataByPlateNum, plateTableLabels, plateTableInput, selectedOperatorOption, operatorsList, selectedPhysicalStatusOption, physicalStatusList, updateCounter, selectedReelToEditOption, ReelsToEdit, reelDataByReelNum, reelTableLabels  }  = this.state;
         return (
        
           <OpticalPortContainer>
@@ -100,33 +165,128 @@ class opticalPortView extends Component{
               </SelectBox>
               </span>
 
-              <PlateDataBlock plateData={plateDataByPlateNum}>
-              </PlateDataBlock>  
+              <DataBlock dataBatch={plateDataByPlateNum}>
+              </DataBlock>  
               <RoutinesTable tableCols={plateTableLabels}>
+                    <DisplayData>
+                    {plateTableInput[0].value}
+                   </DisplayData>
+                   <DisplayData>
+                    {plateTableInput[0].value}
+                   </DisplayData>
+                   <TestButton>
+                      <Select
+                          styles={customStyles} 
+                          autoFocus
+                          placeholder=''
+                          value={selectedOperatorOption}
+                          onChange={this.operatorsHandleChange}
+                          options={operatorsList}
+                          name="operations-list-select"
+                        />
+                    </TestButton>
+                    <TestButton>
+                        <TextInput
+                            style={{fontWeight:'300', width:'110px'}}
+                              placeholder="value"
+                            //  value={item.plateHeight}
+                          />
+                    </TestButton>
+                    <TestButton>
+                        <TextInput
+                            style={{fontWeight:'300', width:'110px'}}
+                              placeholder="value"
+                            //  value={item.plateHeight}
+                          />
+                    </TestButton>
                     <TestButton>
                       <Select
                           styles={customStyles} 
                           autoFocus
-                          placeholder='RoR'
-                          value={'einar'}
-                         // onChange={}
-                          //options={}
-                          name="functions-list-select"
+                          placeholder=''
+                          value={selectedPhysicalStatusOption}
+                          onChange={this.PhysicalStatusHandleChange}
+                          options={physicalStatusList}
+                          name="operations-list-select"
                         />
                     </TestButton>
                     <DisplayData>
-                    {plateTableInput[0].value}
+                    {updateCounter}
                    </DisplayData>
-                  
                 </RoutinesTable>
                 <SaveButton style={{width:'20%', fontSize:'16px'}}>
                       save
                     </SaveButton>
             </PlateEditContainer>
-         
+
             <ReelEditContainer>
             <h4>Set reels status after production </h4>
-            {/**   <ButtonsGroup btnsArr={plateGripperButtons}></ButtonsGroup>*/}
+            <span>
+                <strong>Select reel to edit &nbsp;</strong>
+                <SelectBox>
+                    <Select
+                        styles={customStyles} 
+                        autoFocus
+                        placeholder='reel #'
+                        value={selectedReelToEditOption}
+                        onChange={this.reelToEditHandleChange}
+                        options={ReelsToEdit}
+                        name="select-reel-number-to-edit"
+                      />
+                </SelectBox>
+            </span>
+
+            <DataBlock dataBatch={reelDataByReelNum}></DataBlock>  
+            <RoutinesTable tableCols={reelTableLabels}>
+                    <DisplayData>
+                    {plateTableInput[0].value}
+                   </DisplayData>
+                   <DisplayData>
+                    {plateTableInput[0].value}
+                   </DisplayData>
+                   <TestButton>
+                      <Select
+                          styles={customStyles} 
+                          autoFocus
+                          placeholder=''
+                          value={selectedOperatorOption}
+                          onChange={this.operatorsHandleChange}
+                          options={operatorsList}
+                          name="operations-list-select"
+                        />
+                    </TestButton>
+                    <TestButton>
+                        <TextInput
+                            style={{fontWeight:'300', width:'110px'}}
+                              placeholder="value"
+                            //  value={item.plateHeight}
+                          />
+                    </TestButton>
+                    <TestButton>
+                        <TextInput
+                            style={{fontWeight:'300', width:'110px'}}
+                              placeholder="value"
+                            //  value={item.plateHeight}
+                          />
+                    </TestButton>
+                    <TestButton>
+                      <Select
+                          styles={customStyles} 
+                          autoFocus
+                          placeholder=''
+                          value={selectedPhysicalStatusOption}
+                          onChange={this.PhysicalStatusHandleChange}
+                          options={physicalStatusList}
+                          name="operations-list-select"
+                        />
+                    </TestButton>
+                    <DisplayData>
+                    {updateCounter}
+                   </DisplayData>
+                </RoutinesTable>
+                <SaveButton style={{width:'20%', fontSize:'16px'}}>
+                      save
+                    </SaveButton>
             </ReelEditContainer>
           </OpticalPortContainer>
     
@@ -157,6 +317,7 @@ const PlateEditContainer = styled.div`
     flex-direction: column;
     align-items: start;
     width: 100%;
+    margin-bottom: 1rem;
     margin-right: 4rem;
     & span {
       display:inline-flex;
@@ -171,12 +332,18 @@ const PlateEditContainer = styled.div`
 `;
 
 const ReelEditContainer = styled.div`
+    border-top:1px solid grey;
     display: inline-flex;
     flex-direction: column;
     align-items: start;
     width: 100%;
     margin-right: 4rem;
-    & p {
+    & span {
+      display:inline-flex;
+      align-items:center;
+      flex-direction:row;
+    }
+    & h4 {
       width: 94%;
       text-align:left;
     } 
@@ -185,7 +352,7 @@ const ReelEditContainer = styled.div`
 
 
 const TestButton = styled.div`
-    width:25%;
+    width:10%;
     font-size: 13px;
     font-weight:300;
     margin:0px 4px;
@@ -193,6 +360,7 @@ const TestButton = styled.div`
     & input {
       border:1px solid grey;
       padding: 10px;
+      width: 15%;
     }
 `;
 
