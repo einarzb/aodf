@@ -7,6 +7,7 @@ import ConfigurationsView from './ConfigurationsView';
 import QuickCommandsView from './quickCommandsView';
 import SettingsView from './SettingsView';
 import CalibrationView from './CalibrationView';
+import OpticalPortView from './OpticalPortView';
 
 export default class TabsView extends React.Component{
     
@@ -38,6 +39,7 @@ export default class TabsView extends React.Component{
                   <Route path="/configuration" component={ConfigurationsView} />
                   <Route path="/calibration" component={CalibrationView} />
                   <Route path="/quickcommands" component={QuickCommandsView} />
+                  <Route path="/opticalport" component={OpticalPortView} />
 
                   </div>
             </Router>

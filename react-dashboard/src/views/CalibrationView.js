@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 // STYLING
 import styled from 'styled-components';
 import { TextInput } from 'grommet/components/TextInput';
-import { SaveButton } from '../components/Common';
+import { SaveButton, SelectBox } from '../components/Common';
 import Select from 'react-select';
 
 //COMPONENTS
@@ -456,10 +456,10 @@ const CalibrationContainer = styled.div`
     display: flex;
     flex-direction: row;
     align-items: initial;
-    padding-top:0px auto;
+    padding-top:0px auto; 
     width: 77%;
     margin-left: 12.5%;
-    margin-top: 2rem;
+    margin-top: 1rem;
 `;
 
 const CalibrationControlButtons = styled.div`
@@ -500,18 +500,7 @@ export const MainRow = styled.div`
   padding: 7px 0px;
 `;
 
-const SelectBox = styled.div`
-    width:140px;
-    font-size: 13px;
-    font-weight:300;
-    margin:0px 4px;
-    color:#000000;
 
-    & input {
-      border:1px solid grey;
-      padding: 10px;
-    }
-`;
 
 const TestButton = styled.div`
     width:25%;

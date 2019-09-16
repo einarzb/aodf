@@ -68,3 +68,16 @@ export const CalibrationsGroupWrapper = styled(calibrationRow)`
     }
 
 `;
+
+export const SelectBox = styled.div`
+    width:140px;
+    font-size: 13px;
+    font-weight:300;
+    margin:0px 4px;
+    color:#000000;
+
+    & input {
+      border:1px solid grey;
+      padding: 10px;
+    }
+`;
