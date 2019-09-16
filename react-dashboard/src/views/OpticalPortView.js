@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { SaveButton, SelectBox } from '../components/Common';
 import Select from 'react-select';
+import PlateDataBlock from '../components/PlateDataBlock';
 
 import { MicroApi } from '../micro-api';
 
@@ -78,8 +79,8 @@ class opticalPortView extends Component{
                       name="select-plate-number-to-edit"
                     />
               </SelectBox>
-              <plateDataBlock plateData={plateDataByPlateNum}>
-              </plateDataBlock>  
+              <PlateDataBlock plateData={plateDataByPlateNum}>
+              </PlateDataBlock>  
             </PlateEditContainer>
             <ReelEditContainer>
             <p>reels</p>
