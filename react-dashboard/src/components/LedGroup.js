@@ -14,9 +14,9 @@ let ledsIndicators = (ledStatus) => {
 
 const LedGroup = ({switchesArr}) => {
     
-  let ledsComponents = switchesArr.map(function(led) {
+  let ledsComponents = switchesArr.map(function(led, i) {
    
-    return <SwitchsWrapper>
+    return <SwitchsWrapper key={i}>
               <SwitchTitle>{led.ledNum}</SwitchTitle>
               <SwitchHandle style={{backgroundColor:ledsIndicators(led.limitSwitchStatus)}}> </SwitchHandle> 
            </SwitchsWrapper>              

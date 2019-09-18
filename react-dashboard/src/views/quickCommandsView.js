@@ -8,6 +8,8 @@ import RebootView from './RebootView';
 import ButtonsGroup from '../components/ButtonsGroup';
 import LedsGroup from '../components/LedGroup';
 
+//import { instructions_manager } from '../../../aodf';
+
 import { toggleRebootAction } from '../redux/actions/settings-actions';
 
 // 0 - green
@@ -48,9 +50,9 @@ class quickCommandsView extends Component{
             {label: 'Power Off', onClick:this.powerOff}
           ],
           elevButtons : [
-            {label: 'Elev Up', onClick:this.elevUp},
-            {label: 'Elev Down', onClick:this.elevDown},
-            {label: 'Elev Stop', onClick:this.elevStop}
+            {label: 'Elev Up', onClick:this.elevatorUp},
+            {label: 'Elev Down', onClick:this.elevatorDown},
+            {label: 'Elev Stop', onClick:this.elevatorStop}
           ], 
           
           plateGripperButtons : [
@@ -156,6 +158,26 @@ class quickCommandsView extends Component{
         console.log(res);
       });
      }
+
+     elevatorUp = () => {
+       console.log('im elevator up ror-elvator-1000')
+    //  instructions_manager.execute().then(res => {
+      //  console.log(res)
+     // })
+     }
+     elevatorDown = () => {
+      console.log('im elevator down rol-elvator-1000')
+   //  instructions_manager.execute().then(res => {
+     //  console.log(res)
+    // })
+    }
+
+    elevatorStop = () => {
+      console.log('im elevator stop mst-elvator-nil')
+   //  instructions_manager.execute().then(res => {
+     //  console.log(res)
+    // })
+    }
 
     render(){
       let {rebootOngoing} = this.props;
