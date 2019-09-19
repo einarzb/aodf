@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <fcntl.h>
+#include <linux/reboot.h>
 #include <sys/reboot.h>
 #include <regex.h>    
 
@@ -130,6 +131,8 @@ int main(int argc, char **argv)
       break;
     case COMMAND_POWEROFF:  
         printf("im gonna power off");
+        sync();
+        reboot(LINUX_REBOOT_CMD_POWER_OFF);
         break;
     default:
       printf("Unknown command!\n");
