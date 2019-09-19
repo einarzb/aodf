@@ -104,6 +104,7 @@ const mapStateToProps = (state) => {
     rebootSafe:state.rebootReducer.rebootSafe,
     checkingSwitches:state.rebootReducer.checkingSwitches,
     rebootOngoing:state.rebootReducer.rebootOngoing,
+    
   }    
   console.log(props);
   

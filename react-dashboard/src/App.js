@@ -3,25 +3,14 @@ import { connect } from 'react-redux';
 
 // views
 import PasscodeModal from './views/PasscodeModal';
-import SettingsView from './views/SettingsView';
 import TabsView from './views/TabsView';
-import RebootView from './views/RebootView';
-import {p} from './views/p';
 
 
  
 // styling dependencies
 import './App.css';
-import styled from 'styled-components';
 import {Grommet} from 'grommet/components/Grommet';
 import { ModalBG, myTheme } from './views/styled';
-
-// data 
-import { MicroApi } from './micro-api';
-// ACTIONS
-import { updateTimeInStateAction  } from './redux/actions/settings-actions';
-
-//let switchesPinger;
 
 class App extends Component {
   constructor(props){

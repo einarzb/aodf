@@ -1,17 +1,20 @@
-import { FETCH_SETTINGS , CHECK_SWITCHES, SWITCH_PINGER, TOGGLE_REBOOT, SAVE_SETTINGS } from '../actions/settings-actions';
+import { FETCH_SETTINGS , CHECK_SWITCHES, SWITCH_PINGER, TOGGLE_REBOOT, SAVE_SETTINGS, TOGGLE_POWEROFF } from '../actions/settings-actions';
 
 let needReboot = false;
 let rebootSafe = false; 
 let checkingSwitches = false;
 let rebootOngoing = false;
 let showPasscodeModal = false;
+let poweroffOngoing = false;
+
 
 let initState = {
   needReboot:needReboot, 
   rebootSafe:rebootSafe,
   checkingSwitches:checkingSwitches,
   rebootOngoing:rebootOngoing,
-  showPasscodeModal:showPasscodeModal
+  showPasscodeModal:showPasscodeModal,
+  poweroffOngoing:poweroffOngoing
 }
 
 export default function rebootReducer (state=initState, action){            
@@ -24,6 +27,8 @@ export default function rebootReducer (state=initState, action){
            return checkSwitchesStatus (action.data);
          case TOGGLE_REBOOT:
            return toggleRebootView();
+         case TOGGLE_POWEROFF:
+            return togglePoweroffView();  
          case SAVE_SETTINGS:
            return savePassCodeModal(action.data);  
          case (! action.data || action.data == ''):
@@ -70,3 +75,7 @@ function toggleRebootView() {
   return {...initState}
 }
 
+function togglePoweroffView(){
+  initState.poweroffOngoing = !initState.poweroffOngoing;    
+  return {...initState}
+}

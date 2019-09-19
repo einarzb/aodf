@@ -8,7 +8,7 @@ import {Heading} from 'grommet/components/Heading';
 
 // DATA
 import { MicroApi } from '../micro-api';
-import {toggleRebootAction} from '../redux/actions/settings-actions';
+import {togglePoweroffAction} from '../redux/actions/settings-actions';
 
 
 export class PoweroffView extends React.Component{
@@ -16,7 +16,7 @@ export class PoweroffView extends React.Component{
         super(props)
         //init
         this.state = {
-            rebootInProgress:false,
+            poweroffInProgress:false,
             rebootStartTime:false,
             minutes: 1,
             seconds: 0
@@ -46,31 +46,30 @@ export class PoweroffView extends React.Component{
           }
         }
       }, 1000);
-        this.reboot();        
         let d = new Date();
-        this.setState({rebootInProgress:true, rebootStartTime:d.toDateString()})
-        this.reboot(); // why twice? 
+        this.setState({poweroffInProgress:true, rebootStartTime:d.toDateString()})
     }
 
-    reboot = () => {
-      // TODO check that we don't have any scheduled switching
-      MicroApi.reboot().then(r => {
-        alert("SYSTEM REBOOTED, TRY REFRESHING THIS PAGE IN A MINUTE")
-      })
-    }
-
-    toggleReboot = () => {       
-      let { toggleRebootRedux } = this.props; 
-      let rebootOngoing = !this.props.rebootOngoing; //local for view   
-      toggleRebootRedux(rebootOngoing);
+    togglePowerOff = () => {           
+      console.log('im toggling poweroff ');
+       let { togglePoweroffRedux } = this.props; 
+       let poweroffOngoing = !this.props.poweroffOngoing; 
+       togglePoweroffRedux(poweroffOngoing);
+     }
+     
+     powerOff = () => {
+      console.log('power off - im gonna invoke toggle poweroff ');
+      MicroApi.powerOff().then(res =>{
+        console.log(res);
+      });
     }
 
     render(){
-        let { rebootInProgress, rebootStartTime, minutes, seconds } = this.state;             
+        let { poweroffInProgress, rebootStartTime, minutes, seconds } = this.state;             
         return (
         <RebootDiv>
             { 
-            !rebootInProgress &&<Heading textAlign={'center'}>
+            !poweroffInProgress &&<Heading textAlign={'center'}>
                 Are you sure? 
                 <br/>
                 <br/>
@@ -78,14 +77,14 @@ export class PoweroffView extends React.Component{
             </Heading>
             }
             {
-                !rebootInProgress && <ButtonsFlexer>
-                <OButton label={'CONFIRM REBOOT'} onClick={this.confirm} ></OButton>
-                <OButton label={'CANCEL'} onClick={this.toggleReboot} ></OButton>
+                !poweroffInProgress && <ButtonsFlexer>
+                <OButton label={'CONFIRM POWEROFF'} onClick={this.powerOff} ></OButton>
+                <OButton label={'CANCEL'} onClick={this.togglePowerOff} ></OButton>
                 </ButtonsFlexer>
             }
             {
-            rebootInProgress&&<Heading textAlign={'center'}>
-                Reboot command sent to machine at {rebootStartTime} 
+            poweroffInProgress&&<Heading textAlign={'center'}>
+                Poweroff command sent to machine at {rebootStartTime} 
                 <br/>
                 <br/>
                Page will refresh in { minutes }:{ seconds < 10 ? `0${ seconds }` : seconds } seconds
@@ -100,19 +99,14 @@ export class PoweroffView extends React.Component{
 
 const mapStateToProps = (state) => {
   const props = {
-    needReboot:state.rebootReducer.needReboot,
-    rebootSafe:state.rebootReducer.rebootSafe,
-    checkingSwitches:state.rebootReducer.checkingSwitches,
-    rebootOngoing:state.rebootReducer.rebootOngoing,
-  }    
-  console.log(props);
-  
+    poweroffOngoing:state.rebootReducer.poweroffOngoing
+  }      
   return props;
 };
 
 const mapDispatchToProps = (dispatch) => ({ 
-  toggleRebootRedux: (rebootOngoing) => dispatch(toggleRebootAction(rebootOngoing))
- })
+  togglePoweroffRedux: (poweroffOngoing) => dispatch(togglePoweroffAction(poweroffOngoing))
+})
 
   export default connect(
     mapStateToProps,

@@ -20,7 +20,7 @@ import { toggleRebootAction, togglePoweroffAction } from '../redux/actions/setti
 
 let defaultLimitSwitchButton = '#D3D3D3';
 let limitSwitchButtonIsOn = '#7CFC00';
-    
+let alertPopup;    
 
 class quickCommandsView extends Component{
     constructor(){
@@ -49,7 +49,7 @@ class quickCommandsView extends Component{
             {label: 'Queue Reset', onClick:this.queueReset},
             {label: 'Save Picture', onClick:this.savePicture},
             {label: 'Reboot', onClick:this.toggleReboot},
-            {label: 'Power Off', onClick:this.powerOff}
+            {label: 'Power Off', onClick:this.togglePowerOff}
           ],
           elevButtons : [
             {label: 'Elev Up', onClick:this.elevatorUp},
@@ -110,14 +110,7 @@ class quickCommandsView extends Component{
       this.setState({rightSwitchesLeds});
     }
 
-    toggleReboot = () => {           
-      console.log('im toggle reboot ');
-       let { toggleRebootRedux } = this.props; 
-       let rebootOngoing = !this.props.rebootOngoing; 
-      // console.log(rebootOngoing);//true
-       toggleRebootRedux(rebootOngoing);
-     }
-
+   
     plateRotIn = () => {    
     console.log('im plateRotIn');   
      MicroApi.plateRotIn().then(res => {
@@ -181,52 +174,48 @@ class quickCommandsView extends Component{
     // })
     }
 
-    powerOff = () => {
-      console.log('power off - im gonna invoke toggle poweroff ');
-      MicroApi.powerOff().then(res =>{
-        console.log(res);
-      });
-      this.togglePowerOff();
-    }
-
+   
     togglePowerOff = () => {           
       console.log('im toggling poweroff ');
        let { togglePoweroffRedux } = this.props; 
-       let poweroffOngoing = true; 
-      // console.log(rebootOngoing);//true
+       let poweroffOngoing = !this.props.poweroffOngoing; 
        togglePoweroffRedux(poweroffOngoing);
      }
+
+    toggleReboot = () => {           
+      console.log('im toggle reboot ');
+      let { toggleRebootRedux } = this.props; 
+      let rebootOngoing = !this.props.rebootOngoing; 
+      toggleRebootRedux(rebootOngoing);
+    }
 
     render(){
       let {rebootOngoing, poweroffOngoing} = this.props;
       let {limitSwitchTestButtons, leftSwitchesArr, rightSwitchesArr, generalButtons, plateGripperButtons, elevButtons}  = this.state;
-        return (
+      
+      return (
           <div>
-
-         {
-          rebootOngoing || poweroffOngoing
-          ?
-          <PoweroffView poweroff={this.togglePowerOff} />  ||
-          <RebootView reboot={this.toggleReboot} /> 
-          : 
-          <QuickCommandsContainer>
-            <CommandButtonsContainer>
-              <ButtonsGroup btnsArr={elevButtons}></ButtonsGroup>
-              <ButtonsGroup btnsArr={plateGripperButtons}></ButtonsGroup>
-              <ButtonsGroup btnsArr={generalButtons} ></ButtonsGroup>
-            </CommandButtonsContainer>
-           
-            <LedButtonsContainer>
-               <ButtonsGroup btnsArr={limitSwitchTestButtons} border="none" width={limitSwitchTestButtons.width} bgColor={limitSwitchTestButtons.bgColor}></ButtonsGroup>
-               <SwitchList>
-                  <span> Left Switch Sensor </span>
-                  <LedsGroup switchesArr={leftSwitchesArr} backgroundColor={leftSwitchesArr.limitSwitchStatus}></LedsGroup>
-               </SwitchList>
-               <SwitchList>
-                  <span> Right Switch Sensor </span>
-                  <LedsGroup switchesArr={rightSwitchesArr} backgroundColor={rightSwitchesArr.limitSwitchStatus}></LedsGroup>
-               </SwitchList>
-            </LedButtonsContainer>
+           {
+            rebootOngoing ? <RebootView reboot={this.toggleReboot} /> :
+            poweroffOngoing ? <PoweroffView reboot={this.togglePowerOff}/> : 
+            <QuickCommandsContainer>
+              <CommandButtonsContainer>
+                <ButtonsGroup btnsArr={elevButtons}></ButtonsGroup>
+                <ButtonsGroup btnsArr={plateGripperButtons}></ButtonsGroup>
+                <ButtonsGroup btnsArr={generalButtons} ></ButtonsGroup>
+              </CommandButtonsContainer>
+            
+              <LedButtonsContainer>
+                <ButtonsGroup btnsArr={limitSwitchTestButtons} border="none" width={limitSwitchTestButtons.width} bgColor={limitSwitchTestButtons.bgColor}></ButtonsGroup>
+                <SwitchList>
+                    <span> Left Switch Sensor </span>
+                    <LedsGroup switchesArr={leftSwitchesArr} backgroundColor={leftSwitchesArr.limitSwitchStatus}></LedsGroup>
+                </SwitchList>
+                <SwitchList>
+                    <span> Right Switch Sensor </span>
+                    <LedsGroup switchesArr={rightSwitchesArr} backgroundColor={rightSwitchesArr.limitSwitchStatus}></LedsGroup>
+                </SwitchList>
+              </LedButtonsContainer>
           </QuickCommandsContainer>
          }
          </div>
@@ -235,8 +224,12 @@ class quickCommandsView extends Component{
 }
 const mapStateToProps = (state) => {
   let props = {
-    rebootOngoing:state.rebootReducer.rebootOngoing
+    rebootOngoing:state.rebootReducer.rebootOngoing,
+    poweroffOngoing:state.rebootReducer.poweroffOngoing
     }
+    console.log('omg props')
+    console.log(props);
+    
     return props;
   }
 
