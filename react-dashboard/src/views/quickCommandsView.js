@@ -174,16 +174,14 @@ class quickCommandsView extends Component{
     // })
     }
 
-   
+    // done functions
     togglePowerOff = () => {           
-      console.log('im toggling poweroff ');
        let { togglePoweroffRedux } = this.props; 
        let poweroffOngoing = !this.props.poweroffOngoing; 
        togglePoweroffRedux(poweroffOngoing);
      }
 
     toggleReboot = () => {           
-      console.log('im toggle reboot ');
       let { toggleRebootRedux } = this.props; 
       let rebootOngoing = !this.props.rebootOngoing; 
       toggleRebootRedux(rebootOngoing);
@@ -198,7 +196,9 @@ class quickCommandsView extends Component{
            {
             rebootOngoing ? <RebootView reboot={this.toggleReboot} /> :
             poweroffOngoing ? <PoweroffView reboot={this.togglePowerOff}/> : 
+            
             <QuickCommandsContainer>
+             
               <CommandButtonsContainer>
                 <ButtonsGroup btnsArr={elevButtons}></ButtonsGroup>
                 <ButtonsGroup btnsArr={plateGripperButtons}></ButtonsGroup>
@@ -222,14 +222,13 @@ class quickCommandsView extends Component{
         );
     }
 }
+
+
 const mapStateToProps = (state) => {
   let props = {
     rebootOngoing:state.rebootReducer.rebootOngoing,
     poweroffOngoing:state.rebootReducer.poweroffOngoing
-    }
-    console.log('omg props')
-    console.log(props);
-    
+    }   
     return props;
   }
 

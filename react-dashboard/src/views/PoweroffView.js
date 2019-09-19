@@ -17,59 +17,32 @@ export class PoweroffView extends React.Component{
         //init
         this.state = {
             poweroffInProgress:false,
-            rebootStartTime:false,
-            minutes: 1,
-            seconds: 0
+            rebootStartTime:false
         }   
     }
 
     confirm = () => {        
-      this.myInterval = setInterval(() => {
-          
-        let { seconds, minutes } = this.state
-     
-        if (seconds > 0) {
-          this.setState(({ seconds }) => ({
-            seconds: seconds - 1
-          }))
-        }
-
-        if (seconds === 0) {
-          if (minutes === 0) {
-            clearInterval(this.myInterval);
-            window.location.reload();
-          } else {
-            this.setState(({ minutes }) => ({
-              minutes: minutes - 1,
-              seconds: 59
-            }))
-          }
-        }
-      }, 1000);
+        this.powerOff();
         let d = new Date();
         this.setState({poweroffInProgress:true, rebootStartTime:d.toDateString()})
     }
 
     togglePowerOff = () => {           
-      console.log('im toggling poweroff ');
        let { togglePoweroffRedux } = this.props; 
        let poweroffOngoing = !this.props.poweroffOngoing; 
        togglePoweroffRedux(poweroffOngoing);
      }
      
-     powerOff = () => {
-      console.log('power off - im gonna invoke toggle poweroff ');
-      MicroApi.powerOff().then(res =>{
-        console.log(res);
-      });
+    powerOff = () => {
+      MicroApi.powerOff();
     }
 
     render(){
-        let { poweroffInProgress, rebootStartTime, minutes, seconds } = this.state;             
+        let { poweroffInProgress, rebootStartTime } = this.state;             
         return (
         <RebootDiv>
             { 
-            !poweroffInProgress &&<Heading textAlign={'center'}>
+            !poweroffInProgress && <Heading textAlign={'center'}>
                 Are you sure? 
                 <br/>
                 <br/>
@@ -78,7 +51,7 @@ export class PoweroffView extends React.Component{
             }
             {
                 !poweroffInProgress && <ButtonsFlexer>
-                <OButton label={'CONFIRM POWEROFF'} onClick={this.powerOff} ></OButton>
+                <OButton label={'CONFIRM POWEROFF'} onClick={this.confirm} ></OButton>
                 <OButton label={'CANCEL'} onClick={this.togglePowerOff} ></OButton>
                 </ButtonsFlexer>
             }
@@ -87,11 +60,8 @@ export class PoweroffView extends React.Component{
                 Poweroff command sent to machine at {rebootStartTime} 
                 <br/>
                 <br/>
-               Page will refresh in { minutes }:{ seconds < 10 ? `0${ seconds }` : seconds } seconds
-                <br/>
                 </Heading>
             }
-
         </RebootDiv>
         );
     }
