@@ -130,10 +130,8 @@ int main(int argc, char **argv)
       }
       break;
     case COMMAND_POWEROFF:  
-        printf("im gonna power off");
         sync();
-        // commented for production safety
-        //reboot(LINUX_REBOOT_CMD_POWER_OFF, 0);
+        reboot(LINUX_REBOOT_CMD_POWER_OFF, 0);
         break;
     default:
       printf("Unknown command!\n");
