@@ -19,6 +19,8 @@
 #define COMMAND_REBOOT_FLAG_OFF 8
 #define COMMAND_GET_REBOOT_FLAG 9
 #define COMMAND_SET_DATE 10
+#define COMMAND_POWEROFF 11
+
 // const char *HOS = "Howdy";
 regex_t regex;
 int reti;
@@ -126,6 +128,9 @@ int main(int argc, char **argv)
         return system(extraString);
       }
       break;
+    case COMMAND_POWEROFF:  
+        printf("im gonna power off");
+        break;
     default:
       printf("Unknown command!\n");
       break;

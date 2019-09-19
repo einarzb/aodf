@@ -122,6 +122,9 @@ export const MicroApi = {
     },
     gripperOpen:()=>{
         return  _query({method:'GET',func: 'gripper_open',body:false});
+    },
+    powerOff:()=>{
+        return _query({method:'GET', func:'power_off', body:false});
     }
     
 

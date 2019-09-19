@@ -440,4 +440,11 @@
         $e_res = exec("/scripts/grp_oc_reset");
         return $e_res;
     }
+
+    function power_off(){
+        $res = shell_exec("/root/run_root_settings 11");
+
+     //   $e_res = "einar";
+        return $res;
+    }
 ?>

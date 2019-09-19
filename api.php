@@ -350,20 +350,31 @@ if(isset($_GET["functionname"])&&!empty ($_GET["functionname"]))
             break;
         case 'reel_calibration':
             die(get_reel_calibration());
+            break;
         case 'set_reel_to_parking':
-            die(set_reel_to_parking());    
+            die(set_reel_to_parking());  
+            break;
         case 'plate_rot_in':
             die(plate_rot_in());     
+            break;
         case 'plate_rot_out':
             die(plate_rot_out());  
+            break;
         case 'gripper_in':
             die(gripper_in());
+            break;
         case 'gripper_out':
             die(gripper_out());   
+            break;
         case 'gripper_close':
             die(gripper_close());   
+            break;
         case 'gripper_open':
-            die(gripper_open());                       
+            die(gripper_open());      
+            break;
+        case 'power_off':
+            die(power_off());
+            break;         
             // case 'change_settings':
             //     echo json_encode(get_settings());     
         default :

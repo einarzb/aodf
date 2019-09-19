@@ -179,6 +179,12 @@ class quickCommandsView extends Component{
     // })
     }
 
+    powerOff = () => {
+      MicroApi.powerOff().then(res =>{
+        console.log(res);
+      });
+    }
+
     render(){
       let {rebootOngoing} = this.props;
       let {limitSwitchTestButtons, leftSwitchesArr, rightSwitchesArr, generalButtons, plateGripperButtons, elevButtons}  = this.state;
