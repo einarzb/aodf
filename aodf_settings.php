@@ -442,9 +442,10 @@
     }
 
     function power_off(){
-        $res = shell_exec("/root/run_root_settings 11");
+        //commented out for production safety
+       // $res = shell_exec("/root/run_root_settings 11");
 
-     //   $e_res = "einar";
-        return $res;
+        $e_res = "power off php";
+        return $e_res;
     }
 ?>

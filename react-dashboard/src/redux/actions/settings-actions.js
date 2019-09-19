@@ -98,3 +98,12 @@ export const calibrationSettingsChangedAction = (fieldKey, value, fieldName) => 
       fieldName
      }
   });
+
+//quick commands
+  export const TOGGLE_POWEROFF = 'TOGGLE_POWEROFF';
+  export const togglePoweroffAction = (data) => ({
+    type: TOGGLE_POWEROFF,
+    data: {
+      data
+    }
+  }) 

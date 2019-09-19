@@ -5,12 +5,14 @@ import styled from 'styled-components';
 
 import { MicroApi } from '../micro-api';
 import RebootView from './RebootView';
+import PoweroffView from './PoweroffView';
+
 import ButtonsGroup from '../components/ButtonsGroup';
 import LedsGroup from '../components/LedGroup';
 
 //import { instructions_manager } from '../../../aodf';
 
-import { toggleRebootAction } from '../redux/actions/settings-actions';
+import { toggleRebootAction, togglePoweroffAction } from '../redux/actions/settings-actions';
 
 // 0 - green
 // 1 - red
@@ -180,20 +182,31 @@ class quickCommandsView extends Component{
     }
 
     powerOff = () => {
+      console.log('power off - im gonna invoke toggle poweroff ');
       MicroApi.powerOff().then(res =>{
         console.log(res);
       });
+      this.togglePowerOff();
     }
 
+    togglePowerOff = () => {           
+      console.log('im toggling poweroff ');
+       let { togglePoweroffRedux } = this.props; 
+       let poweroffOngoing = true; 
+      // console.log(rebootOngoing);//true
+       togglePoweroffRedux(poweroffOngoing);
+     }
+
     render(){
-      let {rebootOngoing} = this.props;
+      let {rebootOngoing, poweroffOngoing} = this.props;
       let {limitSwitchTestButtons, leftSwitchesArr, rightSwitchesArr, generalButtons, plateGripperButtons, elevButtons}  = this.state;
         return (
           <div>
 
          {
-          rebootOngoing 
+          rebootOngoing || poweroffOngoing
           ?
+          <PoweroffView poweroff={this.togglePowerOff} />  ||
           <RebootView reboot={this.toggleReboot} /> 
           : 
           <QuickCommandsContainer>
@@ -228,7 +241,8 @@ const mapStateToProps = (state) => {
   }
 
   const mapDispatchToProps = (dispatch) => ({  
-    toggleRebootRedux: (rebootOngoing) => dispatch(toggleRebootAction(rebootOngoing))
+    toggleRebootRedux: (rebootOngoing) => dispatch(toggleRebootAction(rebootOngoing)),
+    togglePoweroffRedux: (poweroffOngoing) => dispatch(togglePoweroffAction(poweroffOngoing))
   });
 
 export default connect(

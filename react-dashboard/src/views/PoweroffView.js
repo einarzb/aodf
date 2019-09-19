@@ -11,7 +11,7 @@ import { MicroApi } from '../micro-api';
 import {toggleRebootAction} from '../redux/actions/settings-actions';
 
 
-export class RebootView extends React.Component{
+export class PoweroffView extends React.Component{
     constructor(props){
         super(props)
         //init
@@ -117,7 +117,7 @@ const mapDispatchToProps = (dispatch) => ({
   export default connect(
     mapStateToProps,
     mapDispatchToProps)
-    (RebootView)
+    (PoweroffView)
   
   
 const RebootDiv = styled.div`
