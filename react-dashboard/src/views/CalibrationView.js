@@ -249,8 +249,9 @@ export class CalibrationView extends React.Component{
     getParams = () => {
       console.log('get params');
       MicroApi.getParams().then(res => {
-        console.log(res);
-        return res;
+        console.log(res.params);
+        let params = res.params
+        return params;
       })
     }
     updatePlateHeight = () => {

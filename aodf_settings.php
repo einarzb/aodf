@@ -454,8 +454,15 @@
     }
 
     function get_params(){
-        $e_res = exec("cat /etc/aodf-scripts/params.json");
-        echo $e_res;
-        return $e_res;
+        $str= shell_exec("cat /etc/aodf-scripts/params.json");
+    
+        $decoded =  json_decode($str , true );
+    
+        if(!$decoded) {
+            $s = str_replace('NC",','NC"',$str);
+            $decoded =  json_decode($s , TRUE );
+        }
+
+        return $decoded;        
     }
 ?>
