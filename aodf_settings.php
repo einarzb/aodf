@@ -452,4 +452,10 @@
         $e_res = "power off php";
         return $e_res;
     }
+
+    function get_params(){
+        $e_res = exec("cat /etc/aodf-scripts/params.json");
+        echo $e_res;
+        return $e_res;
+    }
 ?>

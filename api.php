@@ -341,6 +341,11 @@ if(isset($_GET["functionname"])&&!empty ($_GET["functionname"]))
                 "need_reboot"=>is_reboot_needed()
             ));
             break;
+        case 'get_params':
+            echo json_encode(array(
+                "params"=>get_params()
+            ));
+            break;    
         case 'get_config_settings':
                 echo json_encode( array(
                 "config_settings"=>get_config_settings()

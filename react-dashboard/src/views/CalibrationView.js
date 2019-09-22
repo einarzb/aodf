@@ -37,6 +37,7 @@ export class CalibrationView extends React.Component{
                 borderColor: "#fd7c20"
               }
             })},
+          selectedParamsOption:null,
           selectedPlateNumberOption:null,
           selectedPlateAreaOption:null,
           selectedReelNumberOption:null,
@@ -86,7 +87,8 @@ export class CalibrationView extends React.Component{
           ],
           modifyRobotParameters: [
             {
-              headline:'Modify Robot Parameters'
+              headline:'Modify Robot Parameters',
+              params:this.getParams()
             }
           ],
           routineTableLabels: [
@@ -120,6 +122,10 @@ export class CalibrationView extends React.Component{
     
     }
     
+    paramHandleChange = (selectedParamsOption) => {
+      this.setState({ selectedParamsOption });
+      console.log(`Option selected:`, selectedParamsOption);
+    }
     motorNumChange = (selectedMotorNumOption) => {
       this.setState({ selectedMotorNumOption });
       console.log(`Option selected:`, selectedMotorNumOption);
@@ -240,7 +246,13 @@ export class CalibrationView extends React.Component{
         console.log(res);
       })
     }
-
+    getParams = () => {
+      console.log('get params');
+      MicroApi.getParams().then(res => {
+        console.log(res);
+        return res;
+      })
+    }
     updatePlateHeight = () => {
       console.log('im update plate height ')
       return;
@@ -254,7 +266,7 @@ export class CalibrationView extends React.Component{
     }
 
     render(){
-      let {selectedInstructionsOption, selectedReelNumberOption, selectedPlateNumberOption, selectedPlateAreaOption, plateCalibrationGroups, reelCalibrationGroups, setReelToParkingPlate, updatePlateHeight, modifyRobotParameters, routineTableLabels, routineFunctionsList, selectedInsttypeOption, motorNumList, selectedMotorNumOption, resultTable, customStyles} = this.state
+      let {selectedInstructionsOption, selectedReelNumberOption, selectedPlateNumberOption, selectedPlateAreaOption, plateCalibrationGroups, reelCalibrationGroups, setReelToParkingPlate, updatePlateHeight, modifyRobotParameters, routineTableLabels, routineFunctionsList, selectedInsttypeOption, motorNumList, selectedMotorNumOption, resultTable, customStyles, selectedParamsOption} = this.state
 
       return (
         <div>
@@ -443,9 +455,9 @@ export class CalibrationView extends React.Component{
                         styles={customStyles} 
                         autoFocus
                         placeholder='Parameter'
-                        value={selectedPlateAreaOption}
-                        onChange={this.plateAreaHandleChange}
-                        options={plateCalibrationGroups[0].plateAreas}
+                        value={selectedParamsOption}
+                        onChange={this.paramHandleChange}
+                        options={modifyRobotParameters[0].params}
                         name="select-parameter-selector"
                       />
                   </SelectBox>
