@@ -149,6 +149,8 @@ export class CalibrationView extends React.Component{
       this.setState({ selectedInstructionsOption });
       console.log(`Option selected:`, selectedInstructionsOption);
     };
+
+
     getFunctions = () => {
       let functionsList = [
         {value: 1, label:'ROR rotate right'},
@@ -191,7 +193,6 @@ export class CalibrationView extends React.Component{
       ];
       return reelNumbers;
     }
-
     getPlateNumbers = () => {
       // data should come from res
       let plateNumbers = [
@@ -218,28 +219,24 @@ export class CalibrationView extends React.Component{
       ] 
       return plateAreas;
     }
-   
     setReelToParking = (reelNum) => {
       console.log('im set reel to park');
       MicroApi.setReelToParking(reelNum).then(res => {     
         console.log(res);
       })
     }
-
     plateCalibration = (plateNum, sampleNum) => {   
      console.log('im plateCalibration')
       MicroApi.plateRestart(plateNum).then(res =>{
         console.log(res)
         });        
       }
-
     reelCalibration = () => {
       console.log('run reel calibration');
         MicroApi.reelCalibration().then(res=>{
           console.log(res);
         })
     }
-
     getReport = () => {
       console.log('get report');
       MicroApi.getReport().then(res => {
@@ -248,10 +245,22 @@ export class CalibrationView extends React.Component{
     }
     getParams = () => {
       console.log('get params');
-      MicroApi.getParams().then(res => {
-        console.log(res.params);
-        let params = res.params
+      MicroApi.getParams().then((res) => {
+        console.log(res);
+        let params = Object.keys(res);
         return params;
+        /*
+        let params = Object.keys(res.params);    
+        let paramsArr = [
+          {value: 1, label:params[68]},
+          {value: 2, label:params[69]},
+          {value: 3, label:params[70]},
+          {value: 4, label:params[71]},
+          {value: 5, label:params[104]},
+          {value: 6, label:params[105]},
+          {value: 7, label:params[106]},
+        ]*/
+      //  return paramsArr;
       })
     }
     updatePlateHeight = () => {
@@ -459,7 +468,7 @@ export class CalibrationView extends React.Component{
                         value={selectedParamsOption}
                         onChange={this.paramHandleChange}
                         options={modifyRobotParameters[0].params}
-                        name="select-parameter-selector"
+                        name="select-parameter"
                       />
                   </SelectBox>
                   <DisplayData>

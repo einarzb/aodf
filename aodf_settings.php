@@ -388,6 +388,32 @@
         return $decoded;
     }
 
+    function get_params(){
+        $str= shell_exec("cat /etc/aodf-scripts/params.json");
+    
+        $decoded =  json_decode($str , true );
+    
+        if(!$decoded) {
+            $s = str_replace('NC",','NC"',$str);
+            $decoded =  json_decode($s , TRUE );
+        }
+        return array(
+            'camera_x_coordinate'=>array(
+                'parking_target_x_pos'=>$decoded['PARKING_TARGET_X_POS'],
+                'regular_plate_target_x_pos'=>$decoded['REGULAR_PLATE_TARGET_X_POS']
+            ),
+            'camera_y_coordinate' => array(
+                'parking_target_y_pos'=>$decoded['PARKING_TARGET_Y_POS'],
+                'regular_plate_target_y_pos'=>$decoded['REGULAR_PLATE_TARGET_Y_POS']
+            ),
+            'parking_plate_insert_parameter' => $decoded['P_PLATE_INSERT_EXTENDER_CORRECTION'],
+            'parking_plate_pull_parameter' => $decoded['P_PLATE_PULL_EXTENDER_CORRECTION'],
+            'regular_plate_insert_parameter' => $decoded['R_PLATE_INSERT_EXTENDER_CORRECTION'],
+            'regular_plate_pull_parameter' => $decoded['R_PLATE_PULL_EXTENDER_CORRECTION']
+        );
+        return $decoded;        
+    }
+
     //calibration screen
     
     //should get 2 params from ui 
@@ -453,16 +479,5 @@
         return $e_res;
     }
 
-    function get_params(){
-        $str= shell_exec("cat /etc/aodf-scripts/params.json");
     
-        $decoded =  json_decode($str , true );
-    
-        if(!$decoded) {
-            $s = str_replace('NC",','NC"',$str);
-            $decoded =  json_decode($s , TRUE );
-        }
-
-        return $decoded;        
-    }
 ?>
