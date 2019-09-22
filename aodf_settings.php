@@ -392,8 +392,10 @@
     
     //should get 2 params from ui 
     
-    function plate_restart(){
-       $e_res = exec("/scripts/plate_restart");
+    function plate_restart($plateNum){
+        echo $plateNum;
+        echo "---";
+       $e_res = exec("/scripts/plate_restart '$plateNum'");
        return $e_res;
     }
 
@@ -402,8 +404,13 @@
         return $e_res;
     }
 
-    function set_reel_to_parking(){
-        $e_res = exec("/scripts/manual_put_homeport_on_park");
+    function get_report(){
+        $e_res = exec("/tmp/Reel_position_on_parking.csv");
+        return $e_res;
+    }
+    
+    function set_reel_to_parking($reelNum){
+        $e_res = exec("/scripts/manual_put_homeport_on_park '$reelNum'");
         return $e_res;
     }
 
@@ -411,8 +418,6 @@
 
     function plate_rot_in(){
         $e_res = exec("/scripts/plt_io 1");
-        echo "----";
-        echo $e_res;
         return $e_res;
     }
 
@@ -444,7 +449,6 @@
     function power_off(){
         //commented out for production safety
        // $res = shell_exec("/root/run_root_settings 11");
-
         $e_res = "power off php";
         return $e_res;
     }

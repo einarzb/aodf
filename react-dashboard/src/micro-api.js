@@ -94,15 +94,17 @@ export const MicroApi = {
     },
     
     // calibration view
-    plateRestart:()=>{
-        return  _query({method:'POST', func:'plate_restart',body:{method:'plate_restart'}});
+
+    // needs to get 2 params
+    plateRestart:(plateNum)=>{
+        return  _query({method:'POST', func:'plate_restart',body:{method:'plate_restart', plateNum}});
     },
    
     reelCalibration:()=>{
         return  _query({method:'GET',func: 'reel_calibration',body:false});
     },
-    setReelToParking:()=>{
-        return  _query({method:'GET',func: 'set_reel_to_parking',body:false});
+    setReelToParking:(reelNum)=>{
+        return  _query({method:'POST',func: 'set_reel_to_parking',body:{method:'set_reel_to_parking', reelNum}});
     },
     // quick commands 
     plateRotIn:()=>{
@@ -125,7 +127,9 @@ export const MicroApi = {
     },
     powerOff:()=>{
         return _query({method:'GET', func:'power_off', body:false});
+    },
+    getReport:()=>{
+        return _query({method:'GET', func:'get_report', body:false});
     }
-    
 
 };

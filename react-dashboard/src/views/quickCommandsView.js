@@ -60,9 +60,12 @@ class quickCommandsView extends Component{
           plateGripperButtons : [
             {label: 'Plate Rot In', onClick:this.plateRotIn},
             {label: 'Gripper In', onClick:this.gripperIn},
-            {label: 'Gripper Close', onClick:this.gripperClose},
+            {label: 'Gripper Open', onClick:this.gripperOpen},
+
             {label: 'Plate Rot Out', onClick:this.plateRotOut},
-            {label: 'Gripper Out', onClick:this.gripperOut}
+            {label: 'Gripper Out', onClick:this.gripperOut},
+            {label: 'Gripper Close', onClick:this.gripperClose}
+
           ] 
         }
     } 
@@ -111,20 +114,7 @@ class quickCommandsView extends Component{
     }
 
    
-    plateRotIn = () => {    
-    console.log('im plateRotIn');   
-     MicroApi.plateRotIn().then(res => {
-       console.log(res);
-     });
-    }
-
-    plateRotOut = () => {       
-      console.log('im plateRotOut');
-      MicroApi.plateRotOut().then(res =>{
-        console.log(res);
-      });
-     }
- 
+   
     gripperIn = () => {       
       console.log('im gripper in');
       MicroApi.gripperIn().then(res =>{
@@ -174,7 +164,23 @@ class quickCommandsView extends Component{
     // })
     }
 
-    // done functions
+    // res returns error 
+
+    plateRotIn = () => {    
+      console.log('im plateRotIn');   
+      MicroApi.plateRotIn().then(res => {
+        console.log(res);
+      });
+    }
+
+    plateRotOut = () => {       
+      console.log('im plateRotOut');
+      MicroApi.plateRotOut().then(res =>{
+        console.log(res);
+      });
+     }
+
+     // done functions
     togglePowerOff = () => {           
        let { togglePoweroffRedux } = this.props; 
        let poweroffOngoing = !this.props.poweroffOngoing; 

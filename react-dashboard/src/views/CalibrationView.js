@@ -15,6 +15,8 @@ import { MicroApi } from '../micro-api';
 
 
 
+let plateNum = 2;
+let sampleNum = 7;
 
 export class CalibrationView extends React.Component{
     constructor(props){
@@ -70,7 +72,12 @@ export class CalibrationView extends React.Component{
               headline: 'Update Plate Height',
               plateNumbers: this.getPlateNumbers(),
               plateAreas:this.getPlateAreas(), 
-              plateHeight:'10',
+              plateHeights:[
+                {label: 'height1', value:10},
+                {label: 'height2', value:2},
+                {label: 'height3', value:10},
+                {label: 'height4', value:10},
+              ],
               labelplateHeight:'show plate height' ,
               labelPlateNum:'plate #',
               labelPlateArea:'plate area',
@@ -206,24 +213,32 @@ export class CalibrationView extends React.Component{
       return plateAreas;
     }
    
-    setReelToParking = () => {
+    setReelToParking = (reelNum) => {
       console.log('im set reel to park');
-      MicroApi.setReelToParking().then(res => {     
+      MicroApi.setReelToParking(reelNum).then(res => {     
         console.log(res);
       })
     }
-    plateCalibration = () => {
+
+    plateCalibration = (plateNum, sampleNum) => {   
      console.log('im plateCalibration')
-        MicroApi.plateRestart().then((res)=>{
-          console.log('plateRestart');
+      MicroApi.plateRestart(plateNum).then(res =>{
+        console.log(res)
         });        
-    }
+      }
 
     reelCalibration = () => {
       console.log('run reel calibration');
-        MicroApi.reelCalibration().then((res)=>{
-          this.setState({reelCalibration:res});
+        MicroApi.reelCalibration().then(res=>{
+          console.log(res);
         })
+    }
+
+    getReport = () => {
+      console.log('get report');
+      MicroApi.getReport().then(res => {
+        console.log(res);
+      })
     }
 
     updatePlateHeight = () => {
@@ -339,13 +354,16 @@ export class CalibrationView extends React.Component{
                               name="select-plate-area-number"
                             />
                         </SelectBox>
-                    <SaveButton onClick={this.plateCalibration}>
+                    <SaveButton onClick={() => this.plateCalibration(selectedPlateNumberOption.value, selectedPlateAreaOption.value)}>
                       run
                     </SaveButton>
                 </CalibrationGroup>
                 <CalibrationGroup calibRow={reelCalibrationGroups}>
                     <SaveButton onClick={this.reelCalibration} style={{width:"200px"}}>
                       Run Reel Calibration
+                    </SaveButton>
+                    <SaveButton onClick={this.getReport} style={{width:"200px"}}>
+                        Get Report
                     </SaveButton>
                 </CalibrationGroup>
                 <CalibrationGroup calibRow={setReelToParkingPlate}>
@@ -360,7 +378,7 @@ export class CalibrationView extends React.Component{
                             name="select-reel-number"
                           />
                       </SelectBox>
-                      <SaveButton onClick={this.setReelToParking}>
+                      <SaveButton onClick={() => this.setReelToParking(selectedReelNumberOption.value)}>
                         run
                       </SaveButton>
                 </CalibrationGroup>
@@ -388,10 +406,24 @@ export class CalibrationView extends React.Component{
                               name="select-plate-area-number"
                             />
                         </SelectBox>
-                              
-                        <DisplayData>
-                          {plateCalibrationGroups[0].plateHeight}
-                        </DisplayData>
+                        <PlateDetails>
+                              <DisplayData style={{width:'102px'}}>
+                              {updatePlateHeight[0].plateHeights[0].label} : {updatePlateHeight[0].plateHeights[0].value}
+                              </DisplayData>
+                              <DisplayData style={{width:'102px'}}>
+                              {updatePlateHeight[0].plateHeights[1].label}
+  : {updatePlateHeight[0].plateHeights[1].value}
+                              </DisplayData>
+                              <DisplayData style={{width:'102px'}}>
+                              {updatePlateHeight[0].plateHeights[2].label}
+  : {updatePlateHeight[0].plateHeights[2].value}
+                              </DisplayData>
+                              <DisplayData style={{width:'102px'}}>
+                              {updatePlateHeight[0].plateHeights[3].label}
+   :  {updatePlateHeight[0].plateHeights[3].value}
+                              </DisplayData>
+                          </PlateDetails>      
+                      
                         <SelectBox>
                           <TextInput
                           style={{fontWeight:'300'}}
@@ -403,6 +435,8 @@ export class CalibrationView extends React.Component{
                           save
                         </SaveButton>
                 </CalibrationGroup>
+
+
                 <CalibrationGroup calibRow={modifyRobotParameters}>
                   <SelectBox>
                     <Select
@@ -533,4 +567,9 @@ const DisplayData = styled.div`
 const DisplayResult = styled(DisplayData)`
     width:70px;
     margin: 0 5px;
+`;
+
+const PlateDetails = styled.div`
+    display:inline-flex;
+    flex-direction:column;
 `;
