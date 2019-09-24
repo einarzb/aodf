@@ -43,7 +43,11 @@ export class CalibrationView extends React.Component{
           selectedReelNumberOption:null,
           selectedInstructionsOption:null,
           selectedMotorNumOption:null,
+          outputData:[],
+          selectedMotorNumValue:"",
+          selectedPlateHeight:"",
           selectedInsttypeOption:'dont care',
+          instTypeOptions:['dont care'],
           reelCalibration:this.reelCalibration,
           plateCalibrationGroups: [
             {
@@ -115,40 +119,42 @@ export class CalibrationView extends React.Component{
             {label:'Value'},
             {label:'Diagram:'}
           ]
-
-          
         } 
-      
-    
     }
     
+    /* ============== handle changes ================== */
     paramHandleChange = (selectedParamsOption) => {
       this.setState({ selectedParamsOption });
-      console.log(`Option selected:`, selectedParamsOption);
     }
     motorNumChange = (selectedMotorNumOption) => {
       this.setState({ selectedMotorNumOption });
-      console.log(`Option selected:`, selectedMotorNumOption);
     };
-
+  
     reelNumHandleChange = (selectedReelNumberOption) => {
       this.setState({ selectedReelNumberOption });
-      console.log(`Option selected:`, selectedReelNumberOption);
     };
 
     plateAreaHandleChange = (selectedPlateAreaOption) => {
       this.setState({ selectedPlateAreaOption });
-      console.log(`Option selected:`, selectedPlateAreaOption);
     };
 
     plateNumHandleChange = (selectedPlateNumberOption) => {
       this.setState({ selectedPlateNumberOption });
-      console.log(`Option selected:`, selectedPlateNumberOption);
     };
     instructionsFunctionChange = (selectedInstructionsOption) => {
       this.setState({ selectedInstructionsOption });
-      console.log(`Option selected:`, selectedInstructionsOption);
     };
+
+    setMotorNumValue = (e) => {
+      this.setState({selectedMotorNumValue:e});
+    }
+
+    setPlaheHeightValue = (e) => {
+      this.setState({selectedPlateHeight:e});
+    }
+
+
+    /* ============== END handle changes ================== */
 
 
     getFunctions = () => {
@@ -159,13 +165,13 @@ export class CalibrationView extends React.Component{
         {value: 4, label: 'MVP move to position'},
         {value: 5, label: 'SAP set axis parameter'},
         {value:6, label: 'GAP get axis parameter'},
-        {value: 7, labebl: 'STAP store axis parameter'}    ,
-        {value: 8, labebl: 'RSAP restore axis parameter'}    ,
-        {value: 9, labebl: 'SGP  set global parameter'}    ,
-        {value: 10, labebl: 'GGP  get global parameter'}    ,
-        {value: 14, labebl: 'SIO set output'},
-        {value: 15, labebl: 'GIO get inputoutput'},    
-        {value: 23, labebl: 'STOP stop TMCL program execution'}           
+        {value: 7, label: 'STAP store axis parameter'},
+        {value: 8, label: 'RSAP restore axis parameter'},
+        {value: 9, label: 'SGP  set global parameter'},
+        {value: 10, label: 'GGP  get global parameter'},
+        {value: 14, label: 'SIO set output'},
+        {value: 15, label: 'GIO get inputoutput'},    
+        {value: 23, label: 'STOP stop TMCL program execution'}           
       ];
       return functionsList;
     }
@@ -212,72 +218,99 @@ export class CalibrationView extends React.Component{
       {value: 1, label:1},
       {value: 2, label: 2},
       {value: 3, label: 3},
-      {value: 4, label: 4},
-      {value: 5, label: 5},
-      {value: 6, label: 6},
-      {value: 7, labebl: 7}     
+      {value: 4, label: 4} 
       ] 
       return plateAreas;
     }
     setReelToParking = (reelNum) => {
       console.log('im set reel to park');
+      let log = this.state.setReelToParkingPlate[0].headline + " >> " + reelNum;
+      this.updateLogger(log);
       MicroApi.setReelToParking(reelNum).then(res => {     
         console.log(res);
       })
     }
-    plateCalibration = (plateNum, sampleNum) => {   
-     console.log('im plateCalibration')
-      MicroApi.plateRestart(plateNum).then(res =>{
-        console.log(res)
-        });        
-      }
+    
+    executeInstructions = (val1, val2, val3) => {
+      let log = 'test routine>> ' + val1 + ' ' + val2 + ' value: ' + val3;
+      this.updateLogger(log);
+    }
+
+    plateCalibration = (val1, val2) => {   
+      //update log in ui 
+      let val1labeled = this.state.plateCalibrationGroups[0].labelPlateNum + "" + val1;
+      let val2labeled = this.state.plateCalibrationGroups[0].labelPlateArea +  "(" + val2 + ")";    
+      let log = " plate calibration>> " + val1labeled + ' ' + val2labeled;
+      this.updateLogger(log);
+      
+      // update res
+        MicroApi.plateRestart(plateNum).then(res =>{
+          console.log(res)
+          });
+    }
+
+    updateLogger = (log) => {
+        let i;
+        console.log(log)
+        this.setState({
+          outputData: [...this.state.outputData, <code key={i}>{log}</code>]
+        });
+  
+        //clear input fields
+        this.setState({
+          selectedInstructionsOption:null,
+          selectedMotorNumOption:null,
+          selectedMotorNumValue:"",
+
+        })
+    }  
+
+    clear = () => {
+      this.setState({
+        outputData: []
+      });
+    } 
+
     reelCalibration = () => {
       console.log('run reel calibration');
-        MicroApi.reelCalibration().then(res=>{
+      //ui 
+      let log = 'reel calibration process'
+      this.updateLogger(log);
+      //rest
+      MicroApi.reelCalibration().then(res=>{
+        console.log(res);
+      })
+    }
+    
+    getReport = () => {
+        console.log('get report');
+        MicroApi.getReport().then(res => {
           console.log(res);
         })
     }
-    getReport = () => {
-      console.log('get report');
-      MicroApi.getReport().then(res => {
-        console.log(res);
-      })
-    }
+    
     getParams = () => {
-      console.log('get params');
       MicroApi.getParams().then((res) => {
-        console.log(res);
-        let params = Object.keys(res);
-        return params;
-        /*
-        let params = Object.keys(res.params);    
-        let paramsArr = [
-          {value: 1, label:params[68]},
-          {value: 2, label:params[69]},
-          {value: 3, label:params[70]},
-          {value: 4, label:params[71]},
-          {value: 5, label:params[104]},
-          {value: 6, label:params[105]},
-          {value: 7, label:params[106]},
-        ]*/
-      //  return paramsArr;
+        let keys = Object.keys(res.params);  
+        console.log(keys);
+        return keys;
       })
     }
-    updatePlateHeight = () => {
+
+    updatePlateHeight = (val1,val2,val3) => {
       console.log('im update plate height ')
+      let log = 'update plate height>> ' + this.state.updatePlateHeight[0].labelPlateNum + '' + val1 + " " + this.state.updatePlateHeight[0].labelPlateArea + "(" + val2 + ")" + ' value: ' + val3;
+      this.updateLogger(log);
       return;
     }
     modifyRobotParams = () => {
       console.log('im modify Robot Params ')
       return;
     }
-    executeInstructions = () => {
-      console.log('execute! ')
-    }
+
 
     render(){
-      let {selectedInstructionsOption, selectedReelNumberOption, selectedPlateNumberOption, selectedPlateAreaOption, plateCalibrationGroups, reelCalibrationGroups, setReelToParkingPlate, updatePlateHeight, modifyRobotParameters, routineTableLabels, routineFunctionsList, selectedInsttypeOption, motorNumList, selectedMotorNumOption, resultTable, customStyles, selectedParamsOption} = this.state
-
+      let {selectedInstructionsOption, selectedReelNumberOption, selectedPlateNumberOption, selectedPlateAreaOption, plateCalibrationGroups, reelCalibrationGroups, setReelToParkingPlate, updatePlateHeight, modifyRobotParameters, routineTableLabels, routineFunctionsList, selectedInsttypeOption, motorNumList, selectedMotorNumOption, resultTable, customStyles, selectedParamsOption, instTypeOptions, selectedMotorNumValue, outputData, selectedPlateHeight} = this.state;
       return (
         <div>
         <CalibrationContainer>
@@ -303,7 +336,7 @@ export class CalibrationView extends React.Component{
                           placeholder='dont care'
                           value={selectedInsttypeOption}
                           onChange={this.instructionsFunctionChange}
-                          options={selectedInsttypeOption}
+                          options={instTypeOptions}
                           name="inst-type-select"
                         />
                     </TestButton>
@@ -320,11 +353,12 @@ export class CalibrationView extends React.Component{
                     <TestButton>
                         <TextInput
                             style={{fontWeight:'300', width:'90px'}}
-                              placeholder="value"
-                            //  value={item.plateHeight}
-                          />
+                            placeholder="value"
+                            value={selectedMotorNumValue}
+                            onChange={ event => this.setMotorNumValue(event.target.value) }
+                        />
                     </TestButton>
-                    <SaveButton onClick={this.executeInstructions} style={{width:'20%', fontSize:'16px'}}>
+                    <SaveButton onClick={() => this.executeInstructions(selectedInstructionsOption.label, selectedMotorNumOption.label, selectedMotorNumValue)} style={{width:'20%', fontSize:'16px'}}>
                       execute
                     </SaveButton>
                 </RoutinesTable>   
@@ -348,7 +382,12 @@ export class CalibrationView extends React.Component{
                  
                 </RoutinesTable>
                 <p>Output Box</p>
-                <OutputBox></OutputBox>
+                <OutputBox>
+                    {outputData} 
+                </OutputBox>
+                <SaveButton onClick={this.clear} style={{width:"180px"}}>
+                    clear 
+                </SaveButton>
            </CalibrationTestRoutines>
 
            <CalibrationControlButtons>
@@ -448,12 +487,13 @@ export class CalibrationView extends React.Component{
                       
                         <SelectBox>
                           <TextInput
-                          style={{fontWeight:'300'}}
+                            style={{fontWeight:'300'}}
                             placeholder="insert height"
-                          //  value={item.plateHeight}
+                            value={selectedPlateHeight}
+                            onChange={ event => this.setPlaheHeightValue(event.target.value) }
                           />
                         </SelectBox>
-                        <SaveButton onClick={this.updatePlateHeight}>
+                        <SaveButton onClick={() =>this.updatePlateHeight(selectedPlateNumberOption.value,selectedPlateAreaOption.value,selectedPlateHeight)}>
                           save
                         </SaveButton>
                 </CalibrationGroup>
@@ -544,7 +584,15 @@ const OutputBox = styled.div`
     width: 500px;
     margin-top: 0px;
     margin-right: 45px;
-
+    font-size: 12px;
+    padding: 0.2rem 0.5rem;
+    display:inline-flex;
+    flex-direction:column;
+    padding: 0.2rem 0.5rem; 
+    & children {
+      display:block;
+      border:1px solid red;
+    }
 `;
 
 export const MainRow = styled.div`

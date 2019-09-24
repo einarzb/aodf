@@ -398,14 +398,10 @@
             $decoded =  json_decode($s , TRUE );
         }
         return array(
-            'camera_x_coordinate'=>array(
-                'parking_target_x_pos'=>$decoded['PARKING_TARGET_X_POS'],
-                'regular_plate_target_x_pos'=>$decoded['REGULAR_PLATE_TARGET_X_POS']
-            ),
-            'camera_y_coordinate' => array(
-                'parking_target_y_pos'=>$decoded['PARKING_TARGET_Y_POS'],
-                'regular_plate_target_y_pos'=>$decoded['REGULAR_PLATE_TARGET_Y_POS']
-            ),
+            'parking_target_x_pos'=>$decoded['PARKING_TARGET_X_POS'],
+            'regular_plate_target_x_pos'=>$decoded['REGULAR_PLATE_TARGET_X_POS'],
+            'parking_target_y_pos'=>$decoded['PARKING_TARGET_Y_POS'],
+            'regular_plate_target_y_pos'=>$decoded['REGULAR_PLATE_TARGET_Y_POS'],
             'parking_plate_insert_parameter' => $decoded['P_PLATE_INSERT_EXTENDER_CORRECTION'],
             'parking_plate_pull_parameter' => $decoded['P_PLATE_PULL_EXTENDER_CORRECTION'],
             'regular_plate_insert_parameter' => $decoded['R_PLATE_INSERT_EXTENDER_CORRECTION'],

@@ -20,12 +20,12 @@ import { toggleRebootAction, togglePoweroffAction } from '../redux/actions/setti
 
 let defaultLimitSwitchButton = '#D3D3D3';
 let limitSwitchButtonIsOn = '#7CFC00';
-let alertPopup;    
 
 class quickCommandsView extends Component{
     constructor(){
         super()
         this.state = {
+          dummy:null,
           limitSwitchTestButtons:[
             {label: 'Limit Switch Test', onClick:this.startLimitSwitchTest, width:'100%', bgColor:defaultLimitSwitchButton}
           ],
@@ -47,9 +47,9 @@ class quickCommandsView extends Component{
           ],
           generalButtons: [
             {label: 'Queue Reset', onClick:this.queueReset},
-            {label: 'Save Picture', onClick:this.savePicture},
+            {label: 'Download Picture', onClick:this.downloadPics},
             {label: 'Reboot', onClick:this.toggleReboot},
-            {label: 'Power Off', onClick:this.togglePowerOff}
+            {label: 'Power Off', onClick:this.togglePowerOff},
           ],
           elevButtons : [
             {label: 'Elev Up', onClick:this.elevatorUp},
@@ -180,6 +180,24 @@ class quickCommandsView extends Component{
       });
      }
 
+     downloadPics = () => {
+       console.log('dddd')
+       window.location.href='/page2' 
+    /*  let url = '/frame-www.json';
+      window.open(url, 'Download');  
+*/
+/*
+       let downloadFiles = 
+       <div>
+        <a href="/frame-www.json" download>ffff</a>
+       <a href="/frame-www.ppm" download>ffff</a>;
+       </div>
+     
+
+       this.setState({dummy:downloadFiles})*/
+     }
+ 
+
      // done functions
     togglePowerOff = () => {           
        let { togglePoweroffRedux } = this.props; 
@@ -195,7 +213,7 @@ class quickCommandsView extends Component{
 
     render(){
       let {rebootOngoing, poweroffOngoing} = this.props;
-      let {limitSwitchTestButtons, leftSwitchesArr, rightSwitchesArr, generalButtons, plateGripperButtons, elevButtons}  = this.state;
+      let {limitSwitchTestButtons, leftSwitchesArr, rightSwitchesArr, generalButtons, plateGripperButtons, elevButtons, dummy}  = this.state;
       
       return (
           <div>
@@ -208,7 +226,11 @@ class quickCommandsView extends Component{
               <CommandButtonsContainer>
                 <ButtonsGroup btnsArr={elevButtons}></ButtonsGroup>
                 <ButtonsGroup btnsArr={plateGripperButtons}></ButtonsGroup>
-                <ButtonsGroup btnsArr={generalButtons} ></ButtonsGroup>
+                <ButtonsGroup btnsArr={generalButtons}> 
+                </ButtonsGroup>
+               
+                {dummy} jjjj
+
               </CommandButtonsContainer>
             
               <LedButtonsContainer>
