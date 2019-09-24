@@ -14,7 +14,7 @@ import RoutinesTable from '../components/RoutinesTable';
 import { MicroApi } from '../micro-api';
 
 
-
+let keys;
 let plateNum = 2;
 let sampleNum = 7;
 
@@ -44,6 +44,7 @@ export class CalibrationView extends React.Component{
           selectedInstructionsOption:null,
           selectedMotorNumOption:null,
           outputData:[],
+          robotParamValue:"",
           selectedMotorNumValue:"",
           selectedPlateHeight:"",
           selectedInsttypeOption:'dont care',
@@ -152,7 +153,11 @@ export class CalibrationView extends React.Component{
     setPlaheHeightValue = (e) => {
       this.setState({selectedPlateHeight:e});
     }
+    setRobotParamValue = (e) => {
+      this.setState({robotParamValue:e});
+    }
 
+    
 
     /* ============== END handle changes ================== */
 
@@ -291,10 +296,22 @@ export class CalibrationView extends React.Component{
     
     getParams = () => {
       MicroApi.getParams().then((res) => {
-        let keys = Object.keys(res.params);  
+        keys = Object.keys(res.params);  
         console.log(keys);
-        return keys;
+        console.log(res.params);     
       })
+
+      let myArr = [
+        {value:1, label:'parking_target_x_pos'},
+        {value:2, label:['regular_plate_target_x_pos']},
+        {value:3, label:'parking_target_y_pos'},
+        {value:4, label:'regular_plate_target_y_pos'},
+        {value:5, label:'parking_plate_insert_parameter'}, 
+        {value:6, label:'parking_plate_pull_parameter'}, 
+        {value:7, label:'regular_plate_insert_parameter'}, 
+        {value:8, label:'regular_plate_pull_parameter'}
+       ] 
+       return myArr;
     }
 
     updatePlateHeight = (val1,val2,val3) => {
@@ -303,14 +320,16 @@ export class CalibrationView extends React.Component{
       this.updateLogger(log);
       return;
     }
-    modifyRobotParams = () => {
+    modifyRobotParams = (val1,val2) => {
       console.log('im modify Robot Params ')
+      let log = 'modify robot params>> ' + 'parameter:' + ' ' + val1.label + " value: "  + val2;
+      this.updateLogger(log);
       return;
     }
 
 
     render(){
-      let {selectedInstructionsOption, selectedReelNumberOption, selectedPlateNumberOption, selectedPlateAreaOption, plateCalibrationGroups, reelCalibrationGroups, setReelToParkingPlate, updatePlateHeight, modifyRobotParameters, routineTableLabels, routineFunctionsList, selectedInsttypeOption, motorNumList, selectedMotorNumOption, resultTable, customStyles, selectedParamsOption, instTypeOptions, selectedMotorNumValue, outputData, selectedPlateHeight} = this.state;
+      let {selectedInstructionsOption, selectedReelNumberOption, selectedPlateNumberOption, selectedPlateAreaOption, plateCalibrationGroups, reelCalibrationGroups, setReelToParkingPlate, updatePlateHeight, modifyRobotParameters, routineTableLabels, routineFunctionsList, selectedInsttypeOption, motorNumList, selectedMotorNumOption, resultTable, customStyles, selectedParamsOption, instTypeOptions, selectedMotorNumValue, outputData, selectedPlateHeight, robotParamValue} = this.state;
       return (
         <div>
         <CalibrationContainer>
@@ -500,7 +519,7 @@ export class CalibrationView extends React.Component{
 
 
                 <CalibrationGroup calibRow={modifyRobotParameters}>
-                  <SelectBox>
+                  <SelectBox style={{width:'200px'}}>
                     <Select
                         styles={customStyles} 
                         autoFocus
@@ -511,17 +530,15 @@ export class CalibrationView extends React.Component{
                         name="select-parameter"
                       />
                   </SelectBox>
-                  <DisplayData>
-                    {plateCalibrationGroups[0].plateHeight}
-                  </DisplayData>
                   <SelectBox>
                     <TextInput
-                    style={{fontWeight:'300'}}
+                      style={{fontWeight:'300'}}
                       placeholder="insert value"
-                    //  value={item.plateHeight}
+                      value={robotParamValue}
+                      onChange={ event => this.setRobotParamValue(event.target.value) }
                     />
                   </SelectBox>
-                  <SaveButton onClick={this.modifyRobotParams}>
+                  <SaveButton onClick={()=>this.modifyRobotParams(selectedParamsOption, robotParamValue)}>
                 save
               </SaveButton>
            </CalibrationGroup>
