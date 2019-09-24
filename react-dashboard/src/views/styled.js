@@ -34,13 +34,6 @@ export const FormRow =  styled.div`
   border-right : 1px gray solid;
 
 `;
-export const ConfRow = styled.div`
-  border:1px solid #FFFFFF; 
-  background-color:#CFD5EA;
-  height:50px;
-  display: flex;
-  flex-direction:row;  
-`;
 
 
 export const RowChild = styled.div`

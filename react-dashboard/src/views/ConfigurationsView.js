@@ -23,7 +23,6 @@ class ConfigurationsView extends React.Component {
     }
       //local
   tryToSave = () => {  
-    console.log('trying to save in config');
     let {sendPCMToRedux} = this.props;
     let showPasscodeModal = !this.props.showPasscodeModal; //true local for view    
     sendPCMToRedux(showPasscodeModal)
@@ -47,7 +46,7 @@ class ConfigurationsView extends React.Component {
        let { sendConfigSettingToRedux } = this.props;
     
         MicroApi.getConfigSettings().then((res) => {
-        //concating data
+        //concating data - TODO: refactor it
         let mac_address = res.config_settings.mac_address;
         let plates_fiber_optic_cable_model = res.config_settings.optic_cable_list.plates_fiber_optic_cable.model;
         let reels_fiber_optic_cable_model = res.config_settings.optic_cable_list.reels_fiber_optic_cable.model;
@@ -83,35 +82,23 @@ class ConfigurationsView extends React.Component {
 
         return (
 
-              <ConfigurationContainer
-              >
-               {/**  <Greeting />*/}
+              <ConfigurationContainer>
                   <ConfigurationRow label={'MAC Address'} model={mac_address} />
-        
-                   <ConfigurationRow 
-                        label={'Robotic Part number'} 
-                        model={part_and_serial_numbers_robot_part} 
-                        onChange={val =>{
-                          onSettingChanged(
-                            'part_and_serial_numbers_robot_part',
-                            val,
-                            'Robotic Part number')}}
-                        />
+                  <ConfigurationRow label={'Robotic Part number'} model={part_and_serial_numbers_robot_part} 
+                    onChange={val =>{onSettingChanged('part_and_serial_numbers_robot_part',val,'Robotic Part number')}}
+                  />
                  
-                    <ConfigurationRow 
-                    label={'Robotic Serial number'} 
+                  <ConfigurationRow label={'Robotic Serial number'} 
                     model={part_and_serial_numbers_robot_serial} 
                     onChange={val => { 
                       onSettingChanged('part_and_serial_numbers_robot_serial',val,'Robotic Serial number')}}/>
+                  <ConfigurationRow label={'Optical Part number'} model={part_and_serial_numbers_aodf_part} onChange={val =>{onSettingChanged('part_and_serial_numbers_aodf_part',val,'Optical Part number')}}/>
+
+                  <ConfigurationRow label={'Optical Serial number'} model={part_and_serial_numbers_aodf_serial} onChange={val =>{onSettingChanged('part_and_serial_numbers_aodf_serial',val,'Optical Serial number')}}/>
                 
+                  <ConfigurationRow label={'Plate Fiber Optic Cable'} model={plates_fiber_optic_cable_model} onChange={v=>{onSettingChanged('plates_fiber_optic_cable_model',v,'Plate Fiber Optic Cable')}} />
 
-                    <ConfigurationRow label={'Optical Part number'} model={part_and_serial_numbers_aodf_part} onChange={val =>{onSettingChanged('part_and_serial_numbers_aodf_part',val,'Optical Part number')}}/>
-
-                    <ConfigurationRow label={'Optical Serial number'} model={part_and_serial_numbers_aodf_serial} onChange={val =>{onSettingChanged('part_and_serial_numbers_aodf_serial',val,'Optical Serial number')}}/>
-                  
-                    <ConfigurationRow label={'Plate Fiber Optic Cable'} model={plates_fiber_optic_cable_model} onChange={v=>{onSettingChanged('plates_fiber_optic_cable_model',v,'Plate Fiber Optic Cable')}} />
-
-                    <ConfigurationRow 
+                  <ConfigurationRow 
                     label={'Reels Fiber Optic Cable'} 
                     model={reels_fiber_optic_cable_model}  
                     onChange = {
@@ -121,7 +108,7 @@ class ConfigurationsView extends React.Component {
                           optic_cable_list,
                           'Reels Fiber Optic Cable'
                           )}}
-                    />
+                  />
 
                     <ConfigurationRow label={'Temperature Range'} />
 

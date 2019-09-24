@@ -101,7 +101,7 @@ export class ConfigurationRow extends React.Component{
     let {onChange, label, model, isIp} = this.props;
     if (onChange) {
       return (
-      <ConfRow>
+      <FormRow>
           <RowTitle>
             {label}
           </RowTitle>
@@ -125,10 +125,10 @@ export class ConfigurationRow extends React.Component{
             </InputContainer>              
             
           </RowData>
-        </ConfRow>)
+        </FormRow>)
   }
   return (
-   <ConfRow>
+   <FormRow>
       <RowTitle>
         {label}
       </RowTitle>
@@ -137,7 +137,7 @@ export class ConfigurationRow extends React.Component{
                 {model}
           </DataText>
       </RowData>
-    </ConfRow>);  
+    </FormRow>);  
  }
 }  
 export class HalfRow extends React.Component{

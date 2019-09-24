@@ -56,19 +56,16 @@ class SettingsView extends React.Component {
       this.logRef.current.click();
     })
   }
-  //local
+
   tryToSave = () => {  
-  //  console.log('tryToSave');
     let {sendPCMToRedux} = this.props;
     let showPasscodeModal = !this.props.showPasscodeModal; //true local for view
     sendPCMToRedux(showPasscodeModal)
   }
 
   toggleReboot = () => {           
-   // console.log('im toggle reboot ');
     let { toggleRebootRedux } = this.props; 
     let rebootOngoing = !this.props.rebootOngoing; 
-   // console.log(rebootOngoing);//true
     toggleRebootRedux(rebootOngoing);
   }
   
@@ -163,11 +160,11 @@ const mapStateToProps = (state) => {
     showPasscodeModal:state.rebootReducer.showPasscodeModal,
     rebootOngoing:state.rebootReducer.rebootOngoing
     }
-    /*
+    
     console.log('----im props of setting view:----');
     console.log(props);
     console.log('--------------');
-    */
+    
   return props;
 };
 
