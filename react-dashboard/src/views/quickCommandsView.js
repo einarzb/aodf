@@ -25,25 +25,24 @@ class quickCommandsView extends Component{
     constructor(){
         super()
         this.state = {
-          dummy:null,
           limitSwitchTestButtons:[
             {label: 'Limit Switch Test', onClick:this.startLimitSwitchTest, width:'100%', bgColor:defaultLimitSwitchButton}
           ],
           leftSwitchesArr: [
-            {ledNum: 'Elevator LED 1', limitSwitchStatus:'2'},
-            {ledNum: 'Stage LED 2', limitSwitchStatus:'2'},
-            {ledNum: 'Plate rotator LED 3', limitSwitchStatus:'2'},
-            {ledNum: 'Plate rot I/O LED 4', limitSwitchStatus:'2'},
-            {ledNum: 'Gripper I/O LED 5', limitSwitchStatus:'2'},
-            {ledNum: 'Gripper O/C LED 6', limitSwitchStatus:'2'}
+            {ledNum: 'Elevator', limitSwitchStatus:'2'},
+            {ledNum: 'Stage', limitSwitchStatus:'2'},
+            {ledNum: 'Plate rotator', limitSwitchStatus:'2'},
+            {ledNum: 'Plate rot I/O', limitSwitchStatus:'2'},
+            {ledNum: 'Gripper I/O', limitSwitchStatus:'2'},
+            {ledNum: 'Gripper O/C', limitSwitchStatus:'2'}
           ],
           rightSwitchesArr: [
-            {ledNum: 'Elevator LED 1', limitSwitchStatus:'2'},
-            {ledNum: 'Stage LED 2', limitSwitchStatus:'2'},
-            {ledNum: 'Plate rotator LED 3', limitSwitchStatus:'2'},
-            {ledNum: 'Plate rot I/O LED 4', limitSwitchStatus:'2'},
-            {ledNum: 'Gripper I/O LED 5', limitSwitchStatus:'2'},
-            {ledNum: 'Gripper O/C LED 6', limitSwitchStatus:'2'}
+            {ledNum: 'Elevator', limitSwitchStatus:'2'},
+            {ledNum: 'Stage', limitSwitchStatus:'2'},
+            {ledNum: 'Plate rotator', limitSwitchStatus:'2'},
+            {ledNum: 'Plate rot I/O', limitSwitchStatus:'2'},
+            {ledNum: 'Gripper I/O', limitSwitchStatus:'2'},
+            {ledNum: 'Gripper O/C', limitSwitchStatus:'2'}
           ],
           generalButtons: [
             {label: 'Queue Reset', onClick:this.queueReset},
@@ -213,7 +212,7 @@ class quickCommandsView extends Component{
 
     render(){
       let {rebootOngoing, poweroffOngoing} = this.props;
-      let {limitSwitchTestButtons, leftSwitchesArr, rightSwitchesArr, generalButtons, plateGripperButtons, elevButtons, dummy}  = this.state;
+      let {limitSwitchTestButtons, leftSwitchesArr, rightSwitchesArr, generalButtons, plateGripperButtons, elevButtons }  = this.state;
       
       return (
           <div>
@@ -229,7 +228,6 @@ class quickCommandsView extends Component{
                 <ButtonsGroup btnsArr={generalButtons}> 
                 </ButtonsGroup>
                
-                {dummy} jjjj
 
               </CommandButtonsContainer>
             

@@ -2,16 +2,14 @@ import React, { Component } from 'react';
 import {connect } from 'react-redux';
 
 import styled from 'styled-components';
-import SettingsRow, {ConfigurationRow} from './SettingsRow';
+import  {ConfigurationRow} from './SettingsRow';
 import {ButtonsRow, BigButt} from './styled';
-import PasscodeModal from './PasscodeModal';
-import { ModalBG, myTheme } from './styled';
+
 
 // ACTIONS
 import { MicroApi } from '../micro-api';
 import {  configSettingsChangedAction, updateTimeInStateAction, fetchConfigSettingsAction, savePasscodeModelAction } from '../redux/actions/settings-actions';
 
-//const Greeting = () => <h1>Hello World today!</h1>;
 
 class ConfigurationsView extends React.Component {
     constructor(props){
@@ -141,11 +139,11 @@ const mapStateToProps = (state) => {
     unSavedChanges:state.saveConfigsReducer,
     showPasscodeModal:state.rebootReducer.showPasscodeModal
   }
-  /*
+  
   console.log('-----im props of config view:-----');
   console.log(props);
   console.log('--------------');
-  */ 
+   
   
   return props;
 };

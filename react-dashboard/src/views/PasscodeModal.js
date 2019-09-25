@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import {Heading} from 'grommet/components/Heading';
 import { Close } from 'grommet-icons/icons/Close'
 import {NicePopup, OButton, SaveModal, ModalActions, MTextInput, MOButton, ChangeList} from './styled';
+//import Passcode from '../components/Passcode';
 
 //data
 import { MicroApi } from '../micro-api';
@@ -18,7 +19,10 @@ class PasscodeModal extends React.Component{
     super(props);
     this.state = {
       verifyPIN:"111111",
-      combined:{...this.mergeArrays()}
+      passcodeScreens : [
+        {arr: this.props.unSavedChanges, name:'unSavedChanges', onClick:this.onPasscodeEntered},
+        {arr: this.props.unSavedConfigChanges, name:'unSavedConfigChanges', onClick:this.refreshData}
+      ]
     };        
     console.log('im state');
     console.log(this.state);
@@ -40,17 +44,13 @@ class PasscodeModal extends React.Component{
         this.startPinger();
       }
     });
-/*
+
     //get configs
     MicroApi.getConfigSettings().then((res) => { 
-      console.log('refreshed res');
-      console.log('-----');
-      console.log(res);
-      
       sendConfigSettingToRedux(res);
     });
 
-    */
+    
     MicroApi.getPin().then((data)=>{        
       this.setState({verifyPIN:data.code})
     })
@@ -61,47 +61,17 @@ class PasscodeModal extends React.Component{
     let showPasscodeModal = !this.props.showPasscodeModal; 
     sendPCMToRedux(showPasscodeModal);
   }
-  
-  mergeArrays = () => {
-    let { unSavedChanges , unSavedConfigChanges } = this.props;
-      let a = unSavedChanges;
-      let b = unSavedConfigChanges;
-
-      let combinedDataToSave = [...a, ...b];
-       console.log('im combined obj after filled ')
-       console.log(combinedDataToSave);
-       //a = [];
-       //b = []; 
-       console.log(a);
-       console.log(b);
-       
-      return {combinedDataToSave}
-    
-      
-      //return {combinedDataToSave};
-      // TODO: CLEAR THIS ARRAY
-  }
-
+ 
   onPasscodeEntered = (ep) => {    
-    //init 
     const requiringReboot = ['ip', 'hostname', 'ntp_server', 'netmask', 'gateway'];
     let rebootNeeded = false;
-    let { clearUnSavedChanges, sendPCMToRedux, showPasscodeModal, unSavedChanges, unSavedConfigChanges } = this.props;
-    
-    if ( ep == this.state.verifyPIN) {
-      
-      let settingsMap = {};
-      /* old way      
-      this.props.unSavedChanges.forEach(change => {
-        settingsMap[change.fieldKey] = change.value;
-        
-        if (requiringReboot.indexOf(change.fieldKey)!= -1){          
-          rebootNeeded = true;
-        }
-      }); */
+    let { clearUnSavedChanges, sendPCMToRedux, showPasscodeModal } = this.props;
+    let {passcodeScreens} = this.state;
 
-      //settings view
-      this.state.combined.combinedDataToSave.forEach(change => {
+    if ( ep == this.state.verifyPIN) {
+      let settingsMap = {};
+
+      this.props.unSavedChanges.forEach(change => {
         settingsMap[change.fieldKey] = change.value;
         
         if (requiringReboot.indexOf(change.fieldKey)!= -1){          
@@ -130,15 +100,17 @@ class PasscodeModal extends React.Component{
         this.refreshData()
       });
 
+      /*
+
       //configs view
-      MicroApi.changeConfigs(settingsMap).then((res)=>{    console.log(settingsMap);
+      MicroApi.changeConfigs(settingsMap).then((res)=>{   
+        console.log(settingsMap);
         console.log('== im new configs ==');
         console.log(res);
         console.log('=======');
         this.refreshData()
       });
-
-
+*/
     }
   }
   startPinger = () => {    
@@ -160,27 +132,26 @@ class PasscodeModal extends React.Component{
 
   checkingSwitchesUpdate = () => {
       this.props.checkingSwitches = true;
-    //  console.log('checkingSwitchesUpdate');
-     // console.log(this.props.checkingSwitches); //true
-
       return this.props.checkingSwitches;
     }
 
     render(){
-       // let { unSavedChanges, unSavedConfigChanges } = this.props;
-       // let { combined } = this.state.combined.combinedDataToSave;
+    //  let {passcodeScreens} = this.state;
+        let { unSavedChanges, unSavedConfigChanges } = this.props;
         return (
         
         <SaveModal>
           <MOButton icon={<Close/>} onClick={this.closeModal}/>
           <div>
             <br/>
+           {/**  <Passcode changesBlock={passcodeScreens}></Passcode>*/}
+
             <Heading level={4}>       
-            {`Are you sure you want to make ${this.state.combined.combinedDataToSave.length} change${this.state.combined.combinedDataToSave.length > 1 ? 's':''}?`}
+            {`Are you sure you want to make ${unSavedChanges.length} change${unSavedChanges.length > 1 ? 's':''}?`}
               <br/>
               <ChangeList>
                 {
-                  this.state.combined.combinedDataToSave.map((change, ii) => {
+                  unSavedChanges.map((change, ii) => {
                     if (typeof change.value === 'object') {
                       // if the value is an object then you need to loof inside of it.
                           return(
@@ -216,7 +187,6 @@ class PasscodeModal extends React.Component{
               <br/>
               Enter passcode to verify change
             </Heading>
-
             <MTextInput size="small" placeholder={'######'} onChange={(e)=>{this.onPasscodeEntered(e.target.value)}}></MTextInput>
             <br/>
         </div>
@@ -242,7 +212,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({  
   sendPCMToRedux:(showPasscodeModal) => dispatch(savePasscodeModelAction(showPasscodeModal)),
- // sendConfigSettingToRedux:(res) => dispatch(fetchConfigSettingsAction(res)),
+  sendConfigSettingToRedux:(res) => dispatch(fetchConfigSettingsAction(res)),
   clearUnSavedChanges: () => dispatch(clearUnSavedChangesAction()),
   sendSwitchesToRedux:(res) => dispatch(checkSwitchesAction(res)),
   sendResToRedux:(res) => dispatch(fetchSettingsAction(res)),
