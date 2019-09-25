@@ -61,14 +61,15 @@ class PasscodeModal extends React.Component{
   onPasscodeEntered = (ep) => {    
     const requiringReboot = ['ip', 'hostname', 'ntp_server', 'netmask', 'gateway'];
     let rebootNeeded = false;
-    let { clearUnSavedChanges, sendPCMToRedux, showPasscodeModal, passcode} = this.props;
+    let { clearUnSavedChanges, sendPCMToRedux, showPasscodeModal, passcode, arr} = this.props;
 
-    if ( ep == this.props.passcode) {
+    if ( ep == passcode) {
+   
+      
       let settingsMap = {};
 
-      this.props.unSavedChanges.forEach(change => {
+      arr.forEach(change => {
         settingsMap[change.fieldKey] = change.value;
-        
         if (requiringReboot.indexOf(change.fieldKey)!= -1){          
           rebootNeeded = true;
         }
@@ -82,10 +83,7 @@ class PasscodeModal extends React.Component{
 
       //clear changes array
       clearUnSavedChanges(); 
-      console.log('clearing state too');
-      this.combinedDataToSave = [];
 
-      console.log(this.combinedDataToSave);
       //settings
       MicroApi.changeSettings(settingsMap).then((res)=>{     
         console.log(res);
@@ -131,7 +129,7 @@ class PasscodeModal extends React.Component{
     }
 
     render(){
-        let { unSavedChanges, unSavedConfigChanges, passcode, arr } = this.props;
+        let { passcode, arr } = this.props;
         return (
         
         <SaveModal>
@@ -140,18 +138,13 @@ class PasscodeModal extends React.Component{
             <br/>
 
             <Heading level={4}>       
-            <div>yoyoyoyo {passcode}</div>
-            <div>
+      
 
-yyy             {arr.map(arik => <div>{arik.fieldKey}</div>)}
-
-            </div>
-
-            {`Are you sure you want to make ${unSavedChanges.length} change${unSavedChanges.length > 1 ? 's':''}?`}
+            {`Are you sure you want to make ${arr.length} change${arr.length > 1 ? 's':''}?`}
               <br/>
               <ChangeList>
                 {
-                  unSavedChanges.map((change, ii) => {
+                  arr.map((change, ii) => {
                     if (typeof change.value === 'object') {
                       // if the value is an object then you need to loof inside of it.
                           return(
