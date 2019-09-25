@@ -63,29 +63,23 @@ class PasscodeModal extends React.Component{
     let rebootNeeded = false;
     let { clearUnSavedChanges, sendPCMToRedux, showPasscodeModal, passcode, arr} = this.props;
 
-    if ( ep == passcode) {
-   
-      
+    if ( ep == passcode) {      
       let settingsMap = {};
+      let configsMap = {};
 
-      arr.forEach(change => {
-        settingsMap[change.fieldKey] = change.value;
-        if (requiringReboot.indexOf(change.fieldKey)!= -1){          
-          rebootNeeded = true;
-        }
-      }); 
+      if(arr == this.props.unSavedChanges) { //settings - maybe change to switch case 
+        
+        console.log('im settings')
+        
+        arr.forEach(change => {
+          settingsMap[change.fieldKey] = change.value;
+          if (requiringReboot.indexOf(change.fieldKey)!= -1){          
+            rebootNeeded = true;
+          }
+        }); 
 
-      console.log(settingsMap)
-       
-      showPasscodeModal = !this.props.showPasscodeModal; //false local for view
-      //ui - close modal 
-      sendPCMToRedux(showPasscodeModal); 
-
-      //clear changes array
-      clearUnSavedChanges(); 
-
-      //settings
-      MicroApi.changeSettings(settingsMap).then((res)=>{     
+          //settings
+       MicroApi.changeSettings(settingsMap).then((res)=>{     
         console.log(res);
         if (rebootNeeded){          
           this.startPinger();
@@ -93,17 +87,37 @@ class PasscodeModal extends React.Component{
         this.refreshData()
       });
 
-      /*
+        } else {
+          console.log('im configs');
+          arr.forEach(change => {
+            configsMap[change.fieldKey] = change.value;
+          }); 
+           //configs view
+           MicroApi.changeConfigs(configsMap).then((res)=>{   
+            console.log(configsMap);
+            console.log('== im new configs ==');
+            console.log(res);
+            console.log('=======');
+            this.refreshData()  
+        });
+        }
+     
+      console.log(settingsMap)
+      console.log(configsMap)
 
-      //configs view
-      MicroApi.changeConfigs(settingsMap).then((res)=>{   
-        console.log(settingsMap);
-        console.log('== im new configs ==');
-        console.log(res);
-        console.log('=======');
-        this.refreshData()
-      });
-*/
+      showPasscodeModal = !this.props.showPasscodeModal; //false local for view
+      //ui - close modal 
+      sendPCMToRedux(showPasscodeModal); 
+
+      //clear changes array
+      clearUnSavedChanges(); 
+
+    
+
+      
+
+     
+
     }
   }
   startPinger = () => {    
@@ -129,7 +143,7 @@ class PasscodeModal extends React.Component{
     }
 
     render(){
-        let { passcode, arr } = this.props;
+        let { arr } = this.props;
         return (
         
         <SaveModal>
