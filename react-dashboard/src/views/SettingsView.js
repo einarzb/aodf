@@ -17,7 +17,8 @@ class SettingsView extends React.Component {
     super(props);
     this.logRef = React.createRef();
     this.state = {
-      settings:{...this.props.settings}
+      settings:{...this.props.settings},
+      verifyPIN:"111111"
     };        
   }
 
@@ -81,6 +82,7 @@ class SettingsView extends React.Component {
 
     render(){
         let { onSettingChanged, unSavedChanges, settings, tryToSave, needReboot, rebootSafe, rebootOngoing, showPasscodeModal } = this.props
+        let {verifyPIN} = this.state;
         let currentSettings = settings;
         let {ntp_sync, ip, netmask , mac_address, gateway, time, 
             hostname, repo_ip, ntp_server, part_and_serial_numbers, 
@@ -88,7 +90,7 @@ class SettingsView extends React.Component {
     
         return (
           <div> 
-            { showPasscodeModal ? <PasscodeModal /> : <span></span> } 
+            { showPasscodeModal ? <PasscodeModal arr={unSavedChanges} passcode={verifyPIN}/> : <span></span> } 
             { 
             rebootOngoing 
             ?

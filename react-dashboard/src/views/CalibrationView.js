@@ -15,8 +15,7 @@ import { MicroApi } from '../micro-api';
 
 
 let keys;
-let plateNum = 2;
-let sampleNum = 7;
+
 
 export class CalibrationView extends React.Component{
     constructor(props){
@@ -249,7 +248,7 @@ export class CalibrationView extends React.Component{
       this.updateLogger(log);
       
       // update res
-        MicroApi.plateRestart(plateNum).then(res =>{
+        MicroApi.plateRestart(val1).then(res =>{
           console.log(res)
           });
     }

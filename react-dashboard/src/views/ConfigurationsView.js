@@ -16,7 +16,8 @@ class ConfigurationsView extends React.Component {
     constructor(props){
       super(props);
       this.state = {
-        configs:{...this.props.configs}
+        configs:{...this.props.configs},
+        verifyPIN:"222222"
       }
 
     }
@@ -74,6 +75,7 @@ class ConfigurationsView extends React.Component {
      }
 
     render(){
+        let {verifyPIN} = this.state;
         let { onSettingChanged, unSavedChanges, configs, showPasscodeModal} = this.props
         let currentConfigs = configs;
         let {mac_address, plates_fiber_optic_cable_model, reels_fiber_optic_cable_model, part_and_serial_numbers_aodf_part, part_and_serial_numbers_aodf_serial, part_and_serial_numbers_robot_part, part_and_serial_numbers_robot_serial, temp_aodf_high, temp_aodf_low} = currentConfigs;
@@ -81,7 +83,8 @@ class ConfigurationsView extends React.Component {
 
         return (
           <div>
-               { showPasscodeModal ? <PasscodeModal /> : <span></span> } 
+            
+               { showPasscodeModal ? <PasscodeModal arr={this.props.unSavedChanges} passcode={verifyPIN} /> : <span></span> } 
 
               <ConfigurationContainer>
                   <ConfigurationRow label={'MAC Address'} model={mac_address} />

@@ -61,9 +61,9 @@ class PasscodeModal extends React.Component{
   onPasscodeEntered = (ep) => {    
     const requiringReboot = ['ip', 'hostname', 'ntp_server', 'netmask', 'gateway'];
     let rebootNeeded = false;
-    let { clearUnSavedChanges, sendPCMToRedux, showPasscodeModal } = this.props;
+    let { clearUnSavedChanges, sendPCMToRedux, showPasscodeModal, passcode} = this.props;
 
-    if ( ep == this.state.verifyPIN) {
+    if ( ep == this.props.passcode) {
       let settingsMap = {};
 
       this.props.unSavedChanges.forEach(change => {
@@ -131,17 +131,22 @@ class PasscodeModal extends React.Component{
     }
 
     render(){
-    //  let {passcodeScreens} = this.state;
-        let { unSavedChanges, unSavedConfigChanges } = this.props;
+        let { unSavedChanges, unSavedConfigChanges, passcode, arr } = this.props;
         return (
         
         <SaveModal>
           <MOButton icon={<Close/>} onClick={this.closeModal}/>
           <div>
             <br/>
-           {/**  <Passcode changesBlock={passcodeScreens}></Passcode>*/}
 
             <Heading level={4}>       
+            <div>yoyoyoyo {passcode}</div>
+            <div>
+
+yyy             {arr.map(arik => <div>{arik.fieldKey}</div>)}
+
+            </div>
+
             {`Are you sure you want to make ${unSavedChanges.length} change${unSavedChanges.length > 1 ? 's':''}?`}
               <br/>
               <ChangeList>
