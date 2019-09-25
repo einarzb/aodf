@@ -199,8 +199,9 @@ stopPinger = ()=>{
  
 
       {/**this should be duplicated when you wherever u have save btn  */}
-     
-      { showPasscodeModal ? <PasscodeModal /> : <span></span> }
+     {/**  
+     { showPasscodeModal ? <PasscodeModal /> : <span></span> } */}
+
        <ModalBG visible={showPasscodeModal}/>
         
         {/*

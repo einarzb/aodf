@@ -6,6 +6,7 @@ import SettingsRow, {SettingsIDRow, SettingsNTPSyncRow, SettingsDownloadRow, Hal
 import SettingsDateRow from './SettingsDateRow';
 import { FormContainer, ButtonsRow, BigButt, Spacer, AlertButton } from './styled';
 import RebootView from './RebootView';
+import PasscodeModal from './PasscodeModal';
 
 // ACTIONS
 import { MicroApi } from '../micro-api';
@@ -79,15 +80,16 @@ class SettingsView extends React.Component {
   }
 
     render(){
-        let { onSettingChanged, unSavedChanges, settings, tryToSave, needReboot, rebootSafe, rebootOngoing } = this.props
+        let { onSettingChanged, unSavedChanges, settings, tryToSave, needReboot, rebootSafe, rebootOngoing, showPasscodeModal } = this.props
         let currentSettings = settings;
         let {ntp_sync, ip, netmask , mac_address, gateway, time, 
             hostname, repo_ip, ntp_server, part_and_serial_numbers, 
             EMS_MAJOR_ID, EMS_MINOR_ID, CUSTOMER_MAJOR_ID, CUSTOMER_MINOR_ID } = currentSettings;
     
         return (
-          <div>
-          { 
+          <div> 
+            { showPasscodeModal ? <PasscodeModal /> : <span></span> } 
+            { 
             rebootOngoing 
             ?
             <RebootView reboot={this.toggleReboot} /> 

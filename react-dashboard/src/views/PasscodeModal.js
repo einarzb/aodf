@@ -18,11 +18,7 @@ class PasscodeModal extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      verifyPIN:"111111",
-      passcodeScreens : [
-        {arr: this.props.unSavedChanges, name:'unSavedChanges', onClick:this.onPasscodeEntered},
-        {arr: this.props.unSavedConfigChanges, name:'unSavedConfigChanges', onClick:this.refreshData}
-      ]
+      verifyPIN:"111111"
     };        
     console.log('im state');
     console.log(this.state);
@@ -66,7 +62,6 @@ class PasscodeModal extends React.Component{
     const requiringReboot = ['ip', 'hostname', 'ntp_server', 'netmask', 'gateway'];
     let rebootNeeded = false;
     let { clearUnSavedChanges, sendPCMToRedux, showPasscodeModal } = this.props;
-    let {passcodeScreens} = this.state;
 
     if ( ep == this.state.verifyPIN) {
       let settingsMap = {};

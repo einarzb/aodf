@@ -3,6 +3,7 @@ import {connect } from 'react-redux';
 
 import styled from 'styled-components';
 import  {ConfigurationRow} from './SettingsRow';
+import PasscodeModal from './PasscodeModal';
 import {ButtonsRow, BigButt} from './styled';
 
 
@@ -73,12 +74,14 @@ class ConfigurationsView extends React.Component {
      }
 
     render(){
-        let { onSettingChanged, unSavedChanges, configs} = this.props
+        let { onSettingChanged, unSavedChanges, configs, showPasscodeModal} = this.props
         let currentConfigs = configs;
         let {mac_address, plates_fiber_optic_cable_model, reels_fiber_optic_cable_model, part_and_serial_numbers_aodf_part, part_and_serial_numbers_aodf_serial, part_and_serial_numbers_robot_part, part_and_serial_numbers_robot_serial, temp_aodf_high, temp_aodf_low} = currentConfigs;
 
 
         return (
+          <div>
+               { showPasscodeModal ? <PasscodeModal /> : <span></span> } 
 
               <ConfigurationContainer>
                   <ConfigurationRow label={'MAC Address'} model={mac_address} />
@@ -128,6 +131,7 @@ class ConfigurationsView extends React.Component {
                           }
                     </ButtonsRow>
            </ConfigurationContainer>
+           </div> 
           )
     }
 }
