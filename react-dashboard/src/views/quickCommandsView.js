@@ -48,8 +48,9 @@ class quickCommandsView extends Component{
             {label: 'Queue Reset', onClick:this.queueReset},
             {label: 'Download Picture', onClick:this.downloadPics},
             {label: 'Reboot', onClick:this.toggleReboot},
-            {label: 'Power Off', onClick:this.togglePowerOff},
+            {label: 'Power Off', onClick:this.togglePowerOff}
           ],
+          downloadButtonsHolder: null,
           elevButtons : [
             {label: 'Elev Up', onClick:this.elevatorUp},
             {label: 'Elev Down', onClick:this.elevatorDown},
@@ -180,20 +181,16 @@ class quickCommandsView extends Component{
      }
 
      downloadPics = () => {
-       console.log('dddd')
-       window.location.href='/page2' 
-    /*  let url = '/frame-www.json';
-      window.open(url, 'Download');  
-*/
-/*
-       let downloadFiles = 
-       <div>
-        <a href="/frame-www.json" download>ffff</a>
-       <a href="/frame-www.ppm" download>ffff</a>;
-       </div>
-     
+      console.log('download Pics')
+      let jsonUrl = <a href="/frame-www.json" download> JSON </a>;
+      let ppmUrl = <a href="/frame-www.ppm" download> PPM </a>;
+      let spacer = <span style={{display:'block', height:'2px'}}></span>
+      let downloadButtons = [jsonUrl, spacer, ppmUrl];
+      let linkButtons = {label:downloadButtons, onClick:''};
 
-       this.setState({dummy:downloadFiles})*/
+      this.state.generalButtons[1] = linkButtons;
+      this.forceUpdate();
+
      }
  
 
@@ -227,7 +224,7 @@ class quickCommandsView extends Component{
                 <ButtonsGroup btnsArr={plateGripperButtons}></ButtonsGroup>
                 <ButtonsGroup btnsArr={generalButtons}> 
                 </ButtonsGroup>
-               
+
 
               </CommandButtonsContainer>
             

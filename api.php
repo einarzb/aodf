@@ -18,6 +18,8 @@ if(isset($post_data["method"])&&!empty ($post_data["method"])){
     switch( $post_data["method"]){
         case 'change_settings':
             die(json_encode(change_settings($post_data['settings'])));
+        case 'change_configs':
+            die(json_encode(change_configs($post_data['configs'])));    
         case 'set_date':
             die(json_encode(set_machine_date($post_data['date'])));
         case 'get_date':
@@ -350,7 +352,12 @@ if(isset($_GET["functionname"])&&!empty ($_GET["functionname"]))
                 echo json_encode( array(
                 "config_settings"=>get_config_settings()
             ));
-        break;
+            /*
+        case 'fetch_plates':
+              echo json_encode(array(
+                "plates"=>fetch_plates()
+              ));  
+        break;*/
         case 'reboot':
             die(do_reboot());    
         case 'reel_calibration':

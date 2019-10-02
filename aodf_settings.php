@@ -180,17 +180,13 @@
             "EMS_MAJOR_ID":"'.$new_json['EMS_MAJOR_ID'].'",
             "EMS_MINOR_ID":"'.$new_json['EMS_MINOR_ID'].'"
         }';
+       // echo $str;
         return shell_exec("/root/run_root_settings 4 '$str'");
     }
 
     function get_parts_list(){
-        $str=   shell_exec("cat /etc/hw-list/hw-list.json");
-
-        $decoded =  json_decode($str , true );
-        if(!$decoded) {
-            $s = str_replace('NC",','NC"',$str);
-            $decoded =  json_decode($s , TRUE );
-        }
+        $decoded = get_all_configs();
+        
         return array(
             'aodf'=>array(
                 'serial'=>$decoded['AODF']['S/N'],
@@ -388,6 +384,64 @@
         return $decoded;
     }
 
+
+    function change_configs($configs_map){
+        foreach($configs_map as $key => $value){
+            switch($key){
+                case 'temp_aodf_low':
+                    set_low_temp($value);
+                    break;
+                case 'temp_aodf_high':
+                    set_high_temp($value);
+                    break;                       
+            }
+        }
+
+            return array(
+                "configs"=>get_config_settings()
+            );
+    }
+
+    function get_all_configs(){
+        $str=   shell_exec("cat /etc/hw-list/hw-list.json");
+
+        $decoded =  json_decode($str , true );
+        if(!$decoded) {
+            $s = str_replace('NC",','NC"',$str);
+            $decoded =  json_decode($s , TRUE );
+        }
+        return $decoded;
+    }
+
+    function set_low_temp($new_low_temp) {
+        $all_configs = get_all_configs();
+        $all_configs['AODF']['Temperature']['low'] = $new_low_temp;
+        $all_configs_str = json_encode($all_configs);
+
+        $command = "/root/run_root_settings 13 '$all_configs_str'";
+        //PROBLEM: json has too many chars - so it doesnt reach the C command 
+        // THIS WORKS: "all configs str: ".$all_configs_str."\n\n";
+        // TODO: upload file to c and not send string
+         echo "testing... " . updateFile_exec($command)." blah\n\n"; 
+
+       // return shell_exec("/root/run_root_settings 13 '$all_configs_str'");
+    }
+
+    function set_high_temp($new_high_temp) {
+        $all_configs = get_all_configs();
+        $all_configs['AODF']['Temperature']['high'] = $new_high_temp;
+        $all_configs_str = json_encode($all_configs);
+
+        $command = "/root/run_root_settings 13 '$all_configs_str'";
+        //PROBLEM: json has too many chars - so it doesnt reach the C command 
+        // THIS WORKS: "all configs str: ".$all_configs_str."\n\n";
+        // TODO: upload file to c and not send string
+         echo "testing... " . updateFile_exec($command)." blah\n\n"; 
+
+       // return shell_exec("/root/run_root_settings 13 '$all_configs_str'");
+    }
+ 
+    
     function get_params(){
         $str= shell_exec("cat /etc/aodf-scripts/params.json");
     
@@ -470,10 +524,26 @@
 
     function power_off(){
         //commented out for production safety
-       // $res = shell_exec("/root/run_root_settings 11");
-        $e_res = "power off php";
-        return $e_res;
+        $res = shell_exec("/root/run_root_settings 11");
+        return $res;
     }
 
-    
+    //fetch all plates from db
+    function fetch_plates(){
+        $instructions_array=array();
+        $db = new PDO('sqlite:AODF.db');
+        $result = $db->query("select PLATE_NUMBER from PLATE_INFO;");
+        while($instruction=$result->fetch(PDO::FETCH_ASSOC))
+          {     
+            
+              array_push($instructions_array,$instruction["PLATE_NUMBER"]);
+         }
+      //  $db=null;    
+
+    //$plates_array=[];
+    //$plates_array=$result;
+        print_r($instructions_array);
+        return $instructions_array;
+    }
+
 ?>

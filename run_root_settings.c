@@ -1,9 +1,12 @@
 
 //  chmod 4755 run_root_settings
+
+#include <stdio.h>
+
 #include <string.h>
 #include <stdlib.h>
+
 #include <unistd.h>
-#include <stdio.h>
 #include <fcntl.h>
 #include <linux/reboot.h>
 #include <sys/reboot.h>
@@ -21,6 +24,7 @@
 #define COMMAND_GET_REBOOT_FLAG 9
 #define COMMAND_SET_DATE 10
 #define COMMAND_POWEROFF 11
+#define UPDATE_CONFIGS 13
 
 // const char *HOS = "Howdy";
 regex_t regex;
@@ -89,9 +93,11 @@ int main(int argc, char **argv)
     strcpy(inputData,argv[2]);
   }
   // printf();
+  printf("commandType: %d\n", commandType);
   switch (commandType)
   {
     case COMMAND_HOSTNAME:
+      printf("%d\n", inputData);
       return writeToConfFile("/etc/hostname", inputData);
     case COMMAND_REPO_IP:      
       return writeToConfFile("/etc/hosts", inputData);  
@@ -131,7 +137,12 @@ int main(int argc, char **argv)
       break;
     case COMMAND_POWEROFF:  
         sync();
-        reboot(LINUX_REBOOT_CMD_POWER_OFF, 0);
+        reboot(LINUX_REBOOT_CMD_POWER_OFF);
+        break;
+    case UPDATE_CONFIGS:
+        printf(inputData);
+        return writeToConfFile("/etc/hw-list/hw-list.json", inputData);
+       // return writeToConfFile("/usr/share/aodf-web/root/hw-list.json", inputData);
         break;
     default:
       printf("Unknown command!\n");
