@@ -1,10 +1,10 @@
 #!/bin/bash
 function copy_php {
-    say yo yo you forgot password
     scp -r -P 10560 ./*.php root@82.81.211.231:/usr/share/aodf-web/root/
-    say finished mister
+   # scp -r -P 22 ./*.php root@192.168.1.61:/usr/share/aodf-web/root/
+
 }
-# local machien credentials - -P 443 ./*.php root@192.168.1.61:/usr/share/aodf-web/root/
+# local machine credentials - -P 443 ./*.php root@192.168.1.61:/usr/share/aodf-web/root/
 #remote machine credentials -  scp -r -P 10560 ./*.php root@82.81.211.231:/usr/share/aodf-web/root/
 
 function build_and_copy {
@@ -17,6 +17,8 @@ function build_and_copy {
     node index_updater.js $myPath &&
     say please insert password 
     scp -r -P 10560 ./react-dashboard/build/* root@82.81.211.231:/usr/share/aodf-web/root/machine_settings  
+
+    #scp -r -P 22 ./react-dashboard/build/* root@192.168.1.61:/usr/share/aodf-web/root/machine_settings  
 }
 
 
@@ -27,7 +29,9 @@ function make_upload {
     chmod +X ./run_root_settings && 
     chmod 4755 ./run_root_settings && 
     # send to server
-    scp  -r -P 10560 ./run_root_settings root@82.81.211.231:~
+     scp  -r -P 10560 ./run_root_settings root@82.81.211.231:~
+    # scp  -r -P 22 ./run_root_settings root@192.168.1.61:~
+
     say please insert password
 }
 

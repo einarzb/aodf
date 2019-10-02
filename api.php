@@ -352,16 +352,18 @@ if(isset($_GET["functionname"])&&!empty ($_GET["functionname"]))
                 echo json_encode( array(
                 "config_settings"=>get_config_settings()
             ));
-            /*
+            break;
         case 'fetch_plates':
               echo json_encode(array(
                 "plates"=>fetch_plates()
               ));  
-        break;*/
+              break;
         case 'reboot':
             die(do_reboot());    
         case 'reel_calibration':
             die(get_reel_calibration());
+        case 'queue_reset':
+            die(get_connections());
         case 'get_report':
             die(get_report());
         case 'plate_rot_in':

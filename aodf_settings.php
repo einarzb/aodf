@@ -1,4 +1,5 @@
 <?php 
+//$db = new PDO('sqlite:AODF.db');
 
 // class Aodf_settings{
     $SETTER_PATH = '/root/run_root_settings';
@@ -530,20 +531,43 @@
 
     //fetch all plates from db
     function fetch_plates(){
-        $instructions_array=array();
+        $plates_array=array();
         $db = new PDO('sqlite:AODF.db');
         $result = $db->query("select PLATE_NUMBER from PLATE_INFO;");
-        while($instruction=$result->fetch(PDO::FETCH_ASSOC))
+        while($plate=$result->fetch(PDO::FETCH_ASSOC))
           {     
             
-              array_push($instructions_array,$instruction["PLATE_NUMBER"]);
+            array_push(
+                  $plates_array,
+                  $plate["PLATE_NUMBER"]
+            );
          }
-      //  $db=null;    
-
-    //$plates_array=[];
-    //$plates_array=$result;
-        print_r($instructions_array);
-        return $instructions_array;
+         //
+        return $plates_array;
     }
 
+    function fetch_reels(){
+        $reels_array=array();
+        $db = new PDO('sqlite:AODF.db');
+        $result = $db->query("select PLATE_NUMBER from PLATE_INFO;");
+        while($reel=$result->fetch(PDO::FETCH_ASSOC))
+          {     
+            
+            array_push(
+                  $reels_array,
+                  $reel["PLATE_NUMBER"]
+            );
+         }
+         //
+        return $reels_array;
+    }
+
+    function get_connections(){
+        $db = new PDO('sqlite:connections_queue.db');
+        $result = $db->query("select * from pointer;");
+        echo $result;
+
+        return $result;
+    }
+    get_connections();
 ?>

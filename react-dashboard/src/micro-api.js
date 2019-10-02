@@ -53,6 +53,7 @@ const _query=(params)=>{
 
 export const MicroApi = {
     
+    //settings 
     getSettings:()=>{        
         return _query({method:'GET',func:'get_settings',body:false})
     },
@@ -84,13 +85,12 @@ export const MicroApi = {
     dumpLog:()=>{
         return  _query({method:'POST', func:'dump_log',body:{method:'dump_log'}});
     },
+
+
     /// configuration screen /// 
     
     getConfigSettings:()=>{        
         return _query({method:'GET',func:'get_config_settings',body:false})
-    },
-    getParams:()=>{        
-        return _query({method:'GET',func:'get_params',body:false})
     },
     changeConfigs: (configs)=> {
         return  _query({method:'POST', func:'change_configs',body:{method:'change_configs', configs}});
@@ -98,11 +98,18 @@ export const MicroApi = {
     
     // calibration view
 
+    getParams:()=>{        
+        return _query({method:'GET',func:'get_params',body:false})
+    },
+
     // needs to get 2 params
     plateRestart:(plateNum)=>{
         return  _query({method:'POST', func:'plate_restart',body:{method:'plate_restart', plateNum}});
     },
-   
+    
+    fetchPlates:()=>{
+        return  _query({method:'GET',func: 'fetch_plates',body:false});
+    },
     reelCalibration:()=>{
         return  _query({method:'GET',func: 'reel_calibration',body:false});
     },
@@ -110,6 +117,9 @@ export const MicroApi = {
         return  _query({method:'POST',func: 'set_reel_to_parking',body:{method:'set_reel_to_parking', reelNum}});
     },
     // quick commands 
+    queueReset:()=>{
+        return  _query({method:'GET',func: 'queue_reset',body:false});
+    },
     plateRotIn:()=>{
         return  _query({method:'GET',func: 'plate_rot_in',body:false});
     },

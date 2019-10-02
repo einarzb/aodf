@@ -114,7 +114,12 @@ class quickCommandsView extends Component{
     }
 
    
-   
+    queueReset = () => {
+      console.log('queue reset');
+      MicroApi.queueReset().then(res =>{
+        console.log(res);
+      });
+    }
     gripperIn = () => {       
       console.log('im gripper in');
       MicroApi.gripperIn().then(res =>{
@@ -123,6 +128,7 @@ class quickCommandsView extends Component{
       
     }
 
+   
     gripperOut = () => {       
       console.log('im gripper out');
       MicroApi.gripperOut().then(res =>{
@@ -181,13 +187,13 @@ class quickCommandsView extends Component{
      }
 
      downloadPics = () => {
-      console.log('download Pics')
-      let jsonUrl = <a href="/frame-www.json" download> JSON </a>;
-      let ppmUrl = <a href="/frame-www.ppm" download> PPM </a>;
+      let jsonUrl = <a href="root/frame-www.json" download> JSON </a>;
+      let ppmUrl = <a href="root/frame-www.ppm" download> PPM </a>;
       let spacer = <span style={{display:'block', height:'2px'}}></span>
       let downloadButtons = [jsonUrl, spacer, ppmUrl];
       let linkButtons = {label:downloadButtons, onClick:''};
 
+      //swap buttons
       this.state.generalButtons[1] = linkButtons;
       this.forceUpdate();
 
@@ -222,10 +228,7 @@ class quickCommandsView extends Component{
               <CommandButtonsContainer>
                 <ButtonsGroup btnsArr={elevButtons}></ButtonsGroup>
                 <ButtonsGroup btnsArr={plateGripperButtons}></ButtonsGroup>
-                <ButtonsGroup btnsArr={generalButtons}> 
-                </ButtonsGroup>
-
-
+                <ButtonsGroup btnsArr={generalButtons}> </ButtonsGroup>
               </CommandButtonsContainer>
             
               <LedButtonsContainer>

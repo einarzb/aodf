@@ -36,6 +36,8 @@ export class CalibrationView extends React.Component{
                 borderColor: "#fd7c20"
               }
             })},
+          plateNums:null,
+          reelNums:null,
           selectedParamsOption:null,
           selectedPlateNumberOption:null,
           selectedPlateAreaOption:null,
@@ -52,7 +54,6 @@ export class CalibrationView extends React.Component{
           plateCalibrationGroups: [
             {
               headline: 'Plate Calibration', 
-              plateNumbers: this.getPlateNumbers(),
               plateAreas:this.getPlateAreas(), 
               plateHeight:'10',
               labelplateHeight:'show plate height' ,
@@ -69,13 +70,11 @@ export class CalibrationView extends React.Component{
           setReelToParkingPlate: [
             {
               headline: 'Set Reel to Parking Plate',
-              reelNumbers:this.getReelNumbers()
             }
           ],
           updatePlateHeight: [
             {
               headline: 'Update Plate Height',
-              plateNumbers: this.getPlateNumbers(),
               plateAreas:this.getPlateAreas(), 
               plateHeights:[
                 {label: 'height1', value:10},
@@ -121,7 +120,10 @@ export class CalibrationView extends React.Component{
           ]
         } 
     }
-    
+    componentDidMount(){
+      this.getPlateNumbers();
+      this.getReelNumbers();
+    }
     /* ============== handle changes ================== */
     paramHandleChange = (selectedParamsOption) => {
       this.setState({ selectedParamsOption });
@@ -190,7 +192,9 @@ export class CalibrationView extends React.Component{
       ];
       return motorNums;
     }
+
     getReelNumbers = () => {
+      reelNums
      // data should come from res
       let reelNumbers = [
         {value: 1, label:1},
@@ -203,19 +207,26 @@ export class CalibrationView extends React.Component{
       ];
       return reelNumbers;
     }
+    
+ 
+    
+
     getPlateNumbers = () => {
-      // data should come from res
-      let plateNumbers = [
-        {value: 1, label:1},
-        {value: 2, label: 2},
-        {value: 3, label: 3},
-        {value: 4, label: 4},
-        {value: 5, label: 5},
-        {value: 6, label: 6},
-        {value: 7, labebl: 7}      
-      ];
-      return plateNumbers;
+      MicroApi.fetchPlates().then(res => {
+        this.setState({plateNums: this.makeSelect(res.plates)})
+        })      
     }
+
+    makeSelect = (res) => {
+      let i;
+      let newArr = [];
+
+      for (i = 0; i < res.length; i++) {
+        newArr.push({value:res[i], label:res[i]})
+      }
+      return newArr;
+    }
+
     getPlateAreas = () => {
       // data should come from res
       let plateAreas =  [ 
@@ -283,23 +294,23 @@ export class CalibrationView extends React.Component{
       //rest
       MicroApi.reelCalibration().then(res=>{
         console.log(res);
+        // show : this.getReport();
       })
     }
     
     getReport = () => {
-        console.log('get report');
-        MicroApi.getReport().then(res => {
-          console.log(res);
-        })
+      let report = <a href="tmp/Reel_position_on_parking.csv" download> report </a>;
+
     }
     
     getParams = () => {
+      /*
       MicroApi.getParams().then((res) => {
         keys = Object.keys(res.params);  
         console.log(keys);
         console.log(res.params);     
       })
-
+*/
       let myArr = [
         {value:1, label:'parking_target_x_pos'},
         {value:2, label:['regular_plate_target_x_pos']},
@@ -328,7 +339,7 @@ export class CalibrationView extends React.Component{
 
 
     render(){
-      let {selectedInstructionsOption, selectedReelNumberOption, selectedPlateNumberOption, selectedPlateAreaOption, plateCalibrationGroups, reelCalibrationGroups, setReelToParkingPlate, updatePlateHeight, modifyRobotParameters, routineTableLabels, routineFunctionsList, selectedInsttypeOption, motorNumList, selectedMotorNumOption, resultTable, customStyles, selectedParamsOption, instTypeOptions, selectedMotorNumValue, outputData, selectedPlateHeight, robotParamValue} = this.state;
+      let {selectedInstructionsOption, selectedReelNumberOption, selectedPlateNumberOption, selectedPlateAreaOption, plateCalibrationGroups, reelCalibrationGroups, setReelToParkingPlate, updatePlateHeight, modifyRobotParameters, routineTableLabels, routineFunctionsList, selectedInsttypeOption, motorNumList, selectedMotorNumOption, resultTable, customStyles, selectedParamsOption, instTypeOptions, selectedMotorNumValue, outputData, selectedPlateHeight, robotParamValue, plateNums, reelNums} = this.state;
       return (
         <div>
         <CalibrationContainer>
@@ -417,7 +428,7 @@ export class CalibrationView extends React.Component{
                                 placeholder='plate #'
                                 value={selectedPlateNumberOption}
                                 onChange={this.plateNumHandleChange}
-                                options={plateCalibrationGroups[0].plateNumbers}
+                                options={plateNums}
                                 name="select-plate-number"
                               />
                         </SelectBox>
@@ -453,7 +464,7 @@ export class CalibrationView extends React.Component{
                             placeholder='reel #'
                             value={selectedReelNumberOption}
                             onChange={this.reelNumHandleChange}
-                            options={setReelToParkingPlate[0].reelNumbers}
+                            options={reelNums}
                             name="select-reel-number"
                           />
                       </SelectBox>
@@ -469,7 +480,7 @@ export class CalibrationView extends React.Component{
                                 placeholder='plate #'
                                 value={selectedPlateNumberOption}
                                 onChange={this.plateNumHandleChange}
-                                options={plateCalibrationGroups[0].plateNumbers}
+                                options={plateNums}
                                 name="select-plate-number"
                               />
                         </SelectBox>
