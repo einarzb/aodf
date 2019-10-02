@@ -19,7 +19,15 @@ if(isset($post_data["method"])&&!empty ($post_data["method"])){
         case 'change_settings':
             die(json_encode(change_settings($post_data['settings'])));
         case 'change_configs':
-            die(json_encode(change_configs($post_data['configs'])));    
+            die(json_encode(change_configs($post_data['configs'])));  
+        case 'fetch_plates_height':
+            die(json_encode(array(
+                "height1"=>fetch_plates_height1($post_data['plateNum']),
+                "height2"=>fetch_plates_height2($post_data['plateNum']),
+                "height3"=>fetch_plates_height3($post_data['plateNum']),
+                "height4"=>fetch_plates_height4($post_data['plateNum'])
+                )
+            ));
         case 'set_date':
             die(json_encode(set_machine_date($post_data['date'])));
         case 'get_date':
@@ -362,7 +370,7 @@ if(isset($_GET["functionname"])&&!empty ($_GET["functionname"]))
               echo json_encode(array(
                 "reels"=>fetch_reels()
               ));  
-              break;        
+              break;                 
         case 'reboot':
             die(do_reboot());    
         case 'reel_calibration':

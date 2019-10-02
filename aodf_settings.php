@@ -545,6 +545,64 @@
          //
         return $plates_array;
     }
+    
+
+    function fetch_plates_height1($plateNum) {
+        $heights_array=array();
+        $db = new PDO('sqlite:AODF.db');
+        $height1OfPlates = $db->query("select HEIGHT1 from PLATE_INFO where PLATE_NUMBER=$plateNum;");
+                
+        while($height01=$height1OfPlates->fetch(PDO::FETCH_ASSOC)) {
+            array_push(
+                $heights_array,
+                $height01["HEIGHT1"]
+          );
+        }
+        return $heights_array;
+    }
+    function fetch_plates_height2($plateNum) {
+        $heights_array=array();
+        $db = new PDO('sqlite:AODF.db');
+        $height2OfPlates = $db->query("select HEIGHT2 from PLATE_INFO where PLATE_NUMBER=$plateNum;");
+        
+        while($height02=$height2OfPlates->fetch(PDO::FETCH_ASSOC)) {
+            array_push(
+                $heights_array,
+                $height02["HEIGHT2"]
+          );
+        }
+
+        return $heights_array;
+    }
+    function fetch_plates_height3($plateNum) {
+        $heights_array=array();
+        $db = new PDO('sqlite:AODF.db');
+        $height3OfPlates = $db->query("select HEIGHT3 from PLATE_INFO where PLATE_NUMBER=$plateNum;");
+        
+        while($height03=$height3OfPlates->fetch(PDO::FETCH_ASSOC)) {
+            array_push(
+                $heights_array,
+                $height03["HEIGHT3"]
+          );
+        }
+
+        return $heights_array;
+    }
+
+    function fetch_plates_height4($plateNum) {
+        $heights_array=array();
+        $db = new PDO('sqlite:AODF.db');
+        $height4OfPlates = $db->query("select HEIGHT4 from PLATE_INFO where PLATE_NUMBER=$plateNum;");
+        
+        while($height04=$height4OfPlates->fetch(PDO::FETCH_ASSOC)) {
+            array_push(
+                $heights_array,
+                $height04["HEIGHT4"]
+          );
+        }
+
+        return $heights_array;
+    }
 
     function fetch_reels(){
         $reels_array=array();

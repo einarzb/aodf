@@ -113,6 +113,9 @@ export const MicroApi = {
     fetchReels:()=>{
         return  _query({method:'GET',func: 'fetch_reels',body:false});
     },
+    fetchPlateHeights:(plateNum)=>{
+        return  _query({method:'POST',func: 'fetch_plates_height',body:{method:'fetch_plates_height', plateNum}});
+    },
     reelCalibration:()=>{
         return  _query({method:'GET',func: 'reel_calibration',body:false});
     },

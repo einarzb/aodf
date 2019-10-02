@@ -36,8 +36,13 @@ export class CalibrationView extends React.Component{
                 borderColor: "#fd7c20"
               }
             })},
+            allHeights:null,
           plateNums:null,
           reelNums:null,
+          height1:null,
+          height2:null,
+          height3:null,
+          height4:null,
           selectedParamsOption:null,
           selectedPlateNumberOption:null,
           selectedPlateAreaOption:null,
@@ -54,8 +59,6 @@ export class CalibrationView extends React.Component{
           plateCalibrationGroups: [
             {
               headline: 'Plate Calibration', 
-              plateAreas:this.getPlateAreas(), 
-              plateHeight:'10',
               labelplateHeight:'show plate height' ,
               labelPlateNum:'plate #',
               labelPlateArea:'plate area',
@@ -75,13 +78,6 @@ export class CalibrationView extends React.Component{
           updatePlateHeight: [
             {
               headline: 'Update Plate Height',
-              plateAreas:this.getPlateAreas(), 
-              plateHeights:[
-                {label: 'height1', value:10},
-                {label: 'height2', value:2},
-                {label: 'height3', value:10},
-                {label: 'height4', value:10},
-              ],
               labelplateHeight:'show plate height' ,
               labelPlateNum:'plate #',
               labelPlateArea:'plate area',
@@ -120,10 +116,12 @@ export class CalibrationView extends React.Component{
           ]
         } 
     }
+    // fetch init data from DB
     componentDidMount(){
       this.getPlateNumbers();
       this.getReelNumbers();
     }
+
     /* ============== handle changes ================== */
     paramHandleChange = (selectedParamsOption) => {
       this.setState({ selectedParamsOption });
@@ -142,7 +140,18 @@ export class CalibrationView extends React.Component{
 
     plateNumHandleChange = (selectedPlateNumberOption) => {
       this.setState({ selectedPlateNumberOption });
+     
+      MicroApi.fetchPlateHeights(selectedPlateNumberOption.value).then(res => {    
+        this.setState({height1: res.height1})
+        this.setState({height2: res.height2})
+        this.setState({height3: res.height3})
+        this.setState({height4: res.height4})
+
+        let allHeightsArr = [res.height1,res.height2,res.height3,res.height4];
+        this.setState({allHeights: this.makeSelect(allHeightsArr)})
+        })   
     };
+
     instructionsFunctionChange = (selectedInstructionsOption) => {
       this.setState({ selectedInstructionsOption });
     };
@@ -158,7 +167,6 @@ export class CalibrationView extends React.Component{
       this.setState({robotParamValue:e});
     }
 
-    
 
     /* ============== END handle changes ================== */
 
@@ -195,13 +203,11 @@ export class CalibrationView extends React.Component{
 
     getReelNumbers = () => {
       MicroApi.fetchReels().then(res => {
-        console.log(res);
         this.setState({reelNums: this.makeSelect(res.reels)})
         })   
       
       }
   
-
     getPlateNumbers = () => {
       MicroApi.fetchPlates().then(res => {
         this.setState({plateNums: this.makeSelect(res.plates)})
@@ -218,16 +224,6 @@ export class CalibrationView extends React.Component{
       return newArr;
     }
 
-    getPlateAreas = () => {
-      // data should come from res
-      let plateAreas =  [ 
-      {value: 1, label:1},
-      {value: 2, label: 2},
-      {value: 3, label: 3},
-      {value: 4, label: 4} 
-      ] 
-      return plateAreas;
-    }
     setReelToParking = (reelNum) => {
       console.log('im set reel to park');
       let log = this.state.setReelToParkingPlate[0].headline + " >> " + reelNum;
@@ -285,14 +281,10 @@ export class CalibrationView extends React.Component{
       //rest
       MicroApi.reelCalibration().then(res=>{
         console.log(res);
-        // show : this.getReport();
       })
     }
     
-    getReport = () => {
-      let report = <a href="tmp/Reel_position_on_parking.csv" download> report </a>;
-
-    }
+   
     
     getParams = () => {
       /*
@@ -330,7 +322,7 @@ export class CalibrationView extends React.Component{
 
 
     render(){
-      let {selectedInstructionsOption, selectedReelNumberOption, selectedPlateNumberOption, selectedPlateAreaOption, plateCalibrationGroups, reelCalibrationGroups, setReelToParkingPlate, updatePlateHeight, modifyRobotParameters, routineTableLabels, routineFunctionsList, selectedInsttypeOption, motorNumList, selectedMotorNumOption, resultTable, customStyles, selectedParamsOption, instTypeOptions, selectedMotorNumValue, outputData, selectedPlateHeight, robotParamValue, plateNums, reelNums} = this.state;
+      let {selectedInstructionsOption, selectedReelNumberOption, selectedPlateNumberOption, selectedPlateAreaOption, plateCalibrationGroups, reelCalibrationGroups, setReelToParkingPlate, updatePlateHeight, modifyRobotParameters, routineTableLabels, routineFunctionsList, selectedInsttypeOption, motorNumList, selectedMotorNumOption, resultTable, customStyles, selectedParamsOption, instTypeOptions, selectedMotorNumValue, outputData, selectedPlateHeight, robotParamValue, plateNums, reelNums, height1, height2, height3, height4 , allHeights} = this.state;
       return (
         <div>
         <CalibrationContainer>
@@ -387,18 +379,16 @@ export class CalibrationView extends React.Component{
                     <span>
                       localhost
                     </span>
+
                     <DisplayResult>
-                      {plateCalibrationGroups[0].plateHeight}
+                     {/**{height1} */} 
                     </DisplayResult>
                     <DisplayResult>
-                      {plateCalibrationGroups[0].plateHeight}
-                    </DisplayResult>
+    {/**{height1} */}                     </DisplayResult>
                     <DisplayResult>
-                      {plateCalibrationGroups[0].plateHeight}
-                    </DisplayResult>
+    {/**{height1} */}                     </DisplayResult>
                     <DisplayResult>
-                      {plateCalibrationGroups[0].plateHeight}
-                    </DisplayResult>
+    {/**{height1} */}                     </DisplayResult>
                  
                 </RoutinesTable>
                 <p>Output Box</p>
@@ -431,7 +421,7 @@ export class CalibrationView extends React.Component{
                               placeholder='plate area'
                               value={selectedPlateAreaOption}
                               onChange={this.plateAreaHandleChange}
-                              options={plateCalibrationGroups[0].plateAreas}
+                              options={allHeights}
                               name="select-plate-area-number"
                             />
                         </SelectBox>
@@ -443,9 +433,8 @@ export class CalibrationView extends React.Component{
                     <SaveButton onClick={this.reelCalibration} style={{width:"200px"}}>
                       Run Reel Calibration
                     </SaveButton>
-                    <SaveButton onClick={this.getReport} style={{width:"200px"}}>
-                        Get Report
-                    </SaveButton>
+                    <a href="tmp/Reel_position_on_parking.csv" download> get report </a>;
+          
                 </CalibrationGroup>
                 <CalibrationGroup calibRow={setReelToParkingPlate}>
                   <SelectBox>
@@ -483,25 +472,37 @@ export class CalibrationView extends React.Component{
                               placeholder='plate area'
                               value={selectedPlateAreaOption}
                               onChange={this.plateAreaHandleChange}
-                              options={plateCalibrationGroups[0].plateAreas}
+                              options={allHeights}
                               name="select-plate-area-number"
                             />
                         </SelectBox>
                         <PlateDetails>
                               <DisplayData style={{width:'102px'}}>
-                              {updatePlateHeight[0].plateHeights[0].label} : {updatePlateHeight[0].plateHeights[0].value}
+                              height1 :
+                            
+                               {height1}
+   
                               </DisplayData>
                               <DisplayData style={{width:'102px'}}>
-                              {updatePlateHeight[0].plateHeights[1].label}
-  : {updatePlateHeight[0].plateHeights[1].value}
+                          height2
+  :                                 
+                            
+                            {height2}
+
                               </DisplayData>
                               <DisplayData style={{width:'102px'}}>
-                              {updatePlateHeight[0].plateHeights[2].label}
-  : {updatePlateHeight[0].plateHeights[2].value}
+                          height3
+  :                                 
+                            
+                            {height3}
+
                               </DisplayData>
                               <DisplayData style={{width:'102px'}}>
-                              {updatePlateHeight[0].plateHeights[3].label}
-   :  {updatePlateHeight[0].plateHeights[3].value}
+                      height4
+   :                                   
+                            
+                            {height4}
+
                               </DisplayData>
                           </PlateDetails>      
                       
