@@ -358,6 +358,11 @@ if(isset($_GET["functionname"])&&!empty ($_GET["functionname"]))
                 "plates"=>fetch_plates()
               ));  
               break;
+        case 'fetch_reels':
+              echo json_encode(array(
+                "reels"=>fetch_reels()
+              ));  
+              break;        
         case 'reboot':
             die(do_reboot());    
         case 'reel_calibration':

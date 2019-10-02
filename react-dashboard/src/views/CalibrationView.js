@@ -194,22 +194,13 @@ export class CalibrationView extends React.Component{
     }
 
     getReelNumbers = () => {
-      reelNums
-     // data should come from res
-      let reelNumbers = [
-        {value: 1, label:1},
-        {value: 2, label: 2},
-        {value: 3, label: 3},
-        {value: 4, label: 4},
-        {value: 5, label: 5},
-        {value: 6, label: 6},
-        {value: 7, labebl: 7}    
-      ];
-      return reelNumbers;
-    }
-    
- 
-    
+      MicroApi.fetchReels().then(res => {
+        console.log(res);
+        this.setState({reelNums: this.makeSelect(res.reels)})
+        })   
+      
+      }
+  
 
     getPlateNumbers = () => {
       MicroApi.fetchPlates().then(res => {

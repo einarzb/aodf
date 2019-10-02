@@ -549,19 +549,19 @@
     function fetch_reels(){
         $reels_array=array();
         $db = new PDO('sqlite:AODF.db');
-        $result = $db->query("select PLATE_NUMBER from PLATE_INFO;");
+        $result = $db->query("select wheelid from wheel_info;");
         while($reel=$result->fetch(PDO::FETCH_ASSOC))
           {     
             
             array_push(
                   $reels_array,
-                  $reel["PLATE_NUMBER"]
+                  $reel["wheelid"]
             );
          }
-         //
         return $reels_array;
     }
 
+    /*
     function get_connections(){
         $db = new PDO('sqlite:connections_queue.db');
         $result = $db->query("select * from pointer;");
@@ -570,4 +570,5 @@
         return $result;
     }
     get_connections();
+    */
 ?>
