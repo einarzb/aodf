@@ -496,16 +496,16 @@ export class CalibrationView extends React.Component{
                         </SaveButton>
                      </CalibrationGroup>
                     <PlateDetails>
-                      <DisplayData style={{width:'102px'}}>
+                      <DisplayData style={{width:'auto'}}>
                           height1:{height1}
                       </DisplayData>
-                      <DisplayData style={{width:'102px'}}>
+                      <DisplayData style={{width:'auto'}}>
                           height2:{height2}
                       </DisplayData>
-                      <DisplayData style={{width:'102px'}}>
+                      <DisplayData style={{width:'auto'}}>
                           height3:{height3}
                       </DisplayData>
-                      <DisplayData style={{width:'102px'}}>
+                      <DisplayData style={{width:'auto'}}>
                           height4:{height4}
                       </DisplayData>
                   </PlateDetails>  
