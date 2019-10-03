@@ -117,6 +117,12 @@ export const MicroApi = {
     fetchReels:()=>{
         return  _query({method:'GET',func: 'fetch_reels',body:false});
     },
+    fetchReelAngle:(currentReel)=>{
+        return  _query({method:'POST',func: 'fetch_reel_angle',body:{method:'fetch_reel_angle', currentReel}});
+    },
+    fetchParkingPlateNum:(currentReel)=>{
+        return  _query({method:'POST',func: 'fetch_parking_plate_num',body:{method:'fetch_parking_plate_num', currentReel}});
+    },
     fetchPlateHeights:(currentPlateNum)=>{
         return  _query({method:'POST',func: 'fetch_plates_height',body:{method:'fetch_plates_height', currentPlateNum}});
     },

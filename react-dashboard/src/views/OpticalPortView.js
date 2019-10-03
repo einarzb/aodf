@@ -39,6 +39,8 @@ class opticalPortView extends Component{
           postionOfPlate:null,
           plateHeight:null,
           plateType:null,
+          reelAngle:null,
+          parkingPlate:null,
           plateDataByPlateNum : [
             {label: 'Postion of Plate', value:'3'},
             {label: 'Plate Height', value:'2341701'},
@@ -117,11 +119,19 @@ class opticalPortView extends Component{
       })
       MicroApi.fetchPlateType(currentPlateNum.value).then(res => {
         console.log(res);
-        this.setState({plateType:res})
-    })
-        
-      
-        
+        this.setState({plateType:res})  
+      })
+    }
+
+    getDataOfReel = (currentReel) => {
+      MicroApi.fetchReelAngle(currentReel.value).then(res => {
+        console.log(res);
+        this.setState({reelAngle:Number(res)})  
+      })
+      MicroApi.fetchParkingPlateNum(currentReel.value).then(res => {
+        console.log(res);
+        this.setState({parkingPlate:Number(res)})  
+      })
     }
 
     makeSelect = (res) => {
@@ -144,6 +154,8 @@ class opticalPortView extends Component{
     reelToEditHandleChange = (selectedReelToEditOption) => {
       this.setState({ selectedReelToEditOption });
       console.log(`Option selected:`, selectedReelToEditOption);
+      this.getDataOfReel(selectedReelToEditOption);
+
     }
     PhysicalStatusHandleChange = (selectedPhysicalStatusOption) => {
       this.setState({ selectedPhysicalStatusOption });
@@ -162,7 +174,7 @@ class opticalPortView extends Component{
 
     render(){
       let {} = this.props;
-      let { customStyles, selectedPlateToEditOption, plateDataByPlateNum, plateTableLabels, plateTableInput, selectedOperatorOption, operatorsList, selectedPhysicalStatusOption, physicalStatusList, updateCounter, selectedReelToEditOption, reelDataByReelNum, reelTableLabels, reelNums, plateNums, postionOfPlate, plateHeight, plateType  }  = this.state;
+      let { customStyles, selectedPlateToEditOption, plateDataByPlateNum, plateTableLabels, plateTableInput, selectedOperatorOption, operatorsList, selectedPhysicalStatusOption, physicalStatusList, updateCounter, selectedReelToEditOption, reelDataByReelNum, reelTableLabels, reelNums, plateNums, postionOfPlate, plateHeight, plateType, reelAngle, parkingPlate  }  = this.state;
         return (
        
           <OpticalPortContainer>
@@ -263,8 +275,15 @@ class opticalPortView extends Component{
                       />
                 </SelectBox>
             </span>
+               <MiniWrap>
+                  <Data>
+                    <strong>Reel Angle: </strong>{reelAngle} 
+                  </Data>
+                  <Data>
+                  <strong>Parking Plate Number: </strong>{parkingPlate}
+                  </Data>
+              </MiniWrap>
 
-            <DataBlock dataBatch={reelDataByReelNum}></DataBlock>  
             <RoutinesTable tableCols={reelTableLabels}>
                     <DisplayData>
                     {plateTableInput[0].value}

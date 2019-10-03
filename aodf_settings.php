@@ -536,6 +536,7 @@
  
          return $plate_height_array;
      }
+
      function fetch_plate_type($currentPlate) {
         $plate_type_array=array();
         $db = new PDO('sqlite:AODF.db');
@@ -549,6 +550,35 @@
         }
 
         return $plate_type_array;
+    }
+
+    function fetch_reel_angle($currentReel) {
+        $reel_angles_array=array();
+        $db = new PDO('sqlite:AODF.db');
+        $currentAngle = $db->query("select wheelangle from wheel_info where wheelid=$currentReel;");
+        
+        while($angle=$currentAngle->fetch(PDO::FETCH_ASSOC)) {
+            array_push(
+                $reel_angles_array,
+                $angle["wheelangle"]
+          );
+        }
+
+        return $reel_angles_array;
+    }
+    function fetch_parking_plate_num($currentReel) {
+        $parking_plate_num_array=array();
+        $db = new PDO('sqlite:AODF.db');
+        $res = $db->query("select parkingplatenum from wheel_info where wheelid=$currentReel;");
+        
+        while($parking_plate=$res->fetch(PDO::FETCH_ASSOC)) {
+            array_push(
+                $parking_plate_num_array,
+                $parking_plate["parkingplatenum"]
+          );
+        }
+
+        return $parking_plate_num_array;
     }
 
     
