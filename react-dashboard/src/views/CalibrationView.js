@@ -15,7 +15,7 @@ import { MicroApi } from '../micro-api';
 
 
 let keys;
-
+let log;
 
 export class CalibrationView extends React.Component{
     constructor(props){
@@ -43,6 +43,7 @@ export class CalibrationView extends React.Component{
           height2:null,
           height3:null,
           height4:null,
+          report:null,
           selectedParamsOption:null,
           selectedPlateNumberOption:null,
           selectedPlateAreaOption:null,
@@ -60,8 +61,6 @@ export class CalibrationView extends React.Component{
             {
               headline: 'Plate Calibration', 
               labelplateHeight:'show plate height' ,
-              labelPlateNum:'plate #',
-              labelPlateArea:'plate area',
               labelPlateHeight:'plate height'
            }
           ],
@@ -214,19 +213,10 @@ export class CalibrationView extends React.Component{
         })      
     }
 
-    makeSelect = (res) => {
-      let i;
-      let newArr = [];
 
-      for (i = 0; i < res.length; i++) {
-        newArr.push({value:res[i], label:res[i]})
-      }
-      return newArr;
-    }
 
     setReelToParking = (reelNum) => {
-      console.log('im set reel to park');
-      let log = this.state.setReelToParkingPlate[0].headline + " >> " + reelNum;
+      log = this.state.setReelToParkingPlate[0].headline + " >> " + reelNum;
       this.updateLogger(log);
       MicroApi.setReelToParking(reelNum).then(res => {     
         console.log(res);
@@ -234,57 +224,35 @@ export class CalibrationView extends React.Component{
     }
     
     executeInstructions = (val1, val2, val3) => {
-      let log = 'test routine>> ' + val1 + ' ' + val2 + ' value: ' + val3;
+      log = 'test routine>> ' + val1 + ' ' + val2 + ' value: ' + val3;
       this.updateLogger(log);
     }
 
     plateCalibration = (val1, val2) => {   
-      //update log in ui 
-      let val1labeled = this.state.plateCalibrationGroups[0].labelPlateNum + "" + val1;
-      let val2labeled = this.state.plateCalibrationGroups[0].labelPlateArea +  "(" + val2 + ")";    
+      let val1labeled = "plate #" + "" + val1;
+      let val2labeled =  "plate area" + "" + "(" + val2 + ")";    
       let log = " plate calibration>> " + val1labeled + ' ' + val2labeled;
       this.updateLogger(log);
       
-      // update res
-        MicroApi.plateRestart(val1).then(res =>{
-          console.log(res)
-          });
+      let data = [val1, val2];
+      MicroApi.plateRestart(data).then(res =>{
+        console.log(res)
+      });
     }
 
-    updateLogger = (log) => {
-        let i;
-        console.log(log)
-        this.setState({
-          outputData: [...this.state.outputData, <code key={i}>{log}</code>]
-        });
-  
-        //clear input fields
-        this.setState({
-          selectedInstructionsOption:null,
-          selectedMotorNumOption:null,
-          selectedMotorNumValue:"",
-
-        })
-    }  
-
-    clear = () => {
-      this.setState({
-        outputData: []
-      });
-    } 
-
     reelCalibration = () => {
-      console.log('run reel calibration');
-      //ui 
-      let log = 'reel calibration process'
+      log = 'reel calibration process'
       this.updateLogger(log);
-      //rest
-      MicroApi.reelCalibration().then(res=>{
+   
+      MicroApi.reelCalibration().then(res=> {
         console.log(res);
+        let report = <a href="tmp/Reel_position_on_parking.csv" download> download report </a>
+        this.setState({
+          report: report
+        });
       })
     }
     
-   
     
     getParams = () => {
       /*
@@ -309,20 +277,48 @@ export class CalibrationView extends React.Component{
 
     updatePlateHeight = (val1,val2,val3) => {
       console.log('im update plate height ')
-      let log = 'update plate height>> ' + this.state.updatePlateHeight[0].labelPlateNum + '' + val1 + " " + this.state.updatePlateHeight[0].labelPlateArea + "(" + val2 + ")" + ' value: ' + val3;
+      log = 'update plate height>> ' + this.state.updatePlateHeight[0].labelPlateNum + '' + val1 + " " + this.state.updatePlateHeight[0].labelPlateArea + "(" + val2 + ")" + ' value: ' + val3;
       this.updateLogger(log);
       return;
     }
     modifyRobotParams = (val1,val2) => {
       console.log('im modify Robot Params ')
-      let log = 'modify robot params>> ' + 'parameter:' + ' ' + val1.label + " value: "  + val2;
+      log = 'modify robot params>> ' + 'parameter:' + ' ' + val1.label + " value: "  + val2;
       this.updateLogger(log);
       return;
     }
 
+    //general utils
+    updateLogger = (log) => {
+        let i;
+        this.setState({
+          outputData: [...this.state.outputData, <code key={i}>{log}</code>]
+        });
+        //clear input fields
+        this.setState({
+          selectedInstructionsOption:null,
+          selectedMotorNumOption:null,
+          selectedMotorNumValue:"",
+        })
+    }  
+
+    makeSelect = (res) => {
+      let i;
+      let newArr = [];
+      for (i = 0; i < res.length; i++) {
+        newArr.push({value:res[i], label:res[i]})
+      }
+      return newArr;
+    }
+
+    clear = () => {
+      this.setState({
+        outputData: []
+      });
+    } 
 
     render(){
-      let {selectedInstructionsOption, selectedReelNumberOption, selectedPlateNumberOption, selectedPlateAreaOption, plateCalibrationGroups, reelCalibrationGroups, setReelToParkingPlate, updatePlateHeight, modifyRobotParameters, routineTableLabels, routineFunctionsList, selectedInsttypeOption, motorNumList, selectedMotorNumOption, resultTable, customStyles, selectedParamsOption, instTypeOptions, selectedMotorNumValue, outputData, selectedPlateHeight, robotParamValue, plateNums, reelNums, height1, height2, height3, height4 , allHeights} = this.state;
+      let {selectedInstructionsOption, selectedReelNumberOption, selectedPlateNumberOption, selectedPlateAreaOption, plateCalibrationGroups, reelCalibrationGroups, setReelToParkingPlate, updatePlateHeight, modifyRobotParameters, routineTableLabels, routineFunctionsList, selectedInsttypeOption, motorNumList, selectedMotorNumOption, resultTable, customStyles, selectedParamsOption, instTypeOptions, selectedMotorNumValue, outputData, selectedPlateHeight, robotParamValue, plateNums, reelNums, height1, height2, height3, height4 , allHeights, report} = this.state;
       return (
         <div>
         <CalibrationContainer>
@@ -433,7 +429,7 @@ export class CalibrationView extends React.Component{
                     <SaveButton onClick={this.reelCalibration} style={{width:"200px"}}>
                       Run Reel Calibration
                     </SaveButton>
-                    <a href="tmp/Reel_position_on_parking.csv" download> get report </a>;
+                    {report}
           
                 </CalibrationGroup>
                 <CalibrationGroup calibRow={setReelToParkingPlate}>

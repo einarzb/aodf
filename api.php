@@ -28,10 +28,12 @@ if(isset($post_data["method"])&&!empty ($post_data["method"])){
                 "height4"=>fetch_plates_height4($post_data['plateNum'])
                 )
             ));
+        case 'plate_restart':
+            die(json_encode(plate_restart($post_data['data'])));
+            break;
         case 'set_date':
             die(json_encode(set_machine_date($post_data['date'])));
         case 'get_date':
-            
             die(
                 json_encode(array(
                     "date" =>get_machine_date())));
@@ -43,8 +45,6 @@ if(isset($post_data["method"])&&!empty ($post_data["method"])){
             dump_log();
             sleep(3);
             return "{result:\"OK\"}";      
-        case 'plate_restart':
-            die(json_encode(change_settings($post_data['plateNum'])));
         case 'set_reel_to_parking':
             die(json_encode(set_reel_to_parking($post_data['reelNum'])));      
         default:    

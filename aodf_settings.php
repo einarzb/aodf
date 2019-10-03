@@ -465,15 +465,14 @@
         return $decoded;        
     }
 
-    //calibration screen
+    # calibration screen
     
     //should get 2 params from ui 
-    
-    function plate_restart($plateNum){
-        echo $plateNum;
-        echo "---";
-       $e_res = exec("/scripts/plate_restart '$plateNum'");
-       return $e_res;
+    function plate_restart($data) {
+        $selectedPlate = $data[0];
+        $plateSample = $data[1][0];
+        $e_res = exec("/scripts/plate_restart '$selectedPlate' '$plateSample'");
+        return $e_res;
     }
 
     function get_reel_calibration(){
@@ -481,17 +480,12 @@
         return $e_res;
     }
 
-    function get_report(){
-        $e_res = exec("/tmp/Reel_position_on_parking.csv");
-        return $e_res;
-    }
-    
     function set_reel_to_parking($reelNum){
         $e_res = exec("/scripts/manual_put_homeport_on_park '$reelNum'");
         return $e_res;
     }
 
-    //quick commands
+    # quick commands
 
     function plate_rot_in(){
         $e_res = exec("/scripts/plt_io 1");
@@ -524,12 +518,10 @@
     }
 
     function power_off(){
-        //commented out for production safety
         $res = shell_exec("/root/run_root_settings 11");
         return $res;
     }
 
-    //fetch all plates from db
     function fetch_plates(){
         $plates_array=array();
         $db = new PDO('sqlite:AODF.db');
@@ -542,7 +534,6 @@
                   $plate["PLATE_NUMBER"]
             );
          }
-         //
         return $plates_array;
     }
     

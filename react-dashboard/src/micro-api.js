@@ -103,8 +103,12 @@ export const MicroApi = {
     },
 
     // needs to get 2 params
-    plateRestart:(plateNum)=>{
-        return  _query({method:'POST', func:'plate_restart',body:{method:'plate_restart', plateNum}});
+    plateRestart:(data)=>{
+        return  _query({method:'POST', func:'plate_restart',body:{method:'plate_restart', data}});
+    },
+
+    reelCalibration:()=>{
+        return  _query({method:'GET',func: 'reel_calibration',body:false});
     },
     
     fetchPlates:()=>{
@@ -116,9 +120,7 @@ export const MicroApi = {
     fetchPlateHeights:(plateNum)=>{
         return  _query({method:'POST',func: 'fetch_plates_height',body:{method:'fetch_plates_height', plateNum}});
     },
-    reelCalibration:()=>{
-        return  _query({method:'GET',func: 'reel_calibration',body:false});
-    },
+
     setReelToParking:(reelNum)=>{
         return  _query({method:'POST',func: 'set_reel_to_parking',body:{method:'set_reel_to_parking', reelNum}});
     },
@@ -146,9 +148,6 @@ export const MicroApi = {
     },
     powerOff:()=>{
         return _query({method:'GET', func:'power_off', body:false});
-    },
-    getReport:()=>{
-        return _query({method:'GET', func:'get_report', body:false});
     }
 
 };
