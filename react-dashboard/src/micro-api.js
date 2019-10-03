@@ -117,8 +117,14 @@ export const MicroApi = {
     fetchReels:()=>{
         return  _query({method:'GET',func: 'fetch_reels',body:false});
     },
-    fetchPlateHeights:(plateNum)=>{
-        return  _query({method:'POST',func: 'fetch_plates_height',body:{method:'fetch_plates_height', plateNum}});
+    fetchPlateHeights:(currentPlateNum)=>{
+        return  _query({method:'POST',func: 'fetch_plates_height',body:{method:'fetch_plates_height', currentPlateNum}});
+    },
+    fetchPlatePosition:(currentPlateNum)=>{
+        return  _query({method:'POST',func: 'fetch_plate_position',body:{method:'fetch_plate_position', currentPlateNum}});
+    },
+    fetchHeight:(currentPlateNum)=>{
+        return  _query({method:'POST',func: 'fetch_height',body:{method:'fetch_height', currentPlateNum}});
     },
     updateConnection:(stop) => {
         return  _query({method:'POST',func: 'update_connection',body:{method:'update_connection', stop}});

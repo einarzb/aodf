@@ -204,6 +204,7 @@ export class CalibrationView extends React.Component{
 
     getReelNumbers = () => {
       MicroApi.fetchReels().then(res => {
+        console.log(res.reels)
         this.setState({reelNums: this.makeSelect(res.reels)})
         })   
       
@@ -260,6 +261,8 @@ export class CalibrationView extends React.Component{
     getParams = () => {
       //params
       MicroApi.getParams().then((res) => {
+        console.log(res);
+        
         keys = Object.keys(res.params);  
         console.log(keys);
         let values = Object.values(res.params);
@@ -268,11 +271,15 @@ export class CalibrationView extends React.Component{
         let i;
         let j;
         let paramArr = [];
+        for (i=0; i<res.params.length; i++) {
+          paramArr.push({value:res.params.key[i], label:res.params.value[i]});
+        }
+        /*
         for (i = 0; i < keys.length; i++) {
           for (j =0; j<values.length; j++){
-            paramArr.push({value:values[j], label:keys[i]})
+            paramArr += {value:values[j], label:keys[i]};
           }
-        }
+        }*/
         console.log(paramArr)
         this.setState({params: this.makeSelect(paramArr)})
 

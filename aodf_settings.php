@@ -507,6 +507,36 @@
         return $e_res;
     }
 
+    function fetch_plate_position($currentPlateNum) {
+        $plate_position_array=array();
+        $db = new PDO('sqlite:AODF.db');
+        $currentPosition = $db->query("select PLATE_POSITION from PLATE_INFO where PLATE_NUMBER=$currentPlateNum;");
+        
+        while($position=$currentPosition->fetch(PDO::FETCH_ASSOC)) {
+            array_push(
+                $plate_position_array,
+                $position["PLATE_POSITION"]
+          );
+        }
+
+        return $plate_position_array;
+    }
+
+    function fetch_height($currentPlateForHeight) {
+         $plate_height_array=array();
+         $db = new PDO('sqlite:AODF.db');
+         $currentHeight = $db->query("select PLATE_HEIGHT from PLATE_INFO where PLATE_NUMBER=$currentPlateForHeight;");
+         
+         while($height=$currentHeight->fetch(PDO::FETCH_ASSOC)) {
+             array_push(
+                 $plate_height_array,
+                 $height["PLATE_HEIGHT"]
+           );
+         }
+ 
+         return $plate_height_array;
+     }
+    
     # quick commands
 
     function plate_rot_in(){

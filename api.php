@@ -30,6 +30,10 @@ if(isset($post_data["method"])&&!empty ($post_data["method"])){
             ));
         case 'plate_restart':
             die(json_encode(plate_restart($post_data['data'])));
+        case 'fetch_plate_position':
+            die(json_encode(fetch_plate_position($post_data['currentPlateNum'])));
+        case 'fetch_height':
+            die(json_encode(fetch_height($post_data['currentPlateNum'])));
         case 'update_connection':
             die(json_encode(update_connection($post_data['stop'])));
         case 'update_plate_height':

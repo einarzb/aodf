@@ -36,8 +36,10 @@ class opticalPortView extends Component{
           selectedPhysicalStatusOption:null,
           selectedOperatorOption:null,
           selectedPlateToEditOption:null,
+          postionOfPlate:null,
+          plateHeight:null,
           plateDataByPlateNum : [
-            {label: 'Postion of Plate', value:'1'},
+            {label: 'Postion of Plate', value:'3'},
             {label: 'Plate Height', value:'2341701'},
             {label: 'Plate Type', value:'Regular'}
           ],
@@ -95,11 +97,25 @@ class opticalPortView extends Component{
         })   
       
       }
-  
+      
     getPlateNumbers = () => {
       MicroApi.fetchPlates().then(res => {
         this.setState({plateNums: this.makeSelect(res.plates)})
         })      
+    }
+    
+    getDataOfPlate = (currentPlateNum) => {
+     
+      MicroApi.fetchPlatePosition(currentPlateNum.value).then(res => {
+        console.log(res);
+          this.setState({postionOfPlate:Number(res)})
+        })
+      MicroApi.fetchHeight(currentPlateNum.value).then(res => {
+          console.log(res);
+          this.setState({plateHeight:Number(res)})
+      })
+        
+        
     }
 
     makeSelect = (res) => {
@@ -129,7 +145,8 @@ class opticalPortView extends Component{
     }
     plateToEditHandleChange = (selectedPlateToEditOption) => {
       this.setState({ selectedPlateToEditOption });
-      console.log(`Option selected:`, selectedPlateToEditOption);
+      //console.log(`Option selected:`, selectedPlateToEditOption);
+      this.getDataOfPlate(selectedPlateToEditOption);
     }
     operatorsHandleChange = (selectedOperatorOption) => {
       this.setState({ selectedOperatorOption });
@@ -139,7 +156,7 @@ class opticalPortView extends Component{
 
     render(){
       let {} = this.props;
-      let { customStyles, selectedPlateToEditOption, plateDataByPlateNum, plateTableLabels, plateTableInput, selectedOperatorOption, operatorsList, selectedPhysicalStatusOption, physicalStatusList, updateCounter, selectedReelToEditOption, reelDataByReelNum, reelTableLabels, reelNums, plateNums  }  = this.state;
+      let { customStyles, selectedPlateToEditOption, plateDataByPlateNum, plateTableLabels, plateTableInput, selectedOperatorOption, operatorsList, selectedPhysicalStatusOption, physicalStatusList, updateCounter, selectedReelToEditOption, reelDataByReelNum, reelTableLabels, reelNums, plateNums, postionOfPlate, plateHeight  }  = this.state;
         return (
        
           <OpticalPortContainer>
@@ -161,8 +178,17 @@ class opticalPortView extends Component{
               </SelectBox>
               </span>
 
-              <DataBlock dataBatch={plateDataByPlateNum}>
-              </DataBlock>  
+              <MiniWrap>
+                  <Data>
+                    Postion of Plate : {postionOfPlate} 
+                  </Data>
+                  <Data>
+                  Plate Height : {plateHeight}
+                  </Data>
+                  <Data>
+                  Plate Type : Regular
+                </Data>
+              </MiniWrap>
               <RoutinesTable tableCols={plateTableLabels}>
                     <DisplayData>
                     {plateTableInput[0].value}
@@ -379,4 +405,14 @@ const DisplayData = styled.div`
 const DisplayResult = styled(DisplayData)`
     width:70px;
     margin: 0 5px;
+`;
+
+const MiniWrap = styled.div`
+  display:inline-flex;
+  flex-direction:column;
+  width: 90%;
+`;
+
+const Data = styled.div`
+    display:block;
 `;
