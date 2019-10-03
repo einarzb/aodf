@@ -36,7 +36,8 @@ export class CalibrationView extends React.Component{
                 borderColor: "#fd7c20"
               }
             })},
-            allHeights:null,
+          params:null,  
+          allHeights:null,
           plateNums:null,
           reelNums:null,
           height1:null,
@@ -85,8 +86,7 @@ export class CalibrationView extends React.Component{
           ],
           modifyRobotParameters: [
             {
-              headline:'Modify Robot Parameters',
-              params:this.getParams()
+              headline:'Modify Robot Parameters'
             }
           ],
           routineTableLabels: [
@@ -119,6 +119,7 @@ export class CalibrationView extends React.Component{
     componentDidMount(){
       this.getPlateNumbers();
       this.getReelNumbers();
+      this.getParams();
     }
 
     /* ============== handle changes ================== */
@@ -257,13 +258,28 @@ export class CalibrationView extends React.Component{
     }
     
     getParams = () => {
-      /*
+      //params
       MicroApi.getParams().then((res) => {
         keys = Object.keys(res.params);  
         console.log(keys);
-        console.log(res.params);     
+        let values = Object.values(res.params);
+        console.log(values);
+
+        let i;
+        let j;
+        let paramArr = [];
+        for (i = 0; i < keys.length; i++) {
+          for (j =0; j<values.length; j++){
+            paramArr.push({value:values[j], label:keys[i]})
+          }
+        }
+        console.log(paramArr)
+        this.setState({params: this.makeSelect(paramArr)})
+
+        return paramArr;
+
       })
-*/
+/*
       let myArr = [
         {value:1, label:'parking_target_x_pos'},
         {value:2, label:['regular_plate_target_x_pos']},
@@ -274,7 +290,7 @@ export class CalibrationView extends React.Component{
         {value:7, label:'regular_plate_insert_parameter'}, 
         {value:8, label:'regular_plate_pull_parameter'}
        ] 
-       return myArr;
+       return myArr;*/
     }
 
     updatePlateHeight = (val1,val2,val3) => {
@@ -326,7 +342,7 @@ export class CalibrationView extends React.Component{
     } 
 
     render(){
-      let {selectedInstructionsOption, selectedReelNumberOption, selectedPlateNumberOption, selectedPlateAreaOption, plateCalibrationGroups, reelCalibrationGroups, setReelToParkingPlate, updatePlateHeight, modifyRobotParameters, routineTableLabels, routineFunctionsList, selectedInsttypeOption, motorNumList, selectedMotorNumOption, resultTable, customStyles, selectedParamsOption, instTypeOptions, selectedMotorNumValue, outputData, selectedPlateHeight, robotParamValue, plateNums, reelNums, height1, height2, height3, height4 , allHeights, report} = this.state;
+      let {selectedInstructionsOption, selectedReelNumberOption, selectedPlateNumberOption, selectedPlateAreaOption, plateCalibrationGroups, reelCalibrationGroups, setReelToParkingPlate, updatePlateHeight, modifyRobotParameters, routineTableLabels, routineFunctionsList, selectedInsttypeOption, motorNumList, selectedMotorNumOption, resultTable, customStyles, selectedParamsOption, instTypeOptions, selectedMotorNumValue, outputData, selectedPlateHeight, robotParamValue, plateNums, reelNums, height1, height2, height3, height4 , allHeights, report, params} = this.state;
       return (
         <div>
         <CalibrationContainer>
@@ -519,7 +535,7 @@ export class CalibrationView extends React.Component{
                         placeholder='Parameter'
                         value={selectedParamsOption}
                         onChange={this.paramHandleChange}
-                        options={modifyRobotParameters[0].params}
+                        options={params}
                         name="select-parameter"
                       />
                   </SelectBox>
