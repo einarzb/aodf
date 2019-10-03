@@ -51,6 +51,8 @@ class quickCommandsView extends Component{
             {label: 'Power Off', onClick:this.togglePowerOff}
           ],
           downloadButtonsHolder: null,
+          stopConnetion: null,
+          startConnetion: null,
           elevButtons : [
             {label: 'Elev Up', onClick:this.elevatorUp},
             {label: 'Elev Down', onClick:this.elevatorDown},
@@ -69,6 +71,11 @@ class quickCommandsView extends Component{
           ] 
         }
     } 
+      // fetch init data from DB
+      componentDidMount(){
+        this.fetchConnections();
+      }
+    
 
     startLimitSwitchTest = () => {
       console.log('lunched test routine');
@@ -114,12 +121,33 @@ class quickCommandsView extends Component{
     }
 
    
-    queueReset = () => {
-      console.log('queue reset');
+    fetchConnections = () => {
+      console.log('fetch connections');
       MicroApi.queueReset().then(res =>{
-        console.log(res);
+        this.setState({
+            stopConnetion:Number(res.connections[0]),
+            startConnetion:Number(res.connections[1])
+        }); 
       });
     }
+
+    queueReset = () => {
+      if (this.state.startConnection != this.state.stopConnection) {
+          console.log('queue connections');        
+          this.state.stopConnection = this.state.startConnection + 1; 
+          //change back also microAPi
+         let stop = this.state.stopConnection;
+          MicroApi.updateConnection(stop).then(res =>{
+            console.log(res);
+          });
+       } else {
+        console.log('there are no queing connections');
+        this.state.startConnection = this.state.stopConnection;
+       }
+    }
+
+
+
     gripperIn = () => {       
       console.log('im gripper in');
       MicroApi.gripperIn().then(res =>{

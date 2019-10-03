@@ -141,6 +141,7 @@ export class CalibrationView extends React.Component{
       this.setState({ selectedPlateNumberOption });
      
       MicroApi.fetchPlateHeights(selectedPlateNumberOption.value).then(res => {    
+        console.log(res);
         this.setState({height1: res.height1})
         this.setState({height2: res.height2})
         this.setState({height3: res.height3})
@@ -493,36 +494,21 @@ export class CalibrationView extends React.Component{
                         <SaveButton onClick={() =>this.updatePlateHeight(selectedPlateNumberOption.value,selectedPlateAreaOption.value,selectedPlateHeight)}>
                           save
                         </SaveButton>
-                </CalibrationGroup>
-                  <PlateDetails>
-                                <DisplayData style={{width:'102px'}}>
-                                height1 :
-                              
-                                {height1}
-    
-                                </DisplayData>
-                                <DisplayData style={{width:'102px'}}>
-                            height2
-    :                                 
-                              
-                              {height2}
-
-                                </DisplayData>
-                                <DisplayData style={{width:'102px'}}>
-                            height3
-    :                                 
-                              
-                              {height3}
-
-                                </DisplayData>
-                                <DisplayData style={{width:'102px'}}>
-                        height4
-    :                                   
-                              
-                              {height4}
-
-                                </DisplayData>
-                            </PlateDetails>  
+                     </CalibrationGroup>
+                    <PlateDetails>
+                      <DisplayData style={{width:'102px'}}>
+                          height1:{height1}
+                      </DisplayData>
+                      <DisplayData style={{width:'102px'}}>
+                          height2:{height2}
+                      </DisplayData>
+                      <DisplayData style={{width:'102px'}}>
+                          height3:{height3}
+                      </DisplayData>
+                      <DisplayData style={{width:'102px'}}>
+                          height4:{height4}
+                      </DisplayData>
+                  </PlateDetails>  
                 </MiniWrap>
 
                 <CalibrationGroup calibRow={modifyRobotParameters}>

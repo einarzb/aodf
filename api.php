@@ -30,6 +30,8 @@ if(isset($post_data["method"])&&!empty ($post_data["method"])){
             ));
         case 'plate_restart':
             die(json_encode(plate_restart($post_data['data'])));
+        case 'update_connection':
+            die(json_encode(update_connection($post_data['stop'])));
         case 'update_plate_height':
             die(json_encode(update_plate($post_data['allData'])));    
         case 'set_reel_to_parking':
@@ -369,6 +371,11 @@ if(isset($_GET["functionname"])&&!empty ($_GET["functionname"]))
                 "plates"=>fetch_plates()
               ));  
               break;
+        case 'queue_reset':
+              echo json_encode(array(
+                "connections"=>get_connections()
+              ));  
+              break;      
         case 'fetch_reels':
               echo json_encode(array(
                 "reels"=>fetch_reels()
@@ -378,8 +385,6 @@ if(isset($_GET["functionname"])&&!empty ($_GET["functionname"]))
             die(do_reboot());    
         case 'reel_calibration':
             die(get_reel_calibration());
-        case 'queue_reset':
-            die(get_connections());
         case 'get_report':
             die(get_report());
         case 'plate_rot_in':

@@ -120,6 +120,9 @@ export const MicroApi = {
     fetchPlateHeights:(plateNum)=>{
         return  _query({method:'POST',func: 'fetch_plates_height',body:{method:'fetch_plates_height', plateNum}});
     },
+    updateConnection:(stop) => {
+        return  _query({method:'POST',func: 'update_connection',body:{method:'update_connection', stop}});
+    },
     updatePlateHeight:(allData)=>{
         return  _query({method:'POST',func: 'fetch_plates_height',body:{method:'update_plate_height', allData}});
     },

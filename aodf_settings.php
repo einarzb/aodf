@@ -467,7 +467,6 @@
 
     # calibration screen
     
-    //should get 2 params from ui 
     function plate_restart($data) {
         $selectedPlate = $data[0];
         $plateSample = $data[1][0];
@@ -485,7 +484,7 @@
         $plateNumToUpdate = $allData[0];
         $currentPlateHeight = $allData[1][0]; // gives value! I need key - should be HEIGHT1, HEIGHT2 etc 
         $newPlateHeight = $allData[2];
-
+        
         //db
         $newHeights_array=array();
         $db = new PDO('sqlite:AODF.db');
@@ -502,7 +501,7 @@
 
 
     }    
-    // TODO: change db plate_type to regular
+    // TODO: join db plate_type to regular
     function set_reel_to_parking($reelNum){
         $e_res = exec("/scripts/manual_put_homeport_on_park '$reelNum'");
         return $e_res;
@@ -647,14 +646,56 @@
         return $reels_array;
     }
 
-    /*
+    # quick commands
     function get_connections(){
+        $connections_array=array();
         $db = new PDO('sqlite:connections_queue.db');
         $result = $db->query("select * from pointer;");
-        echo $result;
-
-        return $result;
+ 
+         while($connection=$result->fetch(PDO::FETCH_ASSOC))
+           {     
+             array_push(
+                   $connections_array,
+                   $connection['start'],
+                   $connection['stop']
+             );
+          }
+         return $connections_array;
     }
-    get_connections();
-    */
+
+    function update_connection($stop){
+        $connections_array=array();
+        $db = new PDO('sqlite:connections_queue.db');
+        $updatedStop = $db->query("update pointer set stop=52");
+        while($newStop=$updatedStop->fetch(PDO::FETCH_ASSOC)) {
+            array_push(
+                $connections_array,
+                $newStop["stop"]
+          );
+        }
+        echo $connections_array;
+        return $connections_array;
+
+    }
+
+
+
+    /*
+    function fetch_plates_height2($plateNum) {
+        $heights_array=array();
+        $db = new PDO('sqlite:AODF.db');
+        $height2OfPlates = $db->query("select HEIGHT2 from PLATE_INFO where PLATE_NUMBER=$plateNum;");
+        
+        while($height02=$height2OfPlates->fetch(PDO::FETCH_ASSOC)) {
+            array_push(
+                $heights_array,
+                $height02["HEIGHT2"]
+          );
+        }
+
+        return $heights_array;
+    }
+       
+        */
+    
 ?>
