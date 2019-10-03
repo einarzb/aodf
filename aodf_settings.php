@@ -536,6 +536,21 @@
  
          return $plate_height_array;
      }
+     function fetch_plate_type($currentPlate) {
+        $plate_type_array=array();
+        $db = new PDO('sqlite:AODF.db');
+        $currentType = $db->query("select PLATE_TYPE from PLATE_INFO where PLATE_NUMBER=$currentPlate;");
+        
+        while($type=$currentType->fetch(PDO::FETCH_ASSOC)) {
+            array_push(
+                $plate_type_array,
+                $type["PLATE_TYPE"]
+          );
+        }
+
+        return $plate_type_array;
+    }
+
     
     # quick commands
 

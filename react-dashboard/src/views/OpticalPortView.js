@@ -38,6 +38,7 @@ class opticalPortView extends Component{
           selectedPlateToEditOption:null,
           postionOfPlate:null,
           plateHeight:null,
+          plateType:null,
           plateDataByPlateNum : [
             {label: 'Postion of Plate', value:'3'},
             {label: 'Plate Height', value:'2341701'},
@@ -114,7 +115,12 @@ class opticalPortView extends Component{
           console.log(res);
           this.setState({plateHeight:Number(res)})
       })
+      MicroApi.fetchPlateType(currentPlateNum.value).then(res => {
+        console.log(res);
+        this.setState({plateType:res})
+    })
         
+      
         
     }
 
@@ -156,7 +162,7 @@ class opticalPortView extends Component{
 
     render(){
       let {} = this.props;
-      let { customStyles, selectedPlateToEditOption, plateDataByPlateNum, plateTableLabels, plateTableInput, selectedOperatorOption, operatorsList, selectedPhysicalStatusOption, physicalStatusList, updateCounter, selectedReelToEditOption, reelDataByReelNum, reelTableLabels, reelNums, plateNums, postionOfPlate, plateHeight  }  = this.state;
+      let { customStyles, selectedPlateToEditOption, plateDataByPlateNum, plateTableLabels, plateTableInput, selectedOperatorOption, operatorsList, selectedPhysicalStatusOption, physicalStatusList, updateCounter, selectedReelToEditOption, reelDataByReelNum, reelTableLabels, reelNums, plateNums, postionOfPlate, plateHeight, plateType  }  = this.state;
         return (
        
           <OpticalPortContainer>
@@ -180,13 +186,13 @@ class opticalPortView extends Component{
 
               <MiniWrap>
                   <Data>
-                    Postion of Plate : {postionOfPlate} 
+                    <strong>Postion of Plate : </strong>{postionOfPlate} 
                   </Data>
                   <Data>
-                  Plate Height : {plateHeight}
+                  <strong>Plate Height : </strong>{plateHeight}
                   </Data>
                   <Data>
-                  Plate Type : Regular
+                  <strong>Plate Type : </strong>{plateType}
                 </Data>
               </MiniWrap>
               <RoutinesTable tableCols={plateTableLabels}>
@@ -410,7 +416,8 @@ const DisplayResult = styled(DisplayData)`
 const MiniWrap = styled.div`
   display:inline-flex;
   flex-direction:column;
-  width: 90%;
+  width: 39%;
+  align-items: flex-start;
 `;
 
 const Data = styled.div`

@@ -123,6 +123,9 @@ export const MicroApi = {
     fetchPlatePosition:(currentPlateNum)=>{
         return  _query({method:'POST',func: 'fetch_plate_position',body:{method:'fetch_plate_position', currentPlateNum}});
     },
+    fetchPlateType:(currentPlateNum)=>{
+        return  _query({method:'POST',func: 'fetch_plate_type',body:{method:'fetch_plate_type', currentPlateNum}});
+    },
     fetchHeight:(currentPlateNum)=>{
         return  _query({method:'POST',func: 'fetch_height',body:{method:'fetch_height', currentPlateNum}});
     },
