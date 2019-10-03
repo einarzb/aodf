@@ -480,6 +480,7 @@
         return $e_res;
     }
 
+    // TODO: change db plate_type to regular
     function set_reel_to_parking($reelNum){
         $e_res = exec("/scripts/manual_put_homeport_on_park '$reelNum'");
         return $e_res;
@@ -579,7 +580,6 @@
 
         return $heights_array;
     }
-
     function fetch_plates_height4($plateNum) {
         $heights_array=array();
         $db = new PDO('sqlite:AODF.db');
@@ -598,7 +598,22 @@
     function fetch_reels(){
         $reels_array=array();
         $db = new PDO('sqlite:AODF.db');
+ 
+       # $result = $db->query("select PLATE_TYPE from PLATE_INFO;");
+   
         $result = $db->query("select wheelid from wheel_info;");
+        /*
+        $result = $db->query("select wheel_info.wheelid, wheel_info.plate_number, PLATE_INFO.PLATE_NUMBER, PLATE_INFO.PLATE_TYPE 
+        from wheel_info 
+        INNER JOIN PLATE_INFO ON wheel_info.plate_number=PLATE_INFO.PLATE_NUMBER WHERE PLATE_INFO.PLATE_TYPE=Regular;");
+
+        $result = $db->query("select wheel_info.wheelid
+        from wheel_info 
+        FULL JOIN PLATE_INFO ON wheel_info.plate_number=PLATE_INFO.PLATE_NUMBER WHERE PLATE_INFO.PLATE_TYPE=Regular;");
+*/
+#        SELECT Orders.OrderID, Customers.CustomerName, Orders.OrderDate
+#FROM Orders
+#INNER JOIN Customers ON Orders.CustomerID=Customers.CustomerID;
         while($reel=$result->fetch(PDO::FETCH_ASSOC))
           {     
             

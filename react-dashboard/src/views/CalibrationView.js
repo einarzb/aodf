@@ -215,13 +215,7 @@ export class CalibrationView extends React.Component{
 
 
 
-    setReelToParking = (reelNum) => {
-      log = this.state.setReelToParkingPlate[0].headline + " >> " + reelNum;
-      this.updateLogger(log);
-      MicroApi.setReelToParking(reelNum).then(res => {     
-        console.log(res);
-      })
-    }
+
     
     executeInstructions = (val1, val2, val3) => {
       log = 'test routine>> ' + val1 + ' ' + val2 + ' value: ' + val3;
@@ -253,6 +247,13 @@ export class CalibrationView extends React.Component{
       })
     }
     
+    setReelToParking = (reelNum) => {
+      log = this.state.setReelToParkingPlate[0].headline + " >> " + reelNum;
+      this.updateLogger(log);
+      MicroApi.setReelToParking(reelNum).then(res => {     
+        console.log(res);
+      })
+    }
     
     getParams = () => {
       /*
@@ -448,7 +449,9 @@ export class CalibrationView extends React.Component{
                         run
                       </SaveButton>
                 </CalibrationGroup>
-                <CalibrationGroup calibRow={updatePlateHeight}>
+                <MiniWrap>
+                 
+                  <CalibrationGroup calibRow={updatePlateHeight}>
                     <SelectBox>
                             <Select
                                 styles={customStyles} 
@@ -472,35 +475,7 @@ export class CalibrationView extends React.Component{
                               name="select-plate-area-number"
                             />
                         </SelectBox>
-                        <PlateDetails>
-                              <DisplayData style={{width:'102px'}}>
-                              height1 :
-                            
-                               {height1}
-   
-                              </DisplayData>
-                              <DisplayData style={{width:'102px'}}>
-                          height2
-  :                                 
-                            
-                            {height2}
-
-                              </DisplayData>
-                              <DisplayData style={{width:'102px'}}>
-                          height3
-  :                                 
-                            
-                            {height3}
-
-                              </DisplayData>
-                              <DisplayData style={{width:'102px'}}>
-                      height4
-   :                                   
-                            
-                            {height4}
-
-                              </DisplayData>
-                          </PlateDetails>      
+             
                       
                         <SelectBox>
                           <TextInput
@@ -514,7 +489,36 @@ export class CalibrationView extends React.Component{
                           save
                         </SaveButton>
                 </CalibrationGroup>
+                <PlateDetails>
+                                <DisplayData style={{width:'102px'}}>
+                                height1 :
+                              
+                                {height1}
+    
+                                </DisplayData>
+                                <DisplayData style={{width:'102px'}}>
+                            height2
+    :                                 
+                              
+                              {height2}
 
+                                </DisplayData>
+                                <DisplayData style={{width:'102px'}}>
+                            height3
+    :                                 
+                              
+                              {height3}
+
+                                </DisplayData>
+                                <DisplayData style={{width:'102px'}}>
+                        height4
+    :                                   
+                              
+                              {height4}
+
+                                </DisplayData>
+                            </PlateDetails>  
+                </MiniWrap>
 
                 <CalibrationGroup calibRow={modifyRobotParameters}>
                   <SelectBox style={{width:'200px'}}>
@@ -656,5 +660,12 @@ const DisplayResult = styled(DisplayData)`
 
 const PlateDetails = styled.div`
     display:inline-flex;
-    flex-direction:column;
+    flex-direction:row;
+    margin-top: -1rem;
+`;
+
+const MiniWrap = styled.div`
+  display:inline-flex;
+  flex-direction:column;
+  width: 90%;
 `;
