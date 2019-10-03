@@ -31,7 +31,6 @@ function make_upload {
     # send to server
      scp  -r -P 10560 ./run_root_settings root@82.81.211.231:~
     # scp  -r -P 22 ./run_root_settings root@192.168.1.61:~
-
     say please insert password
 }
 
@@ -39,7 +38,9 @@ function do_all {
     
     build_and_copy &&
     copy_php &&
-    make_upload 
+    make_upload &&
+    say finished mista
+
 }
 
 function do_js_php {

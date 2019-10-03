@@ -76,6 +76,16 @@ class quickCommandsView extends Component{
         this.fetchConnections();
       }
     
+      fetchConnections = () => {
+        console.log('fetch connections');
+        MicroApi.queueReset().then(res =>{
+          this.setState({
+              stopConnetion:Number(res.connections[0]),
+              startConnetion:Number(res.connections[1])
+          }); 
+        });
+      }
+
 
     startLimitSwitchTest = () => {
       console.log('lunched test routine');
@@ -121,15 +131,7 @@ class quickCommandsView extends Component{
     }
 
    
-    fetchConnections = () => {
-      console.log('fetch connections');
-      MicroApi.queueReset().then(res =>{
-        this.setState({
-            stopConnetion:Number(res.connections[0]),
-            startConnetion:Number(res.connections[1])
-        }); 
-      });
-    }
+
 
     queueReset = () => {
       if (this.state.startConnection != this.state.stopConnection) {
@@ -138,15 +140,12 @@ class quickCommandsView extends Component{
           //change back also microAPi
          let stop = this.state.stopConnection;
           MicroApi.updateConnection(stop).then(res =>{
-            console.log(res);
           });
        } else {
         console.log('there are no queing connections');
         this.state.startConnection = this.state.stopConnection;
        }
     }
-
-
 
     gripperIn = () => {       
       console.log('im gripper in');
@@ -162,21 +161,21 @@ class quickCommandsView extends Component{
       MicroApi.gripperOut().then(res =>{
         console.log(res);
       });
-     }
+    }
 
     gripperClose = () => {       
       console.log('im gripper close');
       MicroApi.gripperClose().then(res =>{
         console.log(res);
       });
-     }
+    }
 
-     gripperOpen = () => {       
+    gripperOpen = () => {       
       console.log('im gripper open');
       MicroApi.gripperOpen().then(res =>{
         console.log(res);
       });
-     }
+    }
 
      elevatorUp = () => {
        console.log('im elevator up ror-elvator-1000')
