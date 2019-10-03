@@ -120,7 +120,9 @@ export const MicroApi = {
     fetchPlateHeights:(plateNum)=>{
         return  _query({method:'POST',func: 'fetch_plates_height',body:{method:'fetch_plates_height', plateNum}});
     },
-
+    updatePlateHeight:(allData)=>{
+        return  _query({method:'POST',func: 'fetch_plates_height',body:{method:'update_plate_height', allData}});
+    },
     setReelToParking:(reelNum)=>{
         return  _query({method:'POST',func: 'set_reel_to_parking',body:{method:'set_reel_to_parking', reelNum}});
     },

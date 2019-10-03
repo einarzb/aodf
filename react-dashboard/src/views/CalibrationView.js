@@ -280,6 +280,12 @@ export class CalibrationView extends React.Component{
       console.log('im update plate height ')
       log = 'update plate height>> ' + this.state.updatePlateHeight[0].labelPlateNum + '' + val1 + " " + this.state.updatePlateHeight[0].labelPlateArea + "(" + val2 + ")" + ' value: ' + val3;
       this.updateLogger(log);
+      
+      let allData = [val1,val2,val3];
+      MicroApi.updatePlateHeight(allData).then(res => {     
+        console.log(res);
+      })
+
       return;
     }
     modifyRobotParams = (val1,val2) => {
@@ -450,7 +456,6 @@ export class CalibrationView extends React.Component{
                       </SaveButton>
                 </CalibrationGroup>
                 <MiniWrap>
-                 
                   <CalibrationGroup calibRow={updatePlateHeight}>
                     <SelectBox>
                             <Select
@@ -489,7 +494,7 @@ export class CalibrationView extends React.Component{
                           save
                         </SaveButton>
                 </CalibrationGroup>
-                <PlateDetails>
+                  <PlateDetails>
                                 <DisplayData style={{width:'102px'}}>
                                 height1 :
                               
@@ -656,6 +661,7 @@ const DisplayData = styled.div`
 const DisplayResult = styled(DisplayData)`
     width:70px;
     margin: 0 5px;
+    border:1px solid grey;
 `;
 
 const PlateDetails = styled.div`

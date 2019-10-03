@@ -30,6 +30,8 @@ if(isset($post_data["method"])&&!empty ($post_data["method"])){
             ));
         case 'plate_restart':
             die(json_encode(plate_restart($post_data['data'])));
+        case 'update_plate_height':
+            die(json_encode(update_plate($post_data['allData'])));    
         case 'set_reel_to_parking':
             die(json_encode(set_reel_to_parking($post_data['reelNum'])));
         case 'set_date':
