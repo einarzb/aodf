@@ -394,7 +394,25 @@
                     break;
                 case 'temp_aodf_high':
                     set_high_temp($value);
-                    break;                       
+                    break;  
+                case 'part_and_serial_numbers_robot_part':
+                    set_robot_part($value);
+                    break;
+                case 'part_and_serial_numbers_robot_serial':
+                    set_robot_serial($value);
+                    break;    
+                case 'part_and_serial_numbers_aodf_part':
+                    set_aodf_part($value);
+                    break;  
+                case 'part_and_serial_numbers_aodf_serial':
+                    set_aodf_serial($value);
+                    break;  
+                case 'plates_fiber_optic_cable_model':
+                    set_plates_fiber_optic_cable_model($value);
+                    break;
+                case 'reels_fiber_optic_cable_model':
+                    set_reels_fiber_optic_cable_model($value);
+                    break;                      
             }
         }
 
@@ -420,12 +438,7 @@
         $all_configs_str = json_encode($all_configs);
 
         $command = "/root/run_root_settings 13 '$all_configs_str'";
-        //PROBLEM: json has too many chars - so it doesnt reach the C command 
-        // THIS WORKS: "all configs str: ".$all_configs_str."\n\n";
-        // TODO: upload file to c and not send string
          echo "testing... " . updateFile_exec($command)." blah\n\n"; 
-
-       // return shell_exec("/root/run_root_settings 13 '$all_configs_str'");
     }
 
     function set_high_temp($new_high_temp) {
@@ -434,15 +447,70 @@
         $all_configs_str = json_encode($all_configs);
 
         $command = "/root/run_root_settings 13 '$all_configs_str'";
-        //PROBLEM: json has too many chars - so it doesnt reach the C command 
-        // THIS WORKS: "all configs str: ".$all_configs_str."\n\n";
-        // TODO: upload file to c and not send string
          echo "testing... " . updateFile_exec($command)." blah\n\n"; 
-
-       // return shell_exec("/root/run_root_settings 13 '$all_configs_str'");
     }
  
-    
+    function set_robot_part($val) {
+        $all_configs = get_all_configs();
+        $all_configs['Robot']['P/N'] = $val;
+        $all_configs_str = json_encode($all_configs);
+
+        $command = "/root/run_root_settings 13 '$all_configs_str'";
+         echo "testing... " . updateFile_exec($command)." blah\n\n"; 
+    }
+
+    function set_robot_serial($val) {
+        $all_configs = get_all_configs();
+        $all_configs['Robot']['S/N'] = $val;
+        $all_configs_str = json_encode($all_configs);
+
+        $command = "/root/run_root_settings 13 '$all_configs_str'";
+         echo "testing... " . updateFile_exec($command)." blah\n\n"; 
+    }
+
+    function set_aodf_part($val) {
+        $all_configs = get_all_configs();
+        $all_configs['AODF']['P/N'] = $val;
+        $all_configs_str = json_encode($all_configs);
+
+        $command = "/root/run_root_settings 13 '$all_configs_str'";
+     
+         echo "testing... " . updateFile_exec($command)." blah\n\n"; 
+    }
+ 
+    function set_aodf_serial($val) {
+        $all_configs = get_all_configs();
+        $all_configs['AODF']['S/N'] = $val;
+        $all_configs_str = json_encode($all_configs);
+
+        $command = "/root/run_root_settings 13 '$all_configs_str'";
+       
+         echo "testing... " . updateFile_exec($command)." blah\n\n"; 
+    }
+
+    function set_plates_fiber_optic_cable_model($val) {
+        $all_configs = get_all_configs();
+        $all_configs['plates fiber optic cable']['Model'] = $val;
+        $all_configs_str = json_encode($all_configs);
+
+        $command = "/root/run_root_settings 13 '$all_configs_str'";
+       
+         echo "testing... " . updateFile_exec($command)." blah\n\n"; 
+
+    }
+
+    function set_reels_fiber_optic_cable_model($val) {
+        $all_configs = get_all_configs();
+        $all_configs['reels fiber optic cable']['Model'] = $val;
+        $all_configs_str = json_encode($all_configs);
+
+        $command = "/root/run_root_settings 13 '$all_configs_str'";
+        
+         echo "testing... " . updateFile_exec($command)." blah\n\n"; 
+    }
+ 
+    // END configuration screen
+
     function get_params(){
         $str= shell_exec("cat /etc/aodf-scripts/params.json");
     
