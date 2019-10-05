@@ -126,8 +126,6 @@ export class CalibrationView extends React.Component{
     /* ============== handle changes ================== */
     paramHandleChange = (selectedParamsOption) => {
       this.setState({ selectedParamsOption });
-      console.log(selectedParamsOption);
-      console.log(selectedParamsOption.value);
       this.setState({paramValue: selectedParamsOption.value})
 
 
@@ -148,7 +146,8 @@ export class CalibrationView extends React.Component{
       this.setState({ selectedPlateNumberOption });
      
       MicroApi.fetchPlateHeights(selectedPlateNumberOption.value).then(res => {    
-        console.log(res);
+        keys = Object.keys(res);  
+
         this.setState({height1: res.height1})
         this.setState({height2: res.height2})
         this.setState({height3: res.height3})
@@ -280,11 +279,11 @@ export class CalibrationView extends React.Component{
     }
 
     updatePlateHeight = (val1,val2,val3) => {
-      console.log('im update plate height ')
-      log = 'update plate height>> ' + this.state.updatePlateHeight[0].labelPlateNum + '' + val1 + " " + this.state.updatePlateHeight[0].labelPlateArea + "(" + val2 + ")" + ' value: ' + val3;
+      log = 'update plate height>> ' + this.state.updatePlateHeight[0].labelPlateNum + '' + val1 + " " + this.state.updatePlateHeight[0].labelPlateArea + "(" + val2.value + ")" + ' value: ' + val3;
       this.updateLogger(log);
       
-      let allData = [val1,val2,val3];
+      let allData = [val1,val2.label,val3];
+      console.log(allData)
       MicroApi.updatePlateHeight(allData).then(res => {     
         console.log(res);
       })
@@ -292,10 +291,12 @@ export class CalibrationView extends React.Component{
       return;
     }
     modifyRobotParams = (val1,val2) => {
-      console.log('im modify Robot Params ')
-      log = 'modify robot params>> ' + 'parameter:' + ' ' + val1.label + " value: "  + val2;
+      log = 'modify robot params>> ' + 'parameter:' + ' ' + val1.label + " value: "  + value;
       this.updateLogger(log);
-      let all = [val1,val2]
+      let label = val1.label;
+      let value = Number(val2);
+      let paramLabel = label.toUpperCase();
+      let all = [paramLabel,value]
       MicroApi.updateRobotParam(all).then(res => {     
         console.log(res);
       })
@@ -497,7 +498,7 @@ export class CalibrationView extends React.Component{
                             onChange={ event => this.setPlaheHeightValue(event.target.value) }
                           />
                         </SelectBox>
-                        <SaveButton onClick={() =>this.updatePlateHeight(selectedPlateNumberOption.value,selectedPlateAreaOption.value,selectedPlateHeight)}>
+                        <SaveButton onClick={() =>this.updatePlateHeight(selectedPlateNumberOption.value,selectedPlateAreaOption,selectedPlateHeight)}>
                           save
                         </SaveButton>
                      </CalibrationGroup>
@@ -534,7 +535,7 @@ export class CalibrationView extends React.Component{
                       </DisplayData>
                   <SelectBox>
                     <TextInput
-                      style={{fontWeight:'300'}}
+                      style={{fontWeight:'300', width:'100px'}}
                       placeholder="insert value"
                       value={robotParamValue}
                       onChange={ event => this.setRobotParamValue(event.target.value) }

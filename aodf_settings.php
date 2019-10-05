@@ -510,6 +510,16 @@
     }
  
     // END configuration screen
+    function get_all_params(){
+        $str= shell_exec("cat /etc/aodf-scripts/params.json");
+
+        $decoded =  json_decode($str , true );
+        if(!$decoded) {
+            $s = str_replace('NC",','NC"',$str);
+            $decoded =  json_decode($s , TRUE );
+        }
+        return $decoded;
+    }
 
     function get_params(){
         $str= shell_exec("cat /etc/aodf-scripts/params.json");
@@ -530,9 +540,20 @@
             'regular_plate_insert_parameter' => $decoded['R_PLATE_INSERT_EXTENDER_CORRECTION'],
             'regular_plate_pull_parameter' => $decoded['R_PLATE_PULL_EXTENDER_CORRECTION']
         );
+
         return $decoded;        
     }
 
+    function update_robot_param($all) {
+        $paramKeyToUpdate = $all[0];
+        $paramValueToUpdate = $all[1];
+        
+        $all_params = get_all_params();
+        $all_params[$paramKeyToUpdate] = $paramValueToUpdate;
+        $all_params_str = json_encode($all_params);
+
+        return shell_exec("/root/run_root_settings 14 '$all_params_str'");     
+    }
     # calibration screen
     
     function plate_restart($data) {
@@ -766,18 +787,7 @@
        # $result = $db->query("select PLATE_TYPE from PLATE_INFO;");
    
         $result = $db->query("select wheelid from wheel_info;");
-        /*
-        $result = $db->query("select wheel_info.wheelid, wheel_info.plate_number, PLATE_INFO.PLATE_NUMBER, PLATE_INFO.PLATE_TYPE 
-        from wheel_info 
-        INNER JOIN PLATE_INFO ON wheel_info.plate_number=PLATE_INFO.PLATE_NUMBER WHERE PLATE_INFO.PLATE_TYPE=Regular;");
 
-        $result = $db->query("select wheel_info.wheelid
-        from wheel_info 
-        FULL JOIN PLATE_INFO ON wheel_info.plate_number=PLATE_INFO.PLATE_NUMBER WHERE PLATE_INFO.PLATE_TYPE=Regular;");
-*/
-#        SELECT Orders.OrderID, Customers.CustomerName, Orders.OrderDate
-#FROM Orders
-#INNER JOIN Customers ON Orders.CustomerID=Customers.CustomerID;
         while($reel=$result->fetch(PDO::FETCH_ASSOC))
           {     
             
@@ -809,7 +819,7 @@
     function update_connection($stop){
         $connections_array=array();
         $db = new PDO('sqlite:connections_queue.db');
-        $updatedStop = $db->query("update pointer set stop=52");
+        $updatedStop = $db->query("update pointer set stop=$stop");
         while($newStop=$updatedStop->fetch(PDO::FETCH_ASSOC)) {
             array_push(
                 $connections_array,
@@ -821,12 +831,7 @@
 
     }
 
-    function update_robot_param($all) {
-        $paramKeyToUpdate = $all[0];
-        $paramValueToUpdate = $all[1];
-        echo  $paramKeyToUpdate;
-        echo  $paramValueToUpdate;
-    }
+
 
 
 
@@ -870,5 +875,7 @@
     }
        
         */
-    
+
+        
 ?>
+

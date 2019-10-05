@@ -25,6 +25,8 @@
 #define COMMAND_SET_DATE 10
 #define COMMAND_POWEROFF 11
 #define UPDATE_CONFIGS 13
+#define UPDATE_PARAMS 14
+
 
 // const char *HOS = "Howdy";
 regex_t regex;
@@ -144,6 +146,9 @@ int main(int argc, char **argv)
         return writeToConfFile("/etc/hw-list/hw-list.json", inputData);
        // return writeToConfFile("/usr/share/aodf-web/root/hw-list.json", inputData);
         break;
+    case UPDATE_PARAMS:
+        return writeToConfFile("/etc/aodf-scripts/params.json", inputData);
+        break;    
     default:
       printf("Unknown command!\n");
       break;
