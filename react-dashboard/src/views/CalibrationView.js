@@ -125,6 +125,9 @@ export class CalibrationView extends React.Component{
     /* ============== handle changes ================== */
     paramHandleChange = (selectedParamsOption) => {
       this.setState({ selectedParamsOption });
+      console.log(selectedParamsOption);
+      console.log(selectedParamsOption.value);
+
     }
     motorNumChange = (selectedMotorNumOption) => {
       this.setState({ selectedMotorNumOption });
@@ -204,7 +207,6 @@ export class CalibrationView extends React.Component{
 
     getReelNumbers = () => {
       MicroApi.fetchReels().then(res => {
-        console.log(res.reels)
         this.setState({reelNums: this.makeSelect(res.reels)})
         })   
       
@@ -259,45 +261,19 @@ export class CalibrationView extends React.Component{
     }
     
     getParams = () => {
-      //params
       MicroApi.getParams().then((res) => {
-        console.log(res);
-        
         keys = Object.keys(res.params);  
-        console.log(keys);
         let values = Object.values(res.params);
-        console.log(values);
 
-        let i;
-        let j;
         let paramArr = [];
-        for (i=0; i<res.params.length; i++) {
-          paramArr.push({value:res.params.key[i], label:res.params.value[i]});
+        for (let i=0; i<keys.length; i++) {
+          paramArr.push({value:values[i], label:keys[i]});
         }
-        /*
-        for (i = 0; i < keys.length; i++) {
-          for (j =0; j<values.length; j++){
-            paramArr += {value:values[j], label:keys[i]};
-          }
-        }*/
-        console.log(paramArr)
-        this.setState({params: this.makeSelect(paramArr)})
+        this.setState({params: paramArr})
 
         return paramArr;
 
       })
-/*
-      let myArr = [
-        {value:1, label:'parking_target_x_pos'},
-        {value:2, label:['regular_plate_target_x_pos']},
-        {value:3, label:'parking_target_y_pos'},
-        {value:4, label:'regular_plate_target_y_pos'},
-        {value:5, label:'parking_plate_insert_parameter'}, 
-        {value:6, label:'parking_plate_pull_parameter'}, 
-        {value:7, label:'regular_plate_insert_parameter'}, 
-        {value:8, label:'regular_plate_pull_parameter'}
-       ] 
-       return myArr;*/
     }
 
     updatePlateHeight = (val1,val2,val3) => {
@@ -546,6 +522,9 @@ export class CalibrationView extends React.Component{
                         name="select-parameter"
                       />
                   </SelectBox>
+                  <DisplayData style={{width:'auto'}}>
+
+                      </DisplayData>
                   <SelectBox>
                     <TextInput
                       style={{fontWeight:'300'}}
