@@ -37,6 +37,7 @@ export class CalibrationView extends React.Component{
               }
             })},
           params:null,  
+          paramValue:null,
           allHeights:null,
           plateNums:null,
           reelNums:null,
@@ -127,6 +128,8 @@ export class CalibrationView extends React.Component{
       this.setState({ selectedParamsOption });
       console.log(selectedParamsOption);
       console.log(selectedParamsOption.value);
+      this.setState({paramValue: selectedParamsOption.value})
+
 
     }
     motorNumChange = (selectedMotorNumOption) => {
@@ -292,6 +295,10 @@ export class CalibrationView extends React.Component{
       console.log('im modify Robot Params ')
       log = 'modify robot params>> ' + 'parameter:' + ' ' + val1.label + " value: "  + val2;
       this.updateLogger(log);
+      let all = [val1,val2]
+      MicroApi.updateRobotParam(all).then(res => {     
+        console.log(res);
+      })
       return;
     }
 
@@ -325,7 +332,7 @@ export class CalibrationView extends React.Component{
     } 
 
     render(){
-      let {selectedInstructionsOption, selectedReelNumberOption, selectedPlateNumberOption, selectedPlateAreaOption, plateCalibrationGroups, reelCalibrationGroups, setReelToParkingPlate, updatePlateHeight, modifyRobotParameters, routineTableLabels, routineFunctionsList, selectedInsttypeOption, motorNumList, selectedMotorNumOption, resultTable, customStyles, selectedParamsOption, instTypeOptions, selectedMotorNumValue, outputData, selectedPlateHeight, robotParamValue, plateNums, reelNums, height1, height2, height3, height4 , allHeights, report, params} = this.state;
+      let {selectedInstructionsOption, selectedReelNumberOption, selectedPlateNumberOption, selectedPlateAreaOption, plateCalibrationGroups, reelCalibrationGroups, setReelToParkingPlate, updatePlateHeight, modifyRobotParameters, routineTableLabels, routineFunctionsList, selectedInsttypeOption, motorNumList, selectedMotorNumOption, resultTable, customStyles, selectedParamsOption, instTypeOptions, selectedMotorNumValue, outputData, selectedPlateHeight, robotParamValue, plateNums, reelNums, height1, height2, height3, height4 , allHeights, report, params, paramValue} = this.state;
       return (
         <div>
         <CalibrationContainer>
@@ -523,7 +530,7 @@ export class CalibrationView extends React.Component{
                       />
                   </SelectBox>
                   <DisplayData style={{width:'auto'}}>
-
+                      {paramValue}
                       </DisplayData>
                   <SelectBox>
                     <TextInput

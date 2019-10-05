@@ -123,8 +123,8 @@ export const MicroApi = {
     fetchParkingPlateNum:(currentReel)=>{
         return  _query({method:'POST',func: 'fetch_parking_plate_num',body:{method:'fetch_parking_plate_num', currentReel}});
     },
-    fetchPlateHeights:(currentPlateNum)=>{
-        return  _query({method:'POST',func: 'fetch_plates_height',body:{method:'fetch_plates_height', currentPlateNum}});
+    fetchPlateHeights:(plateNum)=>{
+        return  _query({method:'POST',func: 'fetch_plates_height',body:{method:'fetch_plates_height', plateNum}});
     },
     fetchPlatePosition:(currentPlateNum)=>{
         return  _query({method:'POST',func: 'fetch_plate_position',body:{method:'fetch_plate_position', currentPlateNum}});
@@ -140,6 +140,9 @@ export const MicroApi = {
     },
     updatePlateHeight:(allData)=>{
         return  _query({method:'POST',func: 'fetch_plates_height',body:{method:'update_plate_height', allData}});
+    },
+    updateRobotParam:(all) => {
+        return  _query({method:'POST',func: 'update_robot_param',body:{method:'update_robot_param', all}});
     },
     setReelToParking:(reelNum)=>{
         return  _query({method:'POST',func: 'set_reel_to_parking',body:{method:'set_reel_to_parking', reelNum}});

@@ -821,9 +821,39 @@
 
     }
 
+    function update_robot_param($all) {
+        $paramKeyToUpdate = $all[0];
+        $paramValueToUpdate = $all[1];
+        echo  $paramKeyToUpdate;
+        echo  $paramValueToUpdate;
+    }
+
 
 
     /*
+     function update_plate($allData){
+        //init data
+        $plateNumToUpdate = $allData[0];
+        $currentPlateHeight = $allData[1][0]; // gives value! I need key - should be HEIGHT1, HEIGHT2 etc 
+        $newPlateHeight = $allData[2];
+        
+        //db
+        $newHeights_array=array();
+        $db = new PDO('sqlite:AODF.db');
+        $updatedHeight = $db->query("update PLATE_INFO set HEIGHT1=$newPlateHeight where PLATE_NUMBER=$plateNumToUpdate;");
+                
+        while($newHeight=$updatedHeight->fetch(PDO::FETCH_ASSOC)) {
+            array_push(
+                $newHeights_array,
+                $newHeight["HEIGHT1"]
+          );
+        }
+        echo $newHeights_array;
+        return $newHeights_array;
+
+
+    }    
+
     function fetch_plates_height2($plateNum) {
         $heights_array=array();
         $db = new PDO('sqlite:AODF.db');
