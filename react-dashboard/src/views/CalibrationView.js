@@ -121,6 +121,7 @@ export class CalibrationView extends React.Component{
       this.getPlateNumbers();
       this.getReelNumbers();
       this.getParams();
+      this.getInstructions();
     }
 
     /* ============== handle changes ================== */
@@ -139,6 +140,7 @@ export class CalibrationView extends React.Component{
     };
 
     plateAreaHandleChange = (selectedPlateAreaOption) => {
+      console.log(selectedPlateAreaOption)
       this.setState({ selectedPlateAreaOption });
     };
 
@@ -166,7 +168,7 @@ export class CalibrationView extends React.Component{
       this.setState({selectedMotorNumValue:e});
     }
 
-    setPlaheHeightValue = (e) => {
+    setPlateHeightValue = (e) => {
       this.setState({selectedPlateHeight:e});
     }
     setRobotParamValue = (e) => {
@@ -207,6 +209,25 @@ export class CalibrationView extends React.Component{
       return motorNums;
     }
 
+    getInstructions = () => {
+      MicroApi.fetchInstructions().then(res => {
+        console.log(res.instructions);
+        console.log(res.instValues);
+
+        keys = Object.keys(res.instructions);  
+        let values = Object.values(res.instValues);
+
+        let instructionsArr = [];
+        for (let i=0; i<keys.length; i++) {
+          instructionsArr.push({value:keys[i], label:values[i]});
+        }
+        this.setState({instructions: instructionsArr})
+
+
+        //this.setState({instructions: this.makeSelect(res.reels)})
+        })   
+      
+    }
     getReelNumbers = () => {
       MicroApi.fetchReels().then(res => {
         this.setState({reelNums: this.makeSelect(res.reels)})
@@ -282,6 +303,10 @@ export class CalibrationView extends React.Component{
       log = 'update plate height>> ' + this.state.updatePlateHeight[0].labelPlateNum + '' + val1 + " " + this.state.updatePlateHeight[0].labelPlateArea + "(" + val2.value + ")" + ' value: ' + val3;
       this.updateLogger(log);
       
+      console.log(val1);
+      console.log(val2);
+console.log(val3);
+
       let allData = [val1,val2.label,val3];
       console.log(allData)
       MicroApi.updatePlateHeight(allData).then(res => {     
@@ -333,7 +358,7 @@ export class CalibrationView extends React.Component{
     } 
 
     render(){
-      let {selectedInstructionsOption, selectedReelNumberOption, selectedPlateNumberOption, selectedPlateAreaOption, plateCalibrationGroups, reelCalibrationGroups, setReelToParkingPlate, updatePlateHeight, modifyRobotParameters, routineTableLabels, routineFunctionsList, selectedInsttypeOption, motorNumList, selectedMotorNumOption, resultTable, customStyles, selectedParamsOption, instTypeOptions, selectedMotorNumValue, outputData, selectedPlateHeight, robotParamValue, plateNums, reelNums, height1, height2, height3, height4 , allHeights, report, params, paramValue} = this.state;
+      let {selectedInstructionsOption, selectedReelNumberOption, selectedPlateNumberOption, selectedPlateAreaOption, plateCalibrationGroups, reelCalibrationGroups, setReelToParkingPlate, updatePlateHeight, modifyRobotParameters, routineTableLabels, routineFunctionsList, selectedInsttypeOption, motorNumList, selectedMotorNumOption, resultTable, customStyles, selectedParamsOption, instTypeOptions, selectedMotorNumValue, outputData, selectedPlateHeight, robotParamValue, plateNums, reelNums, height1, height2, height3, height4 , allHeights, report, params, paramValue, instructions} = this.state;
       return (
         <div>
         <CalibrationContainer>
@@ -348,9 +373,9 @@ export class CalibrationView extends React.Component{
                           placeholder='RoR'
                           value={selectedInstructionsOption}
                           onChange={this.instructionsFunctionChange}
-                          options={routineFunctionsList[0].functionsList}
+                          options={instructions}
                           name="functions-list-select"
-                        />
+                        /> 
                     </TestButton>
                     <TestButton>
                       <Select
@@ -495,7 +520,7 @@ export class CalibrationView extends React.Component{
                             style={{fontWeight:'300'}}
                             placeholder="insert height"
                             value={selectedPlateHeight}
-                            onChange={ event => this.setPlaheHeightValue(event.target.value) }
+                            onChange={ event => this.setPlateHeightValue(event.target.value) }
                           />
                         </SelectBox>
                         <SaveButton onClick={() =>this.updatePlateHeight(selectedPlateNumberOption.value,selectedPlateAreaOption,selectedPlateHeight)}>

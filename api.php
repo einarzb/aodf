@@ -392,7 +392,13 @@ if(isset($_GET["functionname"])&&!empty ($_GET["functionname"]))
               echo json_encode(array(
                 "reels"=>fetch_reels()
               ));  
-              break;                 
+              break;      
+        case 'fetch_instructions':
+                echo json_encode(array(
+                "instructions"=>get_instructions(),
+                "instValues"=>get_instructions_values()
+                ));  
+                break;            
         case 'reboot':
             die(do_reboot());    
         case 'reel_calibration':

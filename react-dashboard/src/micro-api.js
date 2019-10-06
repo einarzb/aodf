@@ -117,6 +117,9 @@ export const MicroApi = {
     fetchReels:()=>{
         return  _query({method:'GET',func: 'fetch_reels',body:false});
     },
+    fetchInstructions:()=>{
+        return  _query({method:'GET',func: 'fetch_instructions',body:false});
+    },
     fetchReelAngle:(currentReel)=>{
         return  _query({method:'POST',func: 'fetch_reel_angle',body:{method:'fetch_reel_angle', currentReel}});
     },

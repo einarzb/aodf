@@ -799,6 +799,33 @@
         return $reels_array;
     }
 
+    function get_instructions(){
+        $instructions_array=array();
+        $db = new PDO('sqlite:AODF.db');
+        $result = $db->query("select * from instructions;");
+        while($instruction=$result->fetch(PDO::FETCH_ASSOC))
+        {     
+          array_push(
+                $instructions_array,
+                $instruction['instname']
+        );
+       }
+      return $instructions_array;
+    }
+
+    function get_instructions_values(){
+        $instructions_values_array=array();
+        $db = new PDO('sqlite:AODF.db');
+        $result = $db->query("select * from instructions;");
+        while($instruction=$result->fetch(PDO::FETCH_ASSOC))
+        {     
+          array_push(
+                $instructions_values_array,
+                $instruction['instvalue']
+        );
+       }
+      return $instructions_values_array;
+    }
     # quick commands
     function get_connections(){
         $connections_array=array();
