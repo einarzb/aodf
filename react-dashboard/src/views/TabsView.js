@@ -17,29 +17,29 @@ export default class TabsView extends React.Component{
                 <div>
                   <TabMenu>
                         <Tab>
-                          <Link to="/settings">Settings</Link>
+                          <Link to="/machine_settings/settings">Settings</Link>
                         </Tab>
                         <Tab>
-                          <Link to="/configuration">Configuration</Link>
+                          <Link to="/machine_settings/configuration">Configuration</Link>
                         </Tab>
                         <Tab>
-                          <Link to="/opticalport">Optical Port</Link>
+                          <Link to="/machine_settings/opticalport">Optical Port</Link>
                         </Tab>
                         <Tab>
-                          <Link to="/calibration">Calibration</Link>
+                          <Link to="/machine_settings/calibration">Calibration</Link>
                         </Tab>
                         <Tab>
-                          <Link to="/quickcommands">Quick Commands</Link>
+                          <Link to="/machine_settings/quickcommands">Quick Commands</Link>
                         </Tab>
                         <Tab></Tab>
                   </TabMenu>
 
 
-                  <Route exact path="/settings" component={SettingsView} /> 
-                  <Route path="/configuration" component={ConfigurationsView} />
-                  <Route path="/calibration" component={CalibrationView} />
-                  <Route path="/quickcommands" component={QuickCommandsView} />
-                  <Route path="/opticalport" component={OpticalPortView} />
+                  <Route exact path="/machine_settings/settings" component={SettingsView} /> 
+                  <Route path="/machine_settings/configuration" component={ConfigurationsView} />
+                  <Route path="/machine_settings/calibration" component={CalibrationView} />
+                  <Route path="/machine_settings/quickcommands" component={QuickCommandsView} />
+                  <Route path="/machine_settings/opticalport" component={OpticalPortView} />
 
                   </div>
             </Router>

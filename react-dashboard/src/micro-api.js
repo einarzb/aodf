@@ -153,6 +153,14 @@ export const MicroApi = {
     },
     powerOff:()=>{
         return _query({method:'GET', func:'power_off', body:false});
-    }
-
+    },
+    elevatorUp: ()=>{
+        return  _query({method:'GET',func: 'direct_mode&arguments=1%201%200%201000',body:false, base:RUNAPI_BASE_URL});
+    },
+    elevatorDown: ()=>{
+        return  _query({method:'GET',func: 'direct_mode&arguments=1%202%200%201000',body:false, base:RUNAPI_BASE_URL});
+    },
+    elevatorStop: ()=>{
+        return  _query({method:'GET',func: 'direct_mode&arguments=1%203%200%200',body:false, base:RUNAPI_BASE_URL});
+    },
 };

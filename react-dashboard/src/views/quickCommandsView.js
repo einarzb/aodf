@@ -179,22 +179,22 @@ class quickCommandsView extends Component{
 
      elevatorUp = () => {
        console.log('im elevator up ror-elvator-1000')
-    //  instructions_manager.execute().then(res => {
-      //  console.log(res)
-     // })
+       MicroApi.elevatorUp().then(res =>{
+        console.log(res);
+      });
      }
      elevatorDown = () => {
       console.log('im elevator down rol-elvator-1000')
-   //  instructions_manager.execute().then(res => {
-     //  console.log(res)
-    // })
+      MicroApi.elevatorDown().then(res =>{
+        console.log(res);
+      });
     }
 
     elevatorStop = () => {
       console.log('im elevator stop mst-elvator-nil')
-   //  instructions_manager.execute().then(res => {
-     //  console.log(res)
-    // })
+      MicroApi.elevatorStop().then(res =>{
+        console.log(res);
+      });
     }
 
     // res returns error 

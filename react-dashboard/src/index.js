@@ -13,9 +13,12 @@ const rootElement = document.getElementById('root');
  
 ReactDOM.render(
     <Provider store={store}>
-        <HashRouter>
-          <App />
-        </HashRouter>
+      <App />
+      {
+        //   <HashRouter>
+        //   <App />
+        // </HashRouter>
+      }
     </Provider>, rootElement
 );
 

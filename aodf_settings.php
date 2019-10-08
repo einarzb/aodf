@@ -4,7 +4,8 @@
 // class Aodf_settings{
     $SETTER_PATH = '/root/run_root_settings';
     $COMMAND_HOSTNAME = 1;
-
+    define('HWLIST_JSON_PATH','/etc/hw-list/hw-list.json' ) ;
+    
     function set_something(){
         return '{"status":"COOL"}';
         
@@ -404,7 +405,7 @@
     }
 
     function get_all_configs(){
-        $str=   shell_exec("cat /etc/hw-list/hw-list.json");
+        $str=   shell_exec("cat ".HWLIST_JSON_PATH);
 
         $decoded =  json_decode($str , true );
         if(!$decoded) {
@@ -415,33 +416,28 @@
     }
 
     function set_low_temp($new_low_temp) {
-        $all_configs = get_all_configs();
-        $all_configs['AODF']['Temperature']['low'] = $new_low_temp;
-        $all_configs_str = json_encode($all_configs);
-
-        $command = "/root/run_root_settings 13 '$all_configs_str'";
-        //PROBLEM: json has too many chars - so it doesnt reach the C command 
-        // THIS WORKS: "all configs str: ".$all_configs_str."\n\n";
-        // TODO: upload file to c and not send string
-         echo "testing... " . updateFile_exec($command)." blah\n\n"; 
-
-       // return shell_exec("/root/run_root_settings 13 '$all_configs_str'");
+        
+        set_temprature($new_low_temp);
     }
 
     function set_high_temp($new_high_temp) {
-        $all_configs = get_all_configs();
-        $all_configs['AODF']['Temperature']['high'] = $new_high_temp;
-        $all_configs_str = json_encode($all_configs);
-
-        $command = "/root/run_root_settings 13 '$all_configs_str'";
-        //PROBLEM: json has too many chars - so it doesnt reach the C command 
-        // THIS WORKS: "all configs str: ".$all_configs_str."\n\n";
-        // TODO: upload file to c and not send string
-         echo "testing... " . updateFile_exec($command)." blah\n\n"; 
-
-       // return shell_exec("/root/run_root_settings 13 '$all_configs_str'");
+        
+        set_temprature($new_high_temp, FALSE);
     }
  
+    function set_temprature($new_temp, $is_low = TRUE) {
+        
+        $all_configs = get_all_configs();
+        $temprature_type = $is_low ? 'low' : 'high';
+        $all_configs['AODF']['Temperature'][$temprature_type] = $new_temp;
+        $all_configs_str = json_encode($all_configs);
+
+        $f=fopen(HWLIST_JSON_PATH,'w+');
+        fwrite($f,$all_configs_str);
+        fclose($f);    
+        // $command = "/
+
+    }
     
     function get_params(){
         $str= shell_exec("cat /etc/aodf-scripts/params.json");
