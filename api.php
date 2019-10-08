@@ -30,10 +30,22 @@ if(isset($post_data["method"])&&!empty ($post_data["method"])){
             ));
         case 'plate_restart':
             die(json_encode(plate_restart($post_data['data'])));
+        case 'fetch_plate_position':
+            die(json_encode(fetch_plate_position($post_data['currentPlateNum'])));
+        case 'fetch_height':
+            die(json_encode(fetch_height($post_data['currentPlateNum'])));
+        case 'fetch_plate_type':
+           die(json_encode(fetch_plate_type($post_data['currentPlateNum'])));
+        case 'fetch_reel_angle':
+           die(json_encode(fetch_reel_angle($post_data['currentReel'])));
+        case 'fetch_parking_plate_num':
+           die(json_encode(fetch_parking_plate_num($post_data['currentReel'])));   
         case 'update_connection':
             die(json_encode(update_connection($post_data['stop'])));
         case 'update_plate_height':
-            die(json_encode(update_plate($post_data['allData'])));    
+            die(json_encode(update_plate($post_data['allData']))); 
+        case 'update_robot_param':
+             die(json_encode(update_robot_param($post_data['all']))); 
         case 'set_reel_to_parking':
             die(json_encode(set_reel_to_parking($post_data['reelNum'])));
         case 'set_date':
@@ -380,7 +392,13 @@ if(isset($_GET["functionname"])&&!empty ($_GET["functionname"]))
               echo json_encode(array(
                 "reels"=>fetch_reels()
               ));  
-              break;                 
+              break;      
+        case 'fetch_instructions':
+                echo json_encode(array(
+                "instructions"=>get_instructions(),
+                "instValues"=>get_instructions_values()
+                ));  
+                break;            
         case 'reboot':
             die(do_reboot());    
         case 'reel_calibration':

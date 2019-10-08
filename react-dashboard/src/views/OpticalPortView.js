@@ -30,14 +30,19 @@ class opticalPortView extends Component{
               }
             })
           },
+          reelNums:null,
+          plateNums:null,
           selectedReelToEditOption:null,
           selectedPhysicalStatusOption:null,
           selectedOperatorOption:null,
           selectedPlateToEditOption:null,
-          PlatesToEdit: this.getPlatesToEdit(),
-          ReelsToEdit:this.getReelsToEdit(),
+          postionOfPlate:null,
+          plateHeight:null,
+          plateType:null,
+          reelAngle:null,
+          parkingPlate:null,
           plateDataByPlateNum : [
-            {label: 'Postion of Plate', value:'1'},
+            {label: 'Postion of Plate', value:'3'},
             {label: 'Plate Height', value:'2341701'},
             {label: 'Plate Type', value:'Regular'}
           ],
@@ -83,49 +88,74 @@ class opticalPortView extends Component{
           updateCounter:this.updateChangesCounter()
         }
     } 
+      // fetch init data from DB
+      componentDidMount(){
+        this.getPlateNumbers();
+        this.getReelNumbers();
+      }
+
+    getReelNumbers = () => {
+      MicroApi.fetchReels().then(res => {
+        this.setState({reelNums: this.makeSelect(res.reels)})
+        })   
+      
+      }
+      
+    getPlateNumbers = () => {
+      MicroApi.fetchPlates().then(res => {
+        this.setState({plateNums: this.makeSelect(res.plates)})
+        })      
+    }
+    
+    getDataOfPlate = (currentPlateNum) => {
+     
+      MicroApi.fetchPlatePosition(currentPlateNum.value).then(res => {
+        console.log(res);
+          this.setState({postionOfPlate:Number(res)})
+        })
+      MicroApi.fetchHeight(currentPlateNum.value).then(res => {
+          console.log(res);
+          this.setState({plateHeight:Number(res)})
+      })
+      MicroApi.fetchPlateType(currentPlateNum.value).then(res => {
+        console.log(res);
+        this.setState({plateType:res})  
+      })
+    }
+
+    getDataOfReel = (currentReel) => {
+      MicroApi.fetchReelAngle(currentReel.value).then(res => {
+        console.log(res);
+        this.setState({reelAngle:Number(res)})  
+      })
+      MicroApi.fetchParkingPlateNum(currentReel.value).then(res => {
+        console.log(res);
+        this.setState({parkingPlate:Number(res)})  
+      })
+    }
+
+    makeSelect = (res) => {
+      let i;
+      let newArr = [];
+      for (i = 0; i < res.length; i++) {
+        newArr.push({value:res[i], label:res[i]})
+      }
+      return newArr;
+    }
+
+
     updateChangesCounter = () => {
       let counter = 0;
       counter++;
       return counter;
     }
-    getPlatesToEdit = () => {
-        let platesToEdit = [
-          {value: 1, label:1},
-          {value: 2, label:2},
-          {value: 3, label:3},
-          {value: 4, label:4},
-          {value: 5, label:5},
-          {value: 6, label:6},
-          {value: 7, label:7},
-          {value: 8, label:8},
-          {value: 9, label:9},
-          {value: 10, label:10},
-          {value: 11, label:11},
-          {value: 12, label:12}
-        ];
-        return platesToEdit
-    }
-    getReelsToEdit = () => {
-      let reelsToEdit = [
-        {value: 1, label:1},
-        {value: 2, label:2},
-        {value: 3, label:3},
-        {value: 4, label:4},
-        {value: 5, label:5},
-        {value: 6, label:6},
-        {value: 7, label:7},
-        {value: 8, label:8},
-        {value: 9, label:9},
-        {value: 10, label:10},
-        {value: 11, label:11},
-        {value: 12, label:12}
-      ];
-      return reelsToEdit
-  }
+  
     
     reelToEditHandleChange = (selectedReelToEditOption) => {
       this.setState({ selectedReelToEditOption });
       console.log(`Option selected:`, selectedReelToEditOption);
+      this.getDataOfReel(selectedReelToEditOption);
+
     }
     PhysicalStatusHandleChange = (selectedPhysicalStatusOption) => {
       this.setState({ selectedPhysicalStatusOption });
@@ -133,7 +163,8 @@ class opticalPortView extends Component{
     }
     plateToEditHandleChange = (selectedPlateToEditOption) => {
       this.setState({ selectedPlateToEditOption });
-      console.log(`Option selected:`, selectedPlateToEditOption);
+      //console.log(`Option selected:`, selectedPlateToEditOption);
+      this.getDataOfPlate(selectedPlateToEditOption);
     }
     operatorsHandleChange = (selectedOperatorOption) => {
       this.setState({ selectedOperatorOption });
@@ -143,7 +174,7 @@ class opticalPortView extends Component{
 
     render(){
       let {} = this.props;
-      let { customStyles, selectedPlateToEditOption, PlatesToEdit, plateDataByPlateNum, plateTableLabels, plateTableInput, selectedOperatorOption, operatorsList, selectedPhysicalStatusOption, physicalStatusList, updateCounter, selectedReelToEditOption, ReelsToEdit, reelDataByReelNum, reelTableLabels  }  = this.state;
+      let { customStyles, selectedPlateToEditOption, plateDataByPlateNum, plateTableLabels, plateTableInput, selectedOperatorOption, operatorsList, selectedPhysicalStatusOption, physicalStatusList, updateCounter, selectedReelToEditOption, reelDataByReelNum, reelTableLabels, reelNums, plateNums, postionOfPlate, plateHeight, plateType, reelAngle, parkingPlate  }  = this.state;
         return (
        
           <OpticalPortContainer>
@@ -159,14 +190,23 @@ class opticalPortView extends Component{
                       placeholder='plate #'
                       value={selectedPlateToEditOption}
                       onChange={this.plateToEditHandleChange}
-                      options={PlatesToEdit}
+                      options={plateNums}
                       name="select-plate-number-to-edit"
                     />
               </SelectBox>
               </span>
 
-              <DataBlock dataBatch={plateDataByPlateNum}>
-              </DataBlock>  
+              <MiniWrap>
+                  <Data>
+                    <strong>Postion of Plate : </strong>{postionOfPlate} 
+                  </Data>
+                  <Data>
+                  <strong>Plate Height : </strong>{plateHeight}
+                  </Data>
+                  <Data>
+                  <strong>Plate Type : </strong>{plateType}
+                </Data>
+              </MiniWrap>
               <RoutinesTable tableCols={plateTableLabels}>
                     <DisplayData>
                     {plateTableInput[0].value}
@@ -230,13 +270,20 @@ class opticalPortView extends Component{
                         placeholder='reel #'
                         value={selectedReelToEditOption}
                         onChange={this.reelToEditHandleChange}
-                        options={ReelsToEdit}
+                        options={reelNums}
                         name="select-reel-number-to-edit"
                       />
                 </SelectBox>
             </span>
+               <MiniWrap>
+                  <Data>
+                    <strong>Reel Angle: </strong>{reelAngle} 
+                  </Data>
+                  <Data>
+                  <strong>Parking Plate Number: </strong>{parkingPlate}
+                  </Data>
+              </MiniWrap>
 
-            <DataBlock dataBatch={reelDataByReelNum}></DataBlock>  
             <RoutinesTable tableCols={reelTableLabels}>
                     <DisplayData>
                     {plateTableInput[0].value}
@@ -383,4 +430,15 @@ const DisplayData = styled.div`
 const DisplayResult = styled(DisplayData)`
     width:70px;
     margin: 0 5px;
+`;
+
+const MiniWrap = styled.div`
+  display:inline-flex;
+  flex-direction:column;
+  width: 39%;
+  align-items: flex-start;
+`;
+
+const Data = styled.div`
+    display:block;
 `;

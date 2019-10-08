@@ -395,7 +395,25 @@
                     break;
                 case 'temp_aodf_high':
                     set_high_temp($value);
-                    break;                       
+                    break;  
+                case 'part_and_serial_numbers_robot_part':
+                    set_robot_part($value);
+                    break;
+                case 'part_and_serial_numbers_robot_serial':
+                    set_robot_serial($value);
+                    break;    
+                case 'part_and_serial_numbers_aodf_part':
+                    set_aodf_part($value);
+                    break;  
+                case 'part_and_serial_numbers_aodf_serial':
+                    set_aodf_serial($value);
+                    break;  
+                case 'plates_fiber_optic_cable_model':
+                    set_plates_fiber_optic_cable_model($value);
+                    break;
+                case 'reels_fiber_optic_cable_model':
+                    set_reels_fiber_optic_cable_model($value);
+                    break;                      
             }
         }
 
@@ -416,8 +434,9 @@
     }
 
     function set_low_temp($new_low_temp) {
-        
+
         set_temprature($new_low_temp);
+
     }
 
     function set_high_temp($new_high_temp) {
@@ -430,15 +449,101 @@
         $all_configs = get_all_configs();
         $temprature_type = $is_low ? 'low' : 'high';
         $all_configs['AODF']['Temperature'][$temprature_type] = $new_temp;
+        overwrite_conf_file($all_configs);
+
+    }
+    // NOTE: ALL MEANS *ALL*
+    function overwrite_conf_file($all_configs) {
         $all_configs_str = json_encode($all_configs);
 
         $f=fopen(HWLIST_JSON_PATH,'w+');
         fwrite($f,$all_configs_str);
         fclose($f);    
-        // $command = "/
-
     }
-    
+
+    function set_robot_part($val) {
+        $all_configs = get_all_configs();
+        $all_configs['Robot']['P/N'] = $val;
+        overwrite_conf_file($all_configs);
+
+        // $all_configs_str = json_encode($all_configs);
+
+        // $command = "/root/run_root_settings 13 '$all_configs_str'";
+        //  echo "testing... " . updateFile_exec($command)." blah\n\n"; 
+    }
+
+    function set_robot_serial($val) {
+        $all_configs = get_all_configs();
+        $all_configs['Robot']['S/N'] = $val;
+        overwrite_conf_file($all_configs);
+
+        // $all_configs_str = json_encode($all_configs);
+
+        // $command = "/root/run_root_settings 13 '$all_configs_str'";
+        //  echo "testing... " . updateFile_exec($command)." blah\n\n"; 
+    }
+
+    function set_aodf_part($val) {
+        $all_configs = get_all_configs();
+        $all_configs['AODF']['P/N'] = $val;
+        overwrite_conf_file($all_configs);
+
+        // $all_configs_str = json_encode($all_configs);
+
+        // $command = "/root/run_root_settings 13 '$all_configs_str'";
+     
+        //  echo "testing... " . updateFile_exec($command)." blah\n\n"; 
+    }
+ 
+    function set_aodf_serial($val) {
+        $all_configs = get_all_configs();
+        $all_configs['AODF']['S/N'] = $val;
+        overwrite_conf_file($all_configs);
+
+        // $all_configs_str = json_encode($all_configs);
+
+        // $command = "/root/run_root_settings 13 '$all_configs_str'";
+       
+        //  echo "testing... " . updateFile_exec($command)." blah\n\n"; 
+    }
+
+    function set_plates_fiber_optic_cable_model($val) {
+        $all_configs = get_all_configs();
+        $all_configs['plates fiber optic cable']['Model'] = $val;
+        overwrite_conf_file($all_configs);
+
+        // $all_configs_str = json_encode($all_configs);
+
+        // $command = "/root/run_root_settings 13 '$all_configs_str'";
+       
+        //  echo "testing... " . updateFile_exec($command)." blah\n\n"; 
+        
+    }
+
+    function set_reels_fiber_optic_cable_model($val) {
+        $all_configs = get_all_configs();
+        $all_configs['reels fiber optic cable']['Model'] = $val;
+        overwrite_conf_file($all_configs);
+
+        // $all_configs_str = json_encode($all_configs);
+
+        // $command = "/root/run_root_settings 13 '$all_configs_str'";
+        
+        //  echo "testing... " . updateFile_exec($command)." blah\n\n"; 
+    }
+ 
+    // END configuration screen
+    function get_all_params(){
+        $str= shell_exec("cat /etc/aodf-scripts/params.json");
+
+        $decoded =  json_decode($str , true );
+        if(!$decoded) {
+            $s = str_replace('NC",','NC"',$str);
+            $decoded =  json_decode($s , TRUE );
+        }
+        return $decoded;
+    }
+
     function get_params(){
         $str= shell_exec("cat /etc/aodf-scripts/params.json");
     
@@ -458,9 +563,20 @@
             'regular_plate_insert_parameter' => $decoded['R_PLATE_INSERT_EXTENDER_CORRECTION'],
             'regular_plate_pull_parameter' => $decoded['R_PLATE_PULL_EXTENDER_CORRECTION']
         );
+
         return $decoded;        
     }
 
+    function update_robot_param($all) {
+        $paramKeyToUpdate = $all[0];
+        $paramValueToUpdate = $all[1];
+        
+        $all_params = get_all_params();
+        $all_params[$paramKeyToUpdate] = $paramValueToUpdate;
+        $all_params_str = json_encode($all_params);
+
+        return shell_exec("/root/run_root_settings 14 '$all_params_str'");     
+    }
     # calibration screen
     
     function plate_restart($data) {
@@ -503,6 +619,81 @@
         return $e_res;
     }
 
+    function fetch_plate_position($currentPlateNum) {
+        $plate_position_array=array();
+        $db = new PDO('sqlite:AODF.db');
+        $currentPosition = $db->query("select PLATE_POSITION from PLATE_INFO where PLATE_NUMBER=$currentPlateNum;");
+        
+        while($position=$currentPosition->fetch(PDO::FETCH_ASSOC)) {
+            array_push(
+                $plate_position_array,
+                $position["PLATE_POSITION"]
+          );
+        }
+
+        return $plate_position_array;
+    }
+
+    function fetch_height($currentPlateForHeight) {
+         $plate_height_array=array();
+         $db = new PDO('sqlite:AODF.db');
+         $currentHeight = $db->query("select PLATE_HEIGHT from PLATE_INFO where PLATE_NUMBER=$currentPlateForHeight;");
+         
+         while($height=$currentHeight->fetch(PDO::FETCH_ASSOC)) {
+             array_push(
+                 $plate_height_array,
+                 $height["PLATE_HEIGHT"]
+           );
+         }
+ 
+         return $plate_height_array;
+     }
+
+     function fetch_plate_type($currentPlate) {
+        $plate_type_array=array();
+        $db = new PDO('sqlite:AODF.db');
+        $currentType = $db->query("select PLATE_TYPE from PLATE_INFO where PLATE_NUMBER=$currentPlate;");
+        
+        while($type=$currentType->fetch(PDO::FETCH_ASSOC)) {
+            array_push(
+                $plate_type_array,
+                $type["PLATE_TYPE"]
+          );
+        }
+
+        return $plate_type_array;
+    }
+
+    function fetch_reel_angle($currentReel) {
+        $reel_angles_array=array();
+        $db = new PDO('sqlite:AODF.db');
+        $currentAngle = $db->query("select wheelangle from wheel_info where wheelid=$currentReel;");
+        
+        while($angle=$currentAngle->fetch(PDO::FETCH_ASSOC)) {
+            array_push(
+                $reel_angles_array,
+                $angle["wheelangle"]
+          );
+        }
+
+        return $reel_angles_array;
+    }
+    function fetch_parking_plate_num($currentReel) {
+        $parking_plate_num_array=array();
+        $db = new PDO('sqlite:AODF.db');
+        $res = $db->query("select parkingplatenum from wheel_info where wheelid=$currentReel;");
+        
+        while($parking_plate=$res->fetch(PDO::FETCH_ASSOC)) {
+            array_push(
+                $parking_plate_num_array,
+                $parking_plate["parkingplatenum"]
+          );
+        }
+
+        return $parking_plate_num_array;
+    }
+
+    
     # quick commands
 
     function plate_rot_in(){
@@ -614,34 +805,60 @@
 
     function fetch_reels(){
         $reels_array=array();
+        $regular_plates=array();
         $db = new PDO('sqlite:AODF.db');
  
-       # $result = $db->query("select PLATE_TYPE from PLATE_INFO;");
-   
-        $result = $db->query("select wheelid from wheel_info;");
-        /*
-        $result = $db->query("select wheel_info.wheelid, wheel_info.plate_number, PLATE_INFO.PLATE_NUMBER, PLATE_INFO.PLATE_TYPE 
-        from wheel_info 
-        INNER JOIN PLATE_INFO ON wheel_info.plate_number=PLATE_INFO.PLATE_NUMBER WHERE PLATE_INFO.PLATE_TYPE=Regular;");
+        $plates_result = $db->query("select * from PLATE_INFO");
+        while($plate=$plates_result->fetch(PDO::FETCH_ASSOC)) {
+            if ($plate['PLATE_TYPE'] == 'Regular' ){
+                $regular_plates[] = $plate['PLATE_NUMBER'];
+            }
+        }
 
-        $result = $db->query("select wheel_info.wheelid
-        from wheel_info 
-        FULL JOIN PLATE_INFO ON wheel_info.plate_number=PLATE_INFO.PLATE_NUMBER WHERE PLATE_INFO.PLATE_TYPE=Regular;");
-*/
-#        SELECT Orders.OrderID, Customers.CustomerName, Orders.OrderDate
-#FROM Orders
-#INNER JOIN Customers ON Orders.CustomerID=Customers.CustomerID;
+        // echo json_encode($regular_plates);
+        $result = $db->query("select * from wheel_info;");
+
         while($reel=$result->fetch(PDO::FETCH_ASSOC))
           {     
+            //   echo json_encode($reel);
+            if (in_array($reel['plate_number'], $regular_plates)) {
+                array_push(
+                    $reels_array,
+                    $reel["wheelid"]
+              );
+            }    
             
-            array_push(
-                  $reels_array,
-                  $reel["wheelid"]
-            );
          }
         return $reels_array;
     }
 
+    function get_instructions(){
+        $instructions_array=array();
+        $db = new PDO('sqlite:AODF.db');
+        $result = $db->query("select * from instructions;");
+        while($instruction=$result->fetch(PDO::FETCH_ASSOC))
+        {     
+          array_push(
+                $instructions_array,
+                $instruction['instname']
+        );
+       }
+      return $instructions_array;
+    }
+
+    function get_instructions_values(){
+        $instructions_values_array=array();
+        $db = new PDO('sqlite:AODF.db');
+        $result = $db->query("select * from instructions;");
+        while($instruction=$result->fetch(PDO::FETCH_ASSOC))
+        {     
+          array_push(
+                $instructions_values_array,
+                $instruction['instvalue']
+        );
+       }
+      return $instructions_values_array;
+    }
     # quick commands
     function get_connections(){
         $connections_array=array();
@@ -662,7 +879,7 @@
     function update_connection($stop){
         $connections_array=array();
         $db = new PDO('sqlite:connections_queue.db');
-        $updatedStop = $db->query("update pointer set stop=52");
+        $updatedStop = $db->query("update pointer set stop=$stop");
         while($newStop=$updatedStop->fetch(PDO::FETCH_ASSOC)) {
             array_push(
                 $connections_array,
@@ -676,7 +893,32 @@
 
 
 
+
+
     /*
+     function update_plate($allData){
+        //init data
+        $plateNumToUpdate = $allData[0];
+        $currentPlateHeight = $allData[1][0]; // gives value! I need key - should be HEIGHT1, HEIGHT2 etc 
+        $newPlateHeight = $allData[2];
+        
+        //db
+        $newHeights_array=array();
+        $db = new PDO('sqlite:AODF.db');
+        $updatedHeight = $db->query("update PLATE_INFO set HEIGHT1=$newPlateHeight where PLATE_NUMBER=$plateNumToUpdate;");
+                
+        while($newHeight=$updatedHeight->fetch(PDO::FETCH_ASSOC)) {
+            array_push(
+                $newHeights_array,
+                $newHeight["HEIGHT1"]
+          );
+        }
+        echo $newHeights_array;
+        return $newHeights_array;
+
+
+    }    
+
     function fetch_plates_height2($plateNum) {
         $heights_array=array();
         $db = new PDO('sqlite:AODF.db');
@@ -693,5 +935,7 @@
     }
        
         */
-    
+
+        
 ?>
+

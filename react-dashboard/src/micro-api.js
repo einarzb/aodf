@@ -117,14 +117,35 @@ export const MicroApi = {
     fetchReels:()=>{
         return  _query({method:'GET',func: 'fetch_reels',body:false});
     },
+    fetchInstructions:()=>{
+        return  _query({method:'GET',func: 'fetch_instructions',body:false});
+    },
+    fetchReelAngle:(currentReel)=>{
+        return  _query({method:'POST',func: 'fetch_reel_angle',body:{method:'fetch_reel_angle', currentReel}});
+    },
+    fetchParkingPlateNum:(currentReel)=>{
+        return  _query({method:'POST',func: 'fetch_parking_plate_num',body:{method:'fetch_parking_plate_num', currentReel}});
+    },
     fetchPlateHeights:(plateNum)=>{
         return  _query({method:'POST',func: 'fetch_plates_height',body:{method:'fetch_plates_height', plateNum}});
+    },
+    fetchPlatePosition:(currentPlateNum)=>{
+        return  _query({method:'POST',func: 'fetch_plate_position',body:{method:'fetch_plate_position', currentPlateNum}});
+    },
+    fetchPlateType:(currentPlateNum)=>{
+        return  _query({method:'POST',func: 'fetch_plate_type',body:{method:'fetch_plate_type', currentPlateNum}});
+    },
+    fetchHeight:(currentPlateNum)=>{
+        return  _query({method:'POST',func: 'fetch_height',body:{method:'fetch_height', currentPlateNum}});
     },
     updateConnection:(stop) => {
         return  _query({method:'POST',func: 'update_connection',body:{method:'update_connection', stop}});
     },
     updatePlateHeight:(allData)=>{
         return  _query({method:'POST',func: 'fetch_plates_height',body:{method:'update_plate_height', allData}});
+    },
+    updateRobotParam:(all) => {
+        return  _query({method:'POST',func: 'update_robot_param',body:{method:'update_robot_param', all}});
     },
     setReelToParking:(reelNum)=>{
         return  _query({method:'POST',func: 'set_reel_to_parking',body:{method:'set_reel_to_parking', reelNum}});
