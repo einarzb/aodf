@@ -213,7 +213,7 @@ class opticalPortView extends Component{
               <RoutinesTable tableCols={plateTableLabels}>
                 
                 {plateTableInput.map((row) => {
-                  return <div>
+                  return <div style={{display:'inline-flex', flexDirecton:'row', width:'100%'}}>
                   <DisplayData>
                     {row.index}
                    </DisplayData>

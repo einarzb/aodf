@@ -21,7 +21,9 @@ const RoutinesTable = ({tableCols, children}) => {
             </TableRow>
           </TableHeader>
           <TableBody style={{display:"inline-flex", width:'100%', alignItems:'center'}}>
-                {children}          
+               <div style={{display: 'inline-flex',flexDirection: 'column',width: '100%'}}>
+               {children}      
+                 </div>     
           </TableBody>
         </Table>
     </TableWrapper>    
