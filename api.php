@@ -206,7 +206,7 @@ if(isset($_GET["functionname"])&&!empty ($_GET["functionname"]))
                     $records=$result->fetch(PDO::FETCH_ASSOC);
                     $port_info['wheelid'] = $records['wheelid'] > 0 ? $records['wheelid'] : "None";
                     $port_info['index'] = $port_index;
-                    $plate_ports_data['rows'][] = $port_index;
+                    $plate_ports_data['rows'][] = $port_info;
                 }
                 echo json_encode($plate_ports_data);
             }

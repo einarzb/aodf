@@ -296,6 +296,7 @@ class opticalPortView extends Component{
               </MiniWrap>
 
             <RoutinesTable tableCols={reelTableLabels}>
+              <div>
                     <DisplayData>
                     {"--"}
                    </DisplayData>
@@ -341,6 +342,7 @@ class opticalPortView extends Component{
                     <DisplayData>
                     {updateCounter}
                    </DisplayData>
+                   </div>
                 </RoutinesTable>
                 <SaveButton style={{width:'20%', fontSize:'16px'}}>
                       save
