@@ -211,20 +211,21 @@ export class CalibrationView extends React.Component{
 
     getInstructions = () => {
       MicroApi.fetchInstructions().then(res => {
-        console.log(res.instructions);
+        console.log();
         console.log(res.instValues);
+        // let {}
+        let instructions = [];
+        // keys = Object.keys(res.instructions);  
+        // let values = Object.values(res.instValues);
 
-        keys = Object.keys(res.instructions);  
-        let values = Object.values(res.instValues);
-
-        let instructionsArr = [];
-        for (let i=0; i<keys.length; i++) {
-          instructionsArr.push({value:keys[i], label:values[i]});
+        // let instructionsArr = [];
+        for (let i=0; i<res.instructions.length; i++) {
+          instructions.push({label:res.instructions[i], value:res.instValues[i]});
+          // instructionsArr.push({value:keys[i], label:values[i]});
         }
-        this.setState({instructions: instructionsArr})
+        this.setState({instructions})
+        // this.setState({instructions: instructionsArr})
 
-
-        //this.setState({instructions: this.makeSelect(res.reels)})
         })   
       
     }
@@ -245,9 +246,12 @@ export class CalibrationView extends React.Component{
 
 
     
-    executeInstructions = (val1, val2, val3) => {
-      log = 'test routine>> ' + val1 + ' ' + val2 + ' value: ' + val3;
-      this.updateLogger(log);
+    executeInstructions  = (instruction, motorNum, value) => {
+      // log = 'test routine>> ' + val1 + ' ' + val2 + ' value: ' + val3;
+      MicroApi.directControl(instruction, motorNum, value).then(res=>{
+        this.updateLogger(res);
+      })
+      
     }
 
     plateCalibration = (val1, val2) => {   
@@ -406,7 +410,7 @@ console.log(val3);
                             onChange={ event => this.setMotorNumValue(event.target.value) }
                         />
                     </TestButton>
-                    <SaveButton onClick={() => this.executeInstructions(selectedInstructionsOption.label, selectedMotorNumOption.label, selectedMotorNumValue)} style={{width:'20%', fontSize:'16px'}}>
+                    <SaveButton onClick={() => this.executeInstructions(selectedInstructionsOption.value, selectedMotorNumOption.label, selectedMotorNumValue)} style={{width:'20%', fontSize:'16px'}}>
                       execute
                     </SaveButton>
                 </RoutinesTable>   

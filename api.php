@@ -167,6 +167,50 @@ if(isset($_GET["functionname"])&&!empty ($_GET["functionname"]))
                $records["status"]="Update Failed";
            echo json_encode($records);
            break;
+        case "plategetportsjson":
+            if(isset($_GET["plateinfo_platenum"]))
+            {
+                $plate_ports_data = array(
+                    "operators"=>array(),
+                    "statuses"=>array(),
+                    "rows"=>array()
+                );
+                $recordid=$_GET["plateinfo_platenum"];
+                $sql="SELECT * FROM 'PLATE_INFO' WHERE PLATE_NUMBER=$recordid";
+                $result = $db->query($sql);
+                if($result==FALSE){
+                    return;
+                }
+                
+                $records=$result->fetch(PDO::FETCH_ASSOC);
+                $plateinfo_portsnum = $records["PORTS_NUMBER"];
+                $plate_type =  $records['PLATE_TYPE'];
+                // get operators list
+                $result = $db->query("SELECT NAME FROM OPERATORS;");
+                // $operatorslist=null;
+                $plate_ports_data['operators'][]="Not Assigned";
+                while($operator=$result->fetch(PDO::FETCH_ASSOC))
+                {
+                    $plate_ports_data['operators'][]=$operator['NAME'];
+                }
+
+                $plate_ports_data['statuses'] = array('Available', 'Not Available');
+                for ($index = 0; $index < $plateinfo_portsnum; $index++){
+                
+                    $port_index = $index+1;
+                    $sql = "select * from 'platesports_info' where plateid= $recordid and portnum = $port_index";
+                    $result = $db->query($sql);
+                    $port_info=$result->fetch(PDO::FETCH_ASSOC);
+                    $sql="SELECT wheelid FROM 'wheel_info' WHERE plate_number=$recordid and plate_port_number=$port_index";
+                    $result = $db->query($sql);
+                    $records=$result->fetch(PDO::FETCH_ASSOC);
+                    $port_info['wheelid'] = $records['wheelid'] > 0 ? $records['wheelid'] : "None";
+                    $port_info['index'] = $port_index;
+                    $plate_ports_data['rows'][] = $port_index;
+                }
+                echo json_encode($plate_ports_data);
+            }
+            break;
        case "plategetportsform":
             if(isset($_GET["plateinfo_platenum"]))
             {

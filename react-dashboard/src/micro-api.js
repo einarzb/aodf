@@ -106,7 +106,9 @@ export const MicroApi = {
     plateRestart:(data)=>{
         return  _query({method:'POST', func:'plate_restart',body:{method:'plate_restart', data}});
     },
-
+    fetchPlatePorts:(plateNum) =>{
+        return  _query({method:'GET',func: `plategetportsjson&plateinfo_platenum=${plateNum}`,body:false, base:API_BASE_URL});
+    },
     reelCalibration:()=>{
         return  _query({method:'GET',func: 'reel_calibration',body:false});
     },
@@ -184,4 +186,8 @@ export const MicroApi = {
     elevatorStop: ()=>{
         return  _query({method:'GET',func: 'direct_mode&arguments=1%203%200%200',body:false, base:RUNAPI_BASE_URL});
     },
+    directControl: (instruction, motorNum, value)=>{
+        return  _query({method:'GET',func: `direct_mode&arguments=${motorNum}%20${instruction}%200%20${value}`,body:false, base:RUNAPI_BASE_URL});
+    },
+
 };

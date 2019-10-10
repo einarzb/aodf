@@ -70,9 +70,7 @@ class opticalPortView extends Component{
           ],
 
           plateTableInput: [
-            {value: 1},
-            {value: 5},
-            {value: 1}
+           
           ],
 
           operatorsList: [
@@ -120,6 +118,11 @@ class opticalPortView extends Component{
       MicroApi.fetchPlateType(currentPlateNum.value).then(res => {
         console.log(res);
         this.setState({plateType:res})  
+      })
+      MicroApi.fetchPlatePorts(currentPlateNum.value).then(res => {
+        // console.log(res);
+        let {rows} = res;
+        this.setState({plateTableInput: rows});  
       })
     }
 
@@ -208,18 +211,21 @@ class opticalPortView extends Component{
                 </Data>
               </MiniWrap>
               <RoutinesTable tableCols={plateTableLabels}>
-                    <DisplayData>
-                    {plateTableInput[0].value}
+                
+                {plateTableInput.map((row) => {
+                  return <div>
+                  <DisplayData>
+                    {row.index}
                    </DisplayData>
                    <DisplayData>
-                    {plateTableInput[0].value}
+                    {row.wheelid}
                    </DisplayData>
                    <TestButton>
                       <Select
                           styles={customStyles} 
                           autoFocus
                           placeholder=''
-                          value={selectedOperatorOption}
+                          value={operatorsList.find(e => e.label == row.operator)}
                           onChange={this.operatorsHandleChange}
                           options={operatorsList}
                           name="operations-list-select"
@@ -253,6 +259,11 @@ class opticalPortView extends Component{
                     <DisplayData>
                     {updateCounter}
                    </DisplayData>
+                </div>
+                })
+                
+                }    
+
                 </RoutinesTable>
                 <SaveButton style={{width:'20%', fontSize:'16px'}}>
                       save
@@ -286,10 +297,10 @@ class opticalPortView extends Component{
 
             <RoutinesTable tableCols={reelTableLabels}>
                     <DisplayData>
-                    {plateTableInput[0].value}
+                    {"--"}
                    </DisplayData>
                    <DisplayData>
-                    {plateTableInput[0].value}
+                    {"==="}
                    </DisplayData>
                    <TestButton>
                       <Select
