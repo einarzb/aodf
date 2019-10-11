@@ -8,7 +8,7 @@ import { TextInput } from 'grommet/components/TextInput';
 
 import DataBlock from '../components/DataBlock';
 import RoutinesTable from '../components/RoutinesTable';
-
+import {DataRow} from '../components/RoutinesTable';
 import { MicroApi } from '../micro-api';
 
 
@@ -32,6 +32,7 @@ class opticalPortView extends Component{
           },
           reelNums:null,
           plateNums:null,
+          selectedReelData:null,
           selectedReelToEditOption:null,
           selectedPhysicalStatusOption:null,
           selectedOperatorOption:null,
@@ -134,7 +135,11 @@ class opticalPortView extends Component{
       MicroApi.fetchParkingPlateNum(currentReel.value).then(res => {
         console.log(res);
         this.setState({parkingPlate:Number(res)})  
-      })
+      });
+      MicroApi.fetchReelData(currentReel.value).then(res => {
+        console.log(res);
+        this.setState({selectedReelData: res })  
+      });
     }
 
     makeSelect = (res) => {
@@ -160,8 +165,28 @@ class opticalPortView extends Component{
       this.getDataOfReel(selectedReelToEditOption);
 
     }
-    PhysicalStatusHandleChange = (selectedPhysicalStatusOption) => {
-      this.setState({ selectedPhysicalStatusOption });
+    reelAdminCommentChanged = (newComment) =>{
+      let {selectedReelData} = this.state;
+      selectedReelData.administrator_comment = newComment;
+      this.setState({ selectedReelData });
+    };
+    reelOperatorCommentChanged = (newComment) =>{
+      let {selectedReelData} = this.state;
+      selectedReelData.operator_comment = newComment;
+      this.setState({ selectedReelData });
+    };
+    
+    
+    reelPhysicalStatusHandleChange = (selectedPhysicalStatusOption) => {
+      let {selectedReelData} = this.state
+      selectedReelData.wheelstatus = selectedPhysicalStatusOption.label
+      this.setState({ selectedReelData });
+      console.log(`Option selected:`, selectedPhysicalStatusOption);
+    }
+    plateReelPhysicalStatusHandleChange = (rowIndex, selectedPhysicalStatusOption) => {
+      let {plateTableInput} = this.state
+      plateTableInput[rowIndex].status = selectedPhysicalStatusOption.label
+      this.setState({ plateTableInput });
       console.log(`Option selected:`, selectedPhysicalStatusOption);
     }
     plateToEditHandleChange = (selectedPlateToEditOption) => {
@@ -173,11 +198,44 @@ class opticalPortView extends Component{
       this.setState({ selectedOperatorOption });
       console.log(`Option selected:`, selectedOperatorOption);
     };
+    wheelOpCommentChanged = (rowIndex, newComment) =>{
+      let {plateTableInput} = this.state;
+      plateTableInput[rowIndex].opcomment = newComment;
+      this.setState({ plateTableInput });
+    };
+    wheelAdminCommentChanged = (rowIndex, newComment) =>{
+      let {plateTableInput} = this.state;
+      plateTableInput[rowIndex].adcomment = newComment;
+      this.setState({ plateTableInput });
+    };
+  wheelOperatorsHandleChange = (rowIndex, selectedOperatorOption) => {
+    let {plateTableInput} = this.state;
+    plateTableInput[rowIndex].operator = selectedOperatorOption.label;
+    this.setState({ plateTableInput });
+    console.log(`Option selected:`, selectedOperatorOption);
+  };
 
-
+    onSaveWheel = () => {
+      // serialize to fit old API
+      let serializedDataArr = [];
+      let {plateTableInput, plateType, postionOfPlate} = this.state;
+      plateTableInput.forEach((row, rowIndex)=>{
+        let serializedRow = `plateinfo_adcmt${rowIndex}=${row.adcomment}&plateinfo_status${rowIndex}=${row.status}`;
+        if ( plateType == 'Regular') {
+          serializedRow = `plateinfo_operator${rowIndex}=${row.operator}&plateinfo_opcmt${rowIndex}=${row.opcomment}&${serializedRow}`
+        }
+        serializedDataArr.push(serializedRow)
+      });
+      let serializedString = serializedDataArr.join('&');
+      let dataToSend = `plateinfo_platenum=${postionOfPlate}&${serializedString}`;
+      MicroApi.savePlateData(dataToSend);
+    };
+    onSaveSelectedReel = () =>{
+      MicroApi.saveReelData(this.state.selectedReelData)
+    }
     render(){
       let {} = this.props;
-      let { customStyles, selectedPlateToEditOption, plateDataByPlateNum, plateTableLabels, plateTableInput, selectedOperatorOption, operatorsList, selectedPhysicalStatusOption, physicalStatusList, updateCounter, selectedReelToEditOption, reelDataByReelNum, reelTableLabels, reelNums, plateNums, postionOfPlate, plateHeight, plateType, reelAngle, parkingPlate  }  = this.state;
+      let { customStyles, selectedPlateToEditOption, plateDataByPlateNum, plateTableLabels, plateTableInput, selectedOperatorOption, operatorsList, selectedPhysicalStatusOption, physicalStatusList, updateCounter, selectedReelToEditOption, selectedReelData, reelTableLabels, reelNums, plateNums, postionOfPlate, plateHeight, plateType, reelAngle, parkingPlate  }  = this.state;
         return (
        
           <OpticalPortContainer>
@@ -212,8 +270,8 @@ class opticalPortView extends Component{
               </MiniWrap>
               <RoutinesTable tableCols={plateTableLabels}>
                 
-                {plateTableInput.map((row) => {
-                  return <div style={{display:'inline-flex', flexDirecton:'row', width:'100%'}}>
+                {plateTableInput.map((row, rowIndex) => {
+                  return <DataRow >
                   <DisplayData>
                     {row.index}
                    </DisplayData>
@@ -226,7 +284,7 @@ class opticalPortView extends Component{
                           autoFocus
                           placeholder=''
                           value={operatorsList.find(e => e.label == row.operator)}
-                          onChange={this.operatorsHandleChange}
+                          onChange={(option)=>{this.wheelOperatorsHandleChange(rowIndex, option)}}
                           options={operatorsList}
                           name="operations-list-select"
                         />
@@ -234,15 +292,17 @@ class opticalPortView extends Component{
                     <TestButton>
                         <TextInput
                             style={{fontWeight:'300', width:'110px'}}
-                              placeholder="value"
-                            //  value={item.plateHeight}
+                              placeholder="op comment"
+                             value={row.opcomment}
+                             onChange={(e)=>{this.wheelOpCommentChanged(rowIndex, e.target.value)}}
                           />
                     </TestButton>
                     <TestButton>
                         <TextInput
                             style={{fontWeight:'300', width:'110px'}}
-                              placeholder="value"
-                            //  value={item.plateHeight}
+                              placeholder="adm. comment"
+                             value={row.adcomment}
+                             onChange={(e)=>{this.wheelAdminCommentChanged(rowIndex, e.target.value)}}
                           />
                     </TestButton>
                     <TestButton>
@@ -250,8 +310,8 @@ class opticalPortView extends Component{
                           styles={customStyles} 
                           autoFocus
                           placeholder=''
-                          value={selectedPhysicalStatusOption}
-                          onChange={this.PhysicalStatusHandleChange}
+                          value={physicalStatusList.find(e => e.label == row.status)}
+                          onChange={(o)=>{this.plateReelPhysicalStatusHandleChange(rowIndex, o)}}
                           options={physicalStatusList}
                           name="operations-list-select"
                         />
@@ -259,13 +319,13 @@ class opticalPortView extends Component{
                     <DisplayData>
                     {updateCounter}
                    </DisplayData>
-                </div>
+                </DataRow>
                 })
                 
                 }    
 
                 </RoutinesTable>
-                <SaveButton style={{width:'20%', fontSize:'16px'}}>
+                <SaveButton style={{width:'20%', fontSize:'16px'}} onClick={this.onSaveWheel}>
                       save
                     </SaveButton>
             </PlateEditContainer>
@@ -286,65 +346,97 @@ class opticalPortView extends Component{
                       />
                 </SelectBox>
             </span>
-               <MiniWrap>
+               {
+               selectedReelData &&<MiniWrap>
                   <Data>
                     <strong>Reel Angle: </strong>{reelAngle} 
                   </Data>
                   <Data>
-                  <strong>Parking Plate Number: </strong>{parkingPlate}
+                    <strong>Parking Plate Number: </strong>{parkingPlate}
                   </Data>
-              </MiniWrap>
-
-            <RoutinesTable tableCols={reelTableLabels}>
-              <div>
-                    <DisplayData>
-                    {"--"}
-                   </DisplayData>
-                   <DisplayData>
-                    {"==="}
-                   </DisplayData>
-                   <TestButton>
+                  <Data>
+                    <strong>Counter: </strong>{selectedReelData.connections_counter}
+                  </Data>
+                  <span>
+                    <strong>Administrator Comment: </strong>
+                    <TextInput
+                            style={{fontWeight:'300', width:'110px'}}
+                              placeholder="add a comment"
+                             value={selectedReelData.administrator_comment}
+                             onChange={(e)=>{this.reelAdminCommentChanged(e.target.value)}}
+                          />
+                  </span>
+                  <span>
+                    <strong>Operator Comment: </strong>
+                    <TextInput
+                            style={{fontWeight:'300', width:'110px'}}
+                              placeholder="add a comment"
+                             value={selectedReelData.operator_comment}
+                             onChange={(e)=>{this.reelOperatorCommentChanged(e.target.value)}}
+                          />
+                  </span>
+                 
+                  <span>
+                    <strong>Physical status: </strong>
+                    <SelectBox>
                       <Select
                           styles={customStyles} 
                           autoFocus
                           placeholder=''
-                          value={selectedOperatorOption}
-                          onChange={this.operatorsHandleChange}
-                          options={operatorsList}
-                          name="operations-list-select"
-                        />
-                    </TestButton>
-                    <TestButton>
-                        <TextInput
-                            style={{fontWeight:'300', width:'110px'}}
-                              placeholder="value"
-                            //  value={item.plateHeight}
-                          />
-                    </TestButton>
-                    <TestButton>
-                        <TextInput
-                            style={{fontWeight:'300', width:'110px'}}
-                              placeholder="value"
-                            //  value={item.plateHeight}
-                          />
-                    </TestButton>
-                    <TestButton>
-                      <Select
-                          styles={customStyles} 
-                          autoFocus
-                          placeholder=''
-                          value={selectedPhysicalStatusOption}
-                          onChange={this.PhysicalStatusHandleChange}
+                          value={physicalStatusList.find(o=>o.label == selectedReelData.wheelstatus)}
+                          onChange={this.reelPhysicalStatusHandleChange}
                           options={physicalStatusList}
                           name="operations-list-select"
                         />
-                    </TestButton>
-                    <DisplayData>
-                    {updateCounter}
-                   </DisplayData>
-                   </div>
-                </RoutinesTable>
-                <SaveButton style={{width:'20%', fontSize:'16px'}}>
+                        </SelectBox>
+                    </span>
+                    
+              </MiniWrap>
+              }
+            {/* 
+          <RoutinesTable tableCols={reelTableLabels}>
+            <DataRow>
+                  <DisplayData>
+                  {"--"}
+                  </DisplayData>
+                  <DisplayData>
+                  {"==="}
+                  </DisplayData>
+                  {
+                //  <TestButton>
+                //     <Select
+                //         styles={customStyles} 
+                //         autoFocus
+                //         placeholder=''
+                //         value={selectedOperatorOption}
+                //         onChange={this.operatorsHandleChange}
+                //         options={operatorsList}
+                //         name="operations-list-select"
+                //       />
+                //   </TestButton>
+                }
+                  <TestButton>
+                      <TextInput
+                          style={{fontWeight:'300', width:'110px'}}
+                            placeholder="value"
+                          //  value={item.plateHeight}
+                        />
+                  </TestButton>
+                  <TestButton>
+                      <TextInput
+                          style={{fontWeight:'300', width:'110px'}}
+                            placeholder="value"
+                          //  value={item.plateHeight}
+                        />
+                  </TestButton>
+                  
+                  <DisplayData>
+                  {updateCounter}
+                  </DisplayData>
+                  </DataRow>
+              </RoutinesTable> */
+}
+                <SaveButton onClick={this.onSaveSelectedReel} style={{width:'20%', fontSize:'16px'}}>
                       save
                     </SaveButton>
             </ReelEditContainer>
@@ -455,3 +547,4 @@ const MiniWrap = styled.div`
 const Data = styled.div`
     display:block;
 `;
+

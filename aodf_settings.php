@@ -593,14 +593,17 @@
 
     function update_plate($allData){
         //init data
+        // die($allData);
         $plateNumToUpdate = $allData[0];
-        $currentPlateHeight = $allData[1][0]; // gives value! I need key - should be HEIGHT1, HEIGHT2 etc 
+        $currentPlateArea =  substr($allData[1], -1); // e.g. (height)1/2/3/4
         $newPlateHeight = $allData[2];
         
         //db
         $newHeights_array=array();
         $db = new PDO('sqlite:AODF.db');
-        $updatedHeight = $db->query("update PLATE_INFO set HEIGHT1=$newPlateHeight where PLATE_NUMBER=$plateNumToUpdate;");
+        $query_str = "update PLATE_INFO set HEIGHT$currentPlateArea=$newPlateHeight where PLATE_NUMBER=$plateNumToUpdate;";
+        // die($query_str);
+        $updatedHeight = $db->query($query_str);
                 
         while($newHeight=$updatedHeight->fetch(PDO::FETCH_ASSOC)) {
             array_push(

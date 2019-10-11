@@ -10,6 +10,8 @@ import Select from 'react-select';
 //COMPONENTS
 import CalibrationGroup from '../components/CalibrationGroup';
 import RoutinesTable from '../components/RoutinesTable';
+import {DataRow} from '../components/RoutinesTable';
+
 // DATA
 import { MicroApi } from '../micro-api';
 
@@ -39,6 +41,8 @@ export class CalibrationView extends React.Component{
           params:null,  
           paramValue:null,
           allHeights:null,
+          plateHeights:null,
+          editedAreaNum:1,
           plateNums:null,
           reelNums:null,
           height1:null,
@@ -149,15 +153,20 @@ export class CalibrationView extends React.Component{
      
       MicroApi.fetchPlateHeights(selectedPlateNumberOption.value).then(res => {    
         keys = Object.keys(res);  
+        
+        // this.setState({height1: res.height1})
+        // this.setState({height2: res.height2})
+        // this.setState({height3: res.height3})
+        // this.setState({height4: res.height4})
 
-        this.setState({height1: res.height1})
-        this.setState({height2: res.height2})
-        this.setState({height3: res.height3})
-        this.setState({height4: res.height4})
-
-        let allHeightsArr = [res.height1,res.height2,res.height3,res.height4];
-        this.setState({allHeights: this.makeSelect(allHeightsArr)})
+        this.setState({...res})
+        let allHeightsArr = keys.map((heightKey)=>{
+          return {value:res[heightKey], label:heightKey }
+        })  
+          // this.setState({allHeights: this.makeSelect(allHeightsArr)})
+          this.setState({allHeights: allHeightsArr, selectedPlateAreaOption: allHeightsArr[0]});
         })   
+
     };
 
     instructionsFunctionChange = (selectedInstructionsOption) => {
@@ -303,18 +312,21 @@ export class CalibrationView extends React.Component{
       })
     }
 
-    updatePlateHeight = (val1,val2,val3) => {
-      log = 'update plate height>> ' + this.state.updatePlateHeight[0].labelPlateNum + '' + val1 + " " + this.state.updatePlateHeight[0].labelPlateArea + "(" + val2.value + ")" + ' value: ' + val3;
+    updatePlateHeight = (plateNum,label,height) => {
+      log = 'update plate height>> ' + this.state.updatePlateHeight[0].labelPlateNum + '' + plateNum + " " + this.state.updatePlateHeight[0].labelPlateArea + "(" + label + ")" + ' value: ' + height;
       this.updateLogger(log);
-      
-      console.log(val1);
-      console.log(val2);
-console.log(val3);
+      let {allHeights} = this.state;
+      console.log(plateNum);
+      console.log(label);
+      console.log(height);
 
-      let allData = [val1,val2.label,val3];
+      let allData = [plateNum,label,height];
       console.log(allData)
       MicroApi.updatePlateHeight(allData).then(res => {     
         console.log(res);
+        // let updatedHeights = allHeights.map(height)
+        this.setState({selectedPlateHeight:""})
+        this.plateNumHandleChange({value:plateNum, label:plateNum})
       })
 
       return;
@@ -362,7 +374,7 @@ console.log(val3);
     } 
 
     render(){
-      let {selectedInstructionsOption, selectedReelNumberOption, selectedPlateNumberOption, selectedPlateAreaOption, plateCalibrationGroups, reelCalibrationGroups, setReelToParkingPlate, updatePlateHeight, modifyRobotParameters, routineTableLabels, routineFunctionsList, selectedInsttypeOption, motorNumList, selectedMotorNumOption, resultTable, customStyles, selectedParamsOption, instTypeOptions, selectedMotorNumValue, outputData, selectedPlateHeight, robotParamValue, plateNums, reelNums, height1, height2, height3, height4 , allHeights, report, params, paramValue, instructions} = this.state;
+      let {editedAreaNum,selectedInstructionsOption, selectedReelNumberOption, selectedPlateNumberOption, selectedPlateAreaOption, plateCalibrationGroups, reelCalibrationGroups, setReelToParkingPlate, updatePlateHeight, modifyRobotParameters, routineTableLabels, routineFunctionsList, selectedInsttypeOption, motorNumList, selectedMotorNumOption, resultTable, customStyles, selectedParamsOption, instTypeOptions, selectedMotorNumValue, outputData, selectedPlateHeight, robotParamValue, plateNums, reelNums, height1, height2, height3, height4 , allHeights, report, params, paramValue, instructions} = this.state;
       return (
         <div>
         <CalibrationContainer>
@@ -370,6 +382,7 @@ console.log(val3);
            <CalibrationTestRoutines>
                 <p>Test Routines</p>
                 <RoutinesTable tableCols={routineTableLabels}>
+                  <DataRow>
                     <TestButton>
                       <Select
                           styles={customStyles} 
@@ -413,9 +426,11 @@ console.log(val3);
                     <SaveButton onClick={() => this.executeInstructions(selectedInstructionsOption.value, selectedMotorNumOption.label, selectedMotorNumValue)} style={{width:'20%', fontSize:'16px'}}>
                       execute
                     </SaveButton>
+                    </DataRow>
                 </RoutinesTable>   
                 <p>Result</p>
                 <RoutinesTable tableCols={resultTable}>
+                  <DataRow>
                     <span>
                       localhost
                     </span>
@@ -429,7 +444,7 @@ console.log(val3);
     {/**{height1} */}                     </DisplayResult>
                     <DisplayResult>
     {/**{height1} */}                     </DisplayResult>
-                 
+                </DataRow>
                 </RoutinesTable>
                 <p>Output Box</p>
                 <OutputBox>
@@ -438,6 +453,7 @@ console.log(val3);
                 <SaveButton onClick={this.clear} style={{width:"180px"}}>
                     clear 
                 </SaveButton>
+                
            </CalibrationTestRoutines>
 
            <CalibrationControlButtons>
@@ -527,7 +543,7 @@ console.log(val3);
                             onChange={ event => this.setPlateHeightValue(event.target.value) }
                           />
                         </SelectBox>
-                        <SaveButton onClick={() =>this.updatePlateHeight(selectedPlateNumberOption.value,selectedPlateAreaOption,selectedPlateHeight)}>
+                        <SaveButton onClick={() =>this.updatePlateHeight(selectedPlateNumberOption.value,selectedPlateAreaOption.label,selectedPlateHeight)}>
                           save
                         </SaveButton>
                      </CalibrationGroup>

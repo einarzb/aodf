@@ -44,3 +44,9 @@ export const TableWrapper = styled.div`
 `;
 
 
+
+export const DataRow = styled.div`
+    display:inline-flex; 
+    flex-direction:row;
+    width:100%;
+`;

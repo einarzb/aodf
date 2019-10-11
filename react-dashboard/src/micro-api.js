@@ -109,6 +109,9 @@ export const MicroApi = {
     fetchPlatePorts:(plateNum) =>{
         return  _query({method:'GET',func: `plategetportsjson&plateinfo_platenum=${plateNum}`,body:false, base:API_BASE_URL});
     },
+    fetchReelData:(reelNum) =>{
+        return  _query({method:'GET',func: `wheelload&reelinfo_reelnum=${reelNum}`,body:false, base:API_BASE_URL});
+    },
     reelCalibration:()=>{
         return  _query({method:'GET',func: 'reel_calibration',body:false});
     },
@@ -144,7 +147,7 @@ export const MicroApi = {
         return  _query({method:'POST',func: 'update_connection',body:{method:'update_connection', stop}});
     },
     updatePlateHeight:(allData)=>{
-        return  _query({method:'POST',func: 'fetch_plates_height',body:{method:'update_plate_height', allData}});
+        return  _query({method:'POST',func: 'update_plate_height',body:{method:'update_plate_height', allData}});
     },
     updateRobotParam:(all) => {
         return  _query({method:'POST',func: 'update_robot_param',body:{method:'update_robot_param', all}});
@@ -189,5 +192,11 @@ export const MicroApi = {
     directControl: (instruction, motorNum, value)=>{
         return  _query({method:'GET',func: `direct_mode&arguments=${motorNum}%20${instruction}%200%20${value}`,body:false, base:RUNAPI_BASE_URL});
     },
-
+    savePlateData: (serializedData)=>{
+        return  _query({method:'GET',func: `platesave&${serializedData}`,body:false, base:API_BASE_URL});
+    },
+    saveReelData: (reelData) => {
+        let {wheelid, operator_comment, administrator_comment, wheelstatus} = reelData;
+        return  _query({method:'GET',func: `wheelsave&reelinfo_reelnum=${wheelid}&reelinfo_adcmt=${administrator_comment}&reelinfo_opcmt=${operator_comment}&reelinfo_status=${wheelstatus}`,body:false, base:API_BASE_URL});
+    }
 };
